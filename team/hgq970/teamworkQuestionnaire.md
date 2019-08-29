@@ -1,7 +1,7 @@
 # Teamwork Questionnaire for Hayden Q
 
 1. __Is it generally easier to reach you by text, electronic mail, voice mail or something else?  What hours?__ 
-   * text, voicemail, discord. any hours
+   * text, voicemail, discord. any hours, although by phone will 99% of the time be responded to asap
 1. __What are your expectations about what your team will accomplish this semester?__ 
    * clean code, working well in a team
 1. __What are your personal goals for improving your teamwork and communication skills this semester?__ 
