@@ -1,5 +1,7 @@
 # t18-mongoose
 
+![alt-text]https://raw.githubusercontent.com/kalek91/t18/master/team/20190903_165909_HDR.jpg
+
 | last      | first       | eID      | GitHub Username | Email                         |  
 |-----------|-------------|----------|-----------------|-------------------------------|
 | Abelein   | Christopher | cabelein | kalek91         | cabelein@rams.colostate.edu   |
