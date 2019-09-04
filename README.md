@@ -1,4 +1,10 @@
-# t18-teamname
+# t18-mongoose
+
+![alt text](team/images/20190903_165909_HDR.jpg?)
+Hayden Quintana, James Lounsbury, Christopher Abelein
+
+
+
 
 | last      | first       | eID      | GitHub Username | Email                         |  
 |-----------|-------------|----------|-----------------|-------------------------------|
