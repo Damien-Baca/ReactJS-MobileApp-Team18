@@ -5,4 +5,4 @@
 | Abelein   | Christopher | cabelein | kalek91         | cabelein@rams.colostate.edu   |
 | Quintana  | Hayden      | hgq      | hgq970          | hgq@rams.colostate.edu        |
 | Lounsbury | James       | jamesl84 | jameslouns      | james.lounsbury0804@gmail.com |
-| Damien    | Baca        | dbaca    | gamerlios123    | dbaca@rams.colostate.edu      |
+| Baca      | Damien      | dbaca    | gamerlios123    | dbaca@rams.colostate.edu      |
