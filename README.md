@@ -1,6 +1,6 @@
 # t18-mongoose
 
-![alt-text](https://raw.githubusercontent.com/kalek91/t18/nameAndPicture(#13)/team/20190903_165909_HDR.jpg)
+![alt-text](team/20190903_165909_HDR.jpg?raw=true "Team Mongoose")
 
 | last      | first       | eID      | GitHub Username | Email                         |  
 |-----------|-------------|----------|-----------------|-------------------------------|
