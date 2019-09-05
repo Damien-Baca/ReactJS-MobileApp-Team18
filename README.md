@@ -12,3 +12,4 @@ Hayden Quintana, James Lounsbury, Christopher Abelein
 | Quintana  | Hayden      | hgq      | hgq970          | hgq@rams.colostate.edu        |
 | Lounsbury | James       | jamesl84 | jameslouns      | james.lounsbury0804@gmail.com |
 | Baca      | Damien      | dbaca    | gamerlios123    | dbaca@rams.colostate.edu      |
+| Chen      | Long        | jacky    | MEtoCS          | jacky@rams.colostate.edu      |   
