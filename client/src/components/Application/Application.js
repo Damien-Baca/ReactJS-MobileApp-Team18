@@ -4,6 +4,7 @@ import {Card, CardBody, CardHeader, Container} from 'reactstrap';
 import Home from './Home';
 import Options from './Options/Options';
 import Calculator from './Calculator/Calculator';
+import About from './About/About';
 import Settings from './Settings/Settings';
 import {getOriginalServerPort, sendServerRequest} from '../../api/restfulAPI';
 import ErrorBanner from './ErrorBanner';
@@ -86,6 +87,10 @@ export default class Application extends Component {
         return <Options options={this.state.planOptions}
                         config={this.state.serverConfig}
                         updateOption={this.updatePlanOption}/>;
+
+      case 'about':
+        return <About/>
+
       case 'settings':
         return <Settings settings={this.state.clientSettings}
                          serverConfig={this.state.serverConfig}
