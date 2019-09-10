@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import {CardGroup, Card, CardHeader, CardBody, CardImg, CardTitle, CardText} from 'reactstrap';
 import cabeleinPhoto from './images/crabelein.jpg'
+import Jamesl84Photo from './images/Jamesl84.jpg'
 
 export default class About extends Component {
   render() {
     return (
       <CardGroup>
         {this.showCabelein()}
+        {this.showjamesl84()}
       </CardGroup>
     );
   }
@@ -20,6 +22,20 @@ export default class About extends Component {
         <CardBody>
           <CardTitle><b>Christopher Abelein</b></CardTitle>
           <CardText>a CS Senior.</CardText>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  showjamesl84() {
+    return (
+      <Card>
+        <CardHeader>
+          <CardImg top src={Jamesl84Photo}/>
+        </CardHeader>
+        <CardBody>
+          <CardTitle><b>James Lounsbury</b></CardTitle>
+          <CardText>a CS and Physics major.</CardText>
         </CardBody>
       </Card>
     );
