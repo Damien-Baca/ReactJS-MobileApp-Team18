@@ -3,6 +3,7 @@ import {CardGroup, Card, CardHeader, CardBody, CardImg, CardTitle, CardText} fro
 import cabeleinPhoto from './images/crabelein.jpg'
 import dbacaPhoto from './images/dbaca.jpg'
 import Jamesl84Photo from './images/Jamesl84.jpg'
+import LongChenPhoto from './images/LongChen.jpg'
 
 export default class About extends Component {
   render() {
@@ -11,6 +12,7 @@ export default class About extends Component {
         {this.showCabelein()}
         {this.showDbaca()}
         {this.showjamesl84()}
+        {this.showLongChen()}
       </CardGroup>
     );
   }
@@ -56,4 +58,18 @@ export default class About extends Component {
       </Card>
     );
   }
+    showLongChen() {
+        return (
+            <Card>
+            <CardHeader>
+            <CardImg top src={LongChenPhoto}/>
+        </CardHeader>
+        <CardBody>
+        <CardTitle><b>Long Chen</b></CardTitle>
+        <CardText>a ME major.</CardText>
+        </CardBody>
+        </Card>
+    );
+    }
 }
+
