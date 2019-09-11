@@ -12,6 +12,7 @@ export default class About extends Component {
         {this.showCabelein()}
         {this.showDbaca()}
         {this.showjamesl84()}
+        {this.showLongChen()}
       </CardGroup>
     );
   }
