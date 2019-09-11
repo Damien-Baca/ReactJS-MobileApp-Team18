@@ -2,74 +2,37 @@ import React, { Component } from 'react'
 import {CardGroup, Card, CardHeader, CardBody, CardImg, CardTitle, CardText} from 'reactstrap';
 import cabeleinPhoto from './images/crabelein.jpg'
 import dbacaPhoto from './images/dbaca.jpg'
-import Jamesl84Photo from './images/Jamesl84.jpg'
-import LongChenPhoto from './images/LongChen.jpg'
+import jamesl84Photo from './images/Jamesl84.jpg'
+import longChenPhoto from './images/LongChen.jpg'
 
 export default class About extends Component {
   render() {
     return (
       <CardGroup>
-        {this.showCabelein()}
-        {this.showDbaca()}
-        {this.showjamesl84()}
-        {this.showLongChen()}
+        {this.showCard(cabeleinPhoto, "Christopher Abelein",
+            "a CS senior.")}
+        {this.showCard(dbacaPhoto, "Damien Baca",
+            "a CS Senior with a Math Minor")}
+        {this.showCard(jamesl84Photo, "James Lounsbury",
+            "A CS and Physics major")}
+        {this.showCard(longChenPhoto, "Long Chen",
+            "a ME major.")}
       </CardGroup>
     );
   }
 
-  showCabelein() {
+  showCard(img, title, text) {
     return (
-      <Card>
-        <CardHeader>
-          <CardImg top src={cabeleinPhoto}/>
-        </CardHeader>
-        <CardBody>
-          <CardTitle><b>Christopher Abelein</b></CardTitle>
-          <CardText>a CS Senior.</CardText>
-        </CardBody>
-      </Card>
-    );
-  }
-
-  showDbaca() {
-      return (
-          <Card>
-              <CardHeader>
-                  <CardImg top src={dbacaPhoto}/>
-              </CardHeader>
-              <CardBody>
-                  <CardTitle><b>Damien Baca</b></CardTitle>
-                  <CardText>a CS Senior with a Math Minor</CardText>
-              </CardBody>
-          </Card>
-      );
-  }
-
-  showjamesl84() {
-    return (
-      <Card>
-        <CardHeader>
-          <CardImg top src={Jamesl84Photo}/>
-        </CardHeader>
-        <CardBody>
-          <CardTitle><b>James Lounsbury</b></CardTitle>
-          <CardText>a CS and Physics major.</CardText>
-        </CardBody>
-      </Card>
-    );
-  }
-    showLongChen() {
-        return (
-            <Card>
-            <CardHeader>
-            <CardImg top src={LongChenPhoto}/>
-        </CardHeader>
-        <CardBody>
-        <CardTitle><b>Long Chen</b></CardTitle>
-        <CardText>a ME major.</CardText>
-        </CardBody>
+        <Card>
+          <CardHeader>
+            <CardImg top src={img}/>
+          </CardHeader>
+          <CardBody>
+            <CardTitle><b>{title}</b></CardTitle>
+            <CardText>{text}</CardText>
+          </CardBody>
         </Card>
     );
-    }
+  }
 }
 
