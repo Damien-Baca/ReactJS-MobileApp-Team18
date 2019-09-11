@@ -4,6 +4,7 @@ import cabeleinPhoto from './images/crabelein.jpg'
 import dbacaPhoto from './images/dbaca.jpg'
 import jamesl84Photo from './images/Jamesl84.jpg'
 import longChenPhoto from './images/LongChen.jpg'
+import hgqPhoto from './images/hqMongoose.jpg'
 
 export default class About extends Component {
   render() {
@@ -17,6 +18,8 @@ export default class About extends Component {
             "A CS and Physics major")}
         {this.showCard(longChenPhoto, "Long Chen",
             "a ME major.")}
+        {this.showCard(hgqPhoto, "Hayden Quintana",
+        "likes long walks on the beach and poking dead things with a stick")}
       </CardGroup>
     );
   }
