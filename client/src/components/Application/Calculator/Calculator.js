@@ -98,7 +98,7 @@ export default class Calculator extends Component {
    */
   calculateDistance() {
 
-    const EARTH_RADIUS_MILES = 3958.8;
+    const EARTH_RADIUS_MILES = 3963;
 
     let origin_lat = Number(this.state.origin.latitude);
     let dest_lat   = Number(this.state.destination.latitude);
@@ -116,6 +116,9 @@ export default class Calculator extends Component {
     let arc = Math.atan(numerator/denominator);
     let distance = arc * EARTH_RADIUS_MILES;
 
+    // Rounding the number to 2 decimal places
+    distance = Math.round(distance * 100) / 100;
+
     const tipConfigRequest = {
       'type'        : 'distance',
       'version'     : 1,
@@ -128,7 +131,7 @@ export default class Calculator extends Component {
         .then((response) => {
         if(response.statusCode >= 200 && response.statusCode <= 299) {
           this.setState({
-            distance: distance.toPrecision(8),
+            distance: distance,
             errorMessage: null
           });
         }
