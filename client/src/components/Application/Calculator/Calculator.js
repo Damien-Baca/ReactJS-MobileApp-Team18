@@ -92,7 +92,30 @@ export default class Calculator extends Component {
     );
   }
 
+  /**
+   *  Outputs Distance in MILES determined by EARTH_RADIUS_MILES.
+   *  Change radius to any other unit to convert.
+   */
   calculateDistance() {
+
+    const EARTH_RADIUS_MILES = 3958.8;
+
+    let origin_lat = Number(this.state.origin.latitude);
+    let dest_lat   = Number(this.state.destination.latitude);
+    let delta_long = Math.abs(Number(this.state.destination.longitude) - Number(this.state.origin.longitude));
+
+    origin_lat = this.to_radians(origin_lat);
+    dest_lat   = this.to_radians(dest_lat);
+    delta_long = this.to_radians(delta_long);
+
+    let numerator = Math.pow(Math.cos(dest_lat) * Math.sin(delta_long),2);
+    numerator    += Math.pow(Math.cos(origin_lat)*Math.sin(dest_lat) - Math.sin(origin_lat)*Math.cos(dest_lat)*Math.cos(delta_long) ,2);
+    numerator     = Math.sqrt(numerator);
+
+    let denominator = Math.sin(origin_lat)*Math.sin(dest_lat) + Math.cos(origin_lat)*Math.cos(dest_lat)*Math.cos(delta_long);
+    let arc = Math.atan(numerator/denominator);
+    let distance = arc * EARTH_RADIUS_MILES;
+
     const tipConfigRequest = {
       'type'        : 'distance',
       'version'     : 1,
@@ -101,11 +124,10 @@ export default class Calculator extends Component {
       'earthRadius' : this.props.options.units[this.props.options.activeUnit]
     };
 
-    sendServerRequestWithBody('distance', tipConfigRequest, this.props.settings.serverPort)
-      .then((response) => {
+    sendServerRequestWithBody('distance', tipConfigRequest, this.props.settings.serverPort).then((response) => {
         if(response.statusCode >= 200 && response.statusCode <= 299) {
           this.setState({
-            distance: response.body.distance,
+            distance: distance.toPrecision(8),
             errorMessage: null
           });
         }
@@ -125,5 +147,11 @@ export default class Calculator extends Component {
     let location = Object.assign({}, this.state[stateVar]);
     location[field] = value;
     this.setState({[stateVar]: location});
+  }
+
+  to_radians(degrees)
+  {
+    let pi = Math.PI;
+    return degrees * (pi/180);
   }
 }
