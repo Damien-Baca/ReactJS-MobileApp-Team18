@@ -124,7 +124,8 @@ export default class Calculator extends Component {
       'earthRadius' : this.props.options.units[this.props.options.activeUnit]
     };
 
-    sendServerRequestWithBody('distance', tipConfigRequest, this.props.settings.serverPort).then((response) => {
+    sendServerRequestWithBody('distance', tipConfigRequest, this.props.settings.serverPort)
+        .then((response) => {
         if(response.statusCode >= 200 && response.statusCode <= 299) {
           this.setState({
             distance: distance.toPrecision(8),
