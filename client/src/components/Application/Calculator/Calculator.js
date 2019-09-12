@@ -102,7 +102,7 @@ export default class Calculator extends Component {
     };
 
     sendServerRequestWithBody('distance', tipConfigRequest, this.props.settings.serverPort)
-      .then((response) => {
+        .then((response) => {
         if(response.statusCode >= 200 && response.statusCode <= 299) {
           this.setState({
             distance: response.body.distance,
