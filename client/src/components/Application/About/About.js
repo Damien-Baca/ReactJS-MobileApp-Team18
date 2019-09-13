@@ -17,7 +17,7 @@ import hgqPhoto from './images/hqMongoose.jpg'
 export default class About extends Component {
   render() {
     let team = [[cabeleinPhoto, "Christopher Abelein",
-                  "Has a phsychological dependancy on writing out plans "
+                  "Has a psychological dependency on writing out plans "
                   + "for projects. Mongoose. That's a cool team name."],
                 [dbacaPhoto, "Damien Baca",
                   "a CS Senior with a Math Minor"],
