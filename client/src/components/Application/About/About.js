@@ -8,7 +8,7 @@ import {
   CardText,
   Row, Col, Container
 } from 'reactstrap';
-import cabeleinPhoto from './images/crabelein.jpg'
+import cabeleinPhoto from './images/crabeleinMongoose.jpg'
 import dbacaPhoto from './images/dbaca.jpg'
 import jamesl84Photo from './images/Jamesl84.jpg'
 import longChenPhoto from './images/LongChen.jpg'
@@ -17,7 +17,8 @@ import hgqPhoto from './images/hqMongoose.jpg'
 export default class About extends Component {
   render() {
     let team = [[cabeleinPhoto, "Christopher Abelein",
-                  "a CS senior."],
+                  "Has a phsychological dependancy on writing out plans "
+                  + "for projects. Mongoose. That's a cool team name."],
                 [dbacaPhoto, "Damien Baca",
                   "a CS Senior with a Math Minor"],
                 [jamesl84Photo, "James Lounsbury",
@@ -25,8 +26,10 @@ export default class About extends Component {
                 [longChenPhoto, "Long Chen",
                   "a ME major."],
                 [hgqPhoto, "Hayden Quintana",
-                  "likes long walks on the beach and poking dead things with a stick"]
+                  "likes long walks on the beach and poking dead things "
+                  + "with a stick"]
                 ];
+
     return (
         this.generateCardGroups(team)
     );
