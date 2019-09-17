@@ -41,8 +41,13 @@
 
 This sprint will complete the following Epics.
 
-* *#0 epic title: description*
-*
+* *#69 where am i: TripCo: Show the user their exact location on the home page map if it is available.*
+* *#70 vincenty: TripCo: As a company, we have decided to use the Vincenty formula from https://en.wikipedia.org/wiki/Great-circle_distance with the mean earth radius of 3959 miles from https://en.wikipedia.org/wiki/Earth_radius. This allows us to compare results between the various implementations, particularly when we interoperate.*
+* *#71 display map and itinerary: User: I want to be able to load a trip itinerary I obtained from another tool so I can see a map of my trip and an updated itinerary that includes the leg and cumulative distances so I know how far I must travel.*
+* *#72 geographic coordinate validation: TripCo: All geographic coordinates should be validated, and invalid formats reported to the user in a user-friendly way so the calculator is easy to use.*
+* *#73 geographic coordinate formats: User: I want the distance calculator to support many/all formats for geographic coordinates so I can copy/paste them from any source.*
+* *#74 short trip: User: I would like the tool to rearrange my trip for me to make it shorter so I have will have less travel time.*
+
 
 Key planning decisions for this sprint include ...
 
