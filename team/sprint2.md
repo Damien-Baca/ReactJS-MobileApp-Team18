@@ -65,7 +65,7 @@ Key planning decisions for this sprint include mutual distribution of tasks, und
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *17092019* | *#task, ...* | *#task, ...* | *none* | 
+| *17/09/2019* | *#task, ...* | *#task, ...* | *none* | 
 
 
 ## Review (focus on solution and technology)
