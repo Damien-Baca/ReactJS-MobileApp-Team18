@@ -58,14 +58,14 @@ Key planning decisions for this sprint include mutual distribution of tasks, und
 | --- | ---: | ---: |
 | Epics | *6* | *value* |
 | Tasks |  *11*   | *value* | 
-| Story Points |  *value*  | *value* | 
+| Story Points |  *12*  | *value* | 
 
 
 ## Scrums
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *17/09/2019* | *#task, ...* | *#task, ...* | *none* | 
+| *17/09/2019* | *#task, ...* | *#86, #83, #92, #87* | *none* | 
 
 
 ## Review (focus on solution and technology)
