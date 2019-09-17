@@ -49,7 +49,7 @@ This sprint will complete the following Epics.
 * *#74 short trip: User: I would like the tool to rearrange my trip for me to make it shorter so I have will have less travel time.*
 
 
-Key planning decisions for this sprint include ...
+Key planning decisions for this sprint include mutual distribution of tasks, under criterion of number weighted by percieved difficulty. Open communication will need to be held throughout the sprint duration in order to maximize successful integration of different components and keep to the allotted window.
 
 
 ## Metrics
