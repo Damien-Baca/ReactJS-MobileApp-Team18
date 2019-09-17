@@ -56,8 +56,8 @@ Key planning decisions for this sprint include mutual distribution of tasks, und
 
 | Statistic | # Planned | # Completed |
 | --- | ---: | ---: |
-| Epics | *value* | *value* |
-| Tasks |  *value*   | *value* | 
+| Epics | *6* | *value* |
+| Tasks |  *11*   | *value* | 
 | Story Points |  *value*  | *value* | 
 
 
@@ -65,7 +65,7 @@ Key planning decisions for this sprint include mutual distribution of tasks, und
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *date* | *#task, ...* | *#task, ...* | *none* | 
+| *17092019* | *#task, ...* | *#task, ...* | *none* | 
 
 
 ## Review (focus on solution and technology)
