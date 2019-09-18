@@ -51,6 +51,8 @@ This sprint will complete the following Epics.
 
 Key planning decisions for this sprint include mutual distribution of tasks, under criterion of number weighted by percieved difficulty. Open communication will need to be held throughout the sprint duration in order to maximize successful integration of different components and keep to the allotted window.
 
+![Client Server Diagram for Short Trip Epic](images/ShortTrip_Issue24_Plan.png)
+
 
 ## Metrics
 
