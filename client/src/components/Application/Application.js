@@ -20,6 +20,7 @@ export default class Application extends Component {
     this.updatePlanOption = this.updatePlanOption.bind(this);
     this.updateClientSetting = this.updateClientSetting.bind(this);
     this.createApplicationPage = this.createApplicationPage.bind(this);
+    this.updateDestinationList = this.updateDestinationList.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -29,6 +30,9 @@ export default class Application extends Component {
       },
       clientSettings: {
         serverPort: getOriginalServerPort()
+      },
+      destinationList: {
+        destinations: []
       },
       errorMessage: null
     };
@@ -118,5 +122,9 @@ export default class Application extends Component {
           </Container>
       });
     }
+  }
+
+  updateDestinationList(destinationList) {
+    //TODO implement
   }
 }

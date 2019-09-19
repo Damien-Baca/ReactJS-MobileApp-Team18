@@ -20,6 +20,7 @@ export default class Home extends Component {
           </Col>
           <Col xs={12} sm={12} md={5} lg={4} xl={3}>
             {this.renderIntro()}
+            {this.renderDestinations()}
           </Col>
         </Row>
       </Container>
@@ -54,7 +55,14 @@ export default class Home extends Component {
   renderIntro() {
     return(
       <Pane header={'Bon Voyage!'}
-            bodyJSX={'Let us help you plan your next trip.'}/>
+            bodyJSX={'Let us plan your next trip!'}/>
+    );
+  }
+
+  renderDestinations() {
+    return(
+        <Pane header={'Destinations:'}
+              bodyJSX={"test"/*this.props.home.destinations*/}/>
     );
   }
 
