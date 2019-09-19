@@ -5,6 +5,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import { Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
+import PaneInput from './PaneInput'
 
 /*
  * Renders the home page.
@@ -61,8 +62,9 @@ export default class Home extends Component {
 
   renderDestinations() {
     return(
-        <Pane header={'Destinations:'}
-              bodyJSX={"test"/*this.props.home.destinations*/}/>
+        <PaneInput header={'Destinations:'}
+                   bodyJSX={"test"}
+                    button={"Add new destination"}/>
     );
   }
 
