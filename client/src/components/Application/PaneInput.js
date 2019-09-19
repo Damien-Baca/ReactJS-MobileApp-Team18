@@ -7,7 +7,7 @@ import {Card, CardBody, CardHeader} from 'reactstrap';
 export default class PaneInput extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {value: 'lemons'};
 
     this.applyChange = this.applyChange.bind(this);
     this.applySubmit = this.applySubmit.bind(this);
@@ -31,10 +31,10 @@ export default class PaneInput extends Component {
     return (
         <form onSubmit={this.applySubmit}>
           <label>
-            Name:
-            <input type="text" value={this.state.value} onChange={this.applyChange} />
+            <input type="text" value={this.state.value}
+                   onChange={this.applyChange}/>
           </label>
-          <input type="submit" value={button} />
+          <input type="submit" value={button}/>
         </form>
     );
   }

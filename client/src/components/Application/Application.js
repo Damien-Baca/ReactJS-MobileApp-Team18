@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Card, CardBody, CardHeader, Container} from 'reactstrap';
+import {Container} from 'reactstrap';
 
 import Home from './Home';
 import Options from './Options/Options';
@@ -9,12 +9,11 @@ import Settings from './Settings/Settings';
 import {getOriginalServerPort, sendServerRequest} from '../../api/restfulAPI';
 import ErrorBanner from './ErrorBanner';
 
-
 /* Renders the application.
  * Holds the destinations and options state shared with the trip.
  */
 export default class Application extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.updatePlanOption = this.updatePlanOption.bind(this);
@@ -25,14 +24,15 @@ export default class Application extends Component {
     this.state = {
       serverConfig: null,
       planOptions: {
-        units: {'miles':3959, 'kilometers':6371},
+        units: {'miles': 3959, 'kilometers': 6371},
         activeUnit: 'miles'
       },
       clientSettings: {
         serverPort: getOriginalServerPort()
       },
       destinationList: {
-        destinations: []
+        destinations: [{'name': 'No destinations',
+        'latitude': 'None', 'longitude': 'None'}]
       },
       errorMessage: null
     };
@@ -44,16 +44,17 @@ export default class Application extends Component {
     let pageToRender = this.state.serverConfig ? this.props.page : 'settings';
 
     return (
-      <div className='application-width'>
-        { this.state.errorMessage }{ this.createApplicationPage(pageToRender) }
-      </div>
+        <div className='application-width'>
+          {this.state.errorMessage}{this.createApplicationPage(pageToRender)}
+        </div>
     );
   }
 
   updateClientSetting(field, value) {
-    if(field === 'serverPort')
-      this.setState({clientSettings: {serverPort: value}}, this.updateServerConfig);
-    else {
+    if (field === 'serverPort') {
+      this.setState({clientSettings: {serverPort: value}},
+          this.updateServerConfig);
+    } else {
       let newSettings = Object.assign({}, this.state.planOptions);
       newSettings[field] = value;
       this.setState({clientSettings: newSettings});
@@ -67,22 +68,23 @@ export default class Application extends Component {
   }
 
   updateServerConfig() {
-    sendServerRequest('config', this.state.clientSettings.serverPort).then(config => {
-      console.log(config);
-      this.processConfigResponse(config);
-    });
+    sendServerRequest('config', this.state.clientSettings.serverPort).then(
+        config => {
+          console.log(config);
+          this.processConfigResponse(config);
+        });
   }
 
   createErrorBanner(statusText, statusCode, message) {
     return (
-      <ErrorBanner statusText={statusText}
-                   statusCode={statusCode}
-                   message={message}/>
+        <ErrorBanner statusText={statusText}
+                     statusCode={statusCode}
+                     message={message}/>
     );
   }
 
   createApplicationPage(pageToRender) {
-    switch(pageToRender) {
+    switch (pageToRender) {
       case 'calc':
         return <Calculator options={this.state.planOptions}
                            settings={this.state.clientSettings}
@@ -93,33 +95,33 @@ export default class Application extends Component {
                         updateOption={this.updatePlanOption}/>;
 
       case 'about':
-        return <About/>
+        return <About/>;
 
       case 'settings':
         return <Settings settings={this.state.clientSettings}
                          serverConfig={this.state.serverConfig}
                          updateSetting={this.updateClientSetting}/>;
       default:
-        return <Home/>;
+        return <Home options={this.state.planOptions}
+                      destinationList={this.state.destinationList}/>;
     }
   }
 
   processConfigResponse(config) {
-    if(config.statusCode >= 200 && config.statusCode <= 299) {
+    if (config.statusCode >= 200 && config.statusCode <= 299) {
       console.log("Switching to server ", this.state.clientSettings.serverPort);
       this.setState({
         serverConfig: config.body,
         errorMessage: null
       });
-    }
-    else {
+    } else {
       this.setState({
         serverConfig: null,
         errorMessage:
-          <Container>
-            {this.createErrorBanner(config.statusText, config.statusCode,
-            `Failed to fetch config from ${ this.state.clientSettings.serverPort}. Please choose a valid server.`)}
-          </Container>
+            <Container>
+              {this.createErrorBanner(config.statusText, config.statusCode,
+                  `Failed to fetch config from ${this.state.clientSettings.serverPort}. Please choose a valid server.`)}
+            </Container>
       });
     }
   }

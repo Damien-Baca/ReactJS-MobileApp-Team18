@@ -8,13 +8,13 @@ import Units from './Units'
  * The options reside in the parent object so they may be shared with the Distance object.
  * Allows the user to set the options used by the application via a set of buttons.
  */
-export default class Options extends Component{
+export default class Options extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    return(
+    return (
         <Container>
           <Row>
             <Col xs="12">
@@ -31,7 +31,6 @@ export default class Options extends Component{
         </Container>
     )
   }
-
 
   heading() {
     return (
