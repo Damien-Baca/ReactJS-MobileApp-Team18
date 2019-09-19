@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, ListGroup, ListGroupItem} from 'reactstrap';
+import {Container, Row, Col, ListGroup, ListGroupItem, Button} from 'reactstrap';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
@@ -67,15 +67,23 @@ export default class Home extends Component {
                    bodyJSX={this.renderDestinationList(
                        this.props.destinationList.destinations
                    )}
-                   button={"Add new destination"}/>
+                   button={"Add new destination"}
+                   applySubmit={this.props.addDestination}/>
     );
   }
 
   renderDestinationList(destinations) {
     return (
-        destinations.map((destination, index) => (
-            <div key={'destination_' + index}>{destination.name}</div>
-        ))
+        <ListGroup>
+          {destinations.map((destination, index) => (
+              <ListGroupItem key={'destination_' + index}>{destination.name}
+              <Button className='btn-csu w-100 text-left'
+                      key={"button_" + destination.name}
+                      value='Remove'
+                      onClick={(event) => this.props.removeDestination({destination})}
+              /></ListGroupItem>
+          ))}
+        </ListGroup>
     );
   }
 

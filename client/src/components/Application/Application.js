@@ -19,7 +19,8 @@ export default class Application extends Component {
     this.updatePlanOption = this.updatePlanOption.bind(this);
     this.updateClientSetting = this.updateClientSetting.bind(this);
     this.createApplicationPage = this.createApplicationPage.bind(this);
-    this.updateDestinationList = this.updateDestinationList.bind(this);
+    this.addDestination = this.addDestination.bind(this);
+    this.removeDestination = this.removeDestination.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -32,7 +33,7 @@ export default class Application extends Component {
       },
       destinationList: {
         destinations: [{'name': 'No destinations',
-        'latitude': 'None', 'longitude': 'None'}]
+          'latitude': 'None', 'longitude': 'None'}]
       },
       errorMessage: null
     };
@@ -103,7 +104,9 @@ export default class Application extends Component {
                          updateSetting={this.updateClientSetting}/>;
       default:
         return <Home options={this.state.planOptions}
-                      destinationList={this.state.destinationList}/>;
+                     destinationList={this.state.destinationList}
+                     addDestination={this.addDestination}
+                     removeDestination={this.removeDestination}/>;
     }
   }
 
@@ -126,7 +129,27 @@ export default class Application extends Component {
     }
   }
 
-  updateDestinationList(destinationList) {
-    //TODO implement
+  addDestination(newDestination) {
+    let destinations = this.state.destinationList.destinations;
+    let empty = {name: 'None', latitude: 'None', longitude: 'None'};
+
+    if (destinations.contains(empty)) {
+      destinations.splice(destinations.indexOf(empty), 1);
+    }
+
+    destinations.append(newDestination);
+  }
+
+  removeDestination(oldDestination) {
+    let destinations = this.state.destinationList.destinations;
+    let empty = {name: 'None', latitude: 'None', longitude: 'None'};
+
+    if (destinations.contains(empty)) {
+      destinations.splice(destinations.indexOf(oldDestination), 1);
+    }
+
+    if(destinations.isEmpty()) {
+      destinations.append(empty);
+    }
   }
 }
