@@ -32,8 +32,7 @@ export default class Application extends Component {
         serverPort: getOriginalServerPort()
       },
       destinationList: {
-        destinations: [{'name': 'No destinations',
-          'latitude': 'None', 'longitude': 'None'}]
+        destinations: []
       },
       errorMessage: null
     };
@@ -131,25 +130,12 @@ export default class Application extends Component {
 
   addDestination(newDestination) {
     let destinations = this.state.destinationList.destinations;
-    let empty = {name: 'None', latitude: 'None', longitude: 'None'};
-
-    if (destinations.contains(empty)) {
-      destinations.splice(destinations.indexOf(empty), 1);
-    }
-
     destinations.append(newDestination);
   }
 
+
   removeDestination(oldDestination) {
     let destinations = this.state.destinationList.destinations;
-    let empty = {name: 'None', latitude: 'None', longitude: 'None'};
-
-    if (destinations.contains(empty)) {
-      destinations.splice(destinations.indexOf(oldDestination), 1);
-    }
-
-    if(destinations.isEmpty()) {
-      destinations.append(empty);
-    }
+    destinations.splice(destinations.indexOf(oldDestination), 1);
   }
 }

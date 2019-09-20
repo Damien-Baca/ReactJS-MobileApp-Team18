@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, ListGroup, ListGroupItem, Button} from 'reactstrap';
+import {Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
-import PaneInput from './PaneInput'
 
 /*
  * Renders the home page.
@@ -63,29 +62,35 @@ export default class Home extends Component {
 
   renderDestinations() {
     return (
-        <PaneInput header={'Destinations:'}
+        <Pane header={'Destinations:'}
                    bodyJSX={this.renderDestinationList(
                        this.props.destinationList.destinations
-                   )}
-                   button={"Add new destination"}
-                   applySubmit={this.props.addDestination}/>
+                   )}/>
     );
   }
 
-  renderDestinationList(destinations) {
+  renderDestinationList() {
     return (
-        <ListGroup>
-          {destinations.map((destination, index) => (
-              <ListGroupItem key={'destination_' + index}>{destination.name}
+        {this.renderList()},
+        {thjsarenderAddDestination()}
+    );
+  }
+
+  renderList() {
+    return (
+      <ListGroup>
+        { this.props.destinationList.destinations.map((destination, index) => (
+            <ListGroupItem key={'destination_' + index}>{destination.name}
               <Button className='btn-csu w-100 text-left'
                       key={"button_" + destination.name}
                       value='Remove'
-                      onClick={(event) => this.props.removeDestination({destination})}
+                      onClick={this.props.removeDestination({destination})}
               /></ListGroupItem>
-          ))}
-        </ListGroup>
+        ))}
+      </ListGroup>
     );
   }
+
 
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado
