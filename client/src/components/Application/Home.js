@@ -71,8 +71,8 @@ export default class Home extends Component {
 
   renderDestinationList() {
     return (
-        {this.renderList()},
-        {thjsarenderAddDestination()}
+        this.renderList(),
+        this.renderAddDestination()
     );
   }
 
@@ -88,6 +88,28 @@ export default class Home extends Component {
               /></ListGroupItem>
         ))}
       </ListGroup>
+    );
+  }
+
+  renderAddDestination() {
+    return (
+      <Form >
+        <FormGroup>
+          <Label for='add_destination'>New Destination</Label>
+          <Input type='text' name='newDest' id='add_destination' placeholder='Name Lat Long' />
+          <Button
+              className='btn-csu w-100 text-left'
+              key={"button_add"}
+              active={true}
+              value={'add_destination'.value}
+              onClick={(event) => this.props.addDestination(
+                  event.target.value.splice(" ")[0],
+                  event.target.value.splice(" ")[1],
+                  event.target.value.splice(" ")[2])}>
+              Add
+          </Button>
+        </FormGroup>
+      </Form>
     );
   }
 
