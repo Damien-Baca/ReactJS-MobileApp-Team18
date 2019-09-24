@@ -129,16 +129,18 @@ export default class Application extends Component {
     }
   }
 
-  addDestination(newDestination) {
-    this.setState(
-        {
-          destinationList: this.state.destinations.append(newDestination)
-        });
+  addDestination(newDestination, index = (this.state.destinations.length)) {
+    console.log(`Adding destination ${newDestination.name}, ${newDestination.latitude}, ${newDestination.longitude} at ${index}`);
+    if (newDestination.name !== '') {
+      this.state.destinations.splice(index, 0, newDestination);
+      this.setState({
+        destinationList: this.state.destinations
+      });
+    }
   }
 
   removeDestination(index) {
     this.state.destinations.splice(index, 1);
-
     this.setState({
       destinations: this.state.destinations
     });

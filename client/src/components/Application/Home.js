@@ -10,6 +10,13 @@ import Pane from './Pane'
  * Renders the home page.
  */
 export default class Home extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      newDestination: {name: '', latitude: 0, longitude: 0}
+    }
+  }
 
   render() {
     return (
@@ -56,7 +63,7 @@ export default class Home extends Component {
   renderIntro() {
     return (
         <Pane header={'Bon Voyage!'}
-              bodyJSX={'Let us plan your next trip!'}/>
+              bodyJSX={this.renderAddDestination()}/>
     );
   }
 
@@ -71,7 +78,6 @@ export default class Home extends Component {
     return (
         <ListGroup>
           {this.renderList()}
-          {this.renderAddDestination()}
         </ListGroup>
     );
   }
@@ -97,24 +103,37 @@ export default class Home extends Component {
     return (
         <Form>
           <FormGroup>
-            <Label for='add_destination'>New Destination</Label>
-            <Input type='text' name='newDest' id='add_destination'
-                   placeholder='Name Lat Long'/>
+            <Label for='add_name'>New Destination</Label>
+            <Input type='text'
+                   name='name'
+                   id='add_name'
+                   placeholder='Name'
+                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
+            <Input type='text'
+                   name='latitude'
+                   id='add_latitude'
+                   placeholder='Latitude'
+                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
+            <Input type='text'
+                   name='longitude'
+                   id='add_longitude'
+                   placeholder='Longitude'
+                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
             <Button
                 className='btn-csu w-100 text-left'
                 key={"button_add"}
                 active={true}
                 value={'add_destination'.value}
-                onClick={() => console.log(`Add clicked`)
-                  /*(event) => this.props.addDestination(
-                    event.target.value.splice(" ")[0],
-                    event.target.value.splice(" ")[1],
-                    event.target.value.splice(" ")[2])*/}>
+                onClick={() => this.props.addDestination(this.state.newDestination)}>
               Add
             </Button>
           </FormGroup>
         </Form>
     );
+  }
+
+  updateNewDestinationOnChange(event) {
+    this.state.newDestination[event.target.name] = event.target.value;
   }
 
   coloradoGeographicBoundaries() {
