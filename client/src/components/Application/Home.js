@@ -1,16 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  ListGroupItem,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button
-} from 'reactstrap';
+import {Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
@@ -97,10 +86,9 @@ export default class Home extends Component {
                       key={"button_" + destination.name}
                       value='Remove'
                       active={false}
-                      onClick={() => console.log(`Remove clicked`)
-                        /*this.props.removeDestination({destination})*/}
+                      onClick={() => this.props.removeDestination(index)}
               >Remove</Button>
-              </ListGroupItem>
+            </ListGroupItem>
         ))
     );
   }

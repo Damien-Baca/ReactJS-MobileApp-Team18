@@ -136,10 +136,11 @@ export default class Application extends Component {
         });
   }
 
-  removeDestination(oldDestination) {
-    let destinationList = this.state.destinations;
+  removeDestination(index) {
+    this.state.destinations.splice(index, 1);
+
     this.setState({
-      destinations: destinationList.splice(destinationList.indexOf(oldDestination), 1)
-    })
+      destinations: this.state.destinations
+    });
   }
 }
