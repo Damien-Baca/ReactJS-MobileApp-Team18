@@ -31,9 +31,10 @@ export default class Application extends Component {
       clientSettings: {
         serverPort: getOriginalServerPort()
       },
-      destinationList: {
-        destinations: []
-      },
+      //FIXME test value
+      destinations: [
+        {name: 'Disney Land', latitude: 33.812511, longitude: -117.918976}
+      ],
       errorMessage: null
     };
 
@@ -103,7 +104,7 @@ export default class Application extends Component {
                          updateSetting={this.updateClientSetting}/>;
       default:
         return <Home options={this.state.planOptions}
-                     destinationList={this.state.destinationList}
+                     destinations={this.state.destinations}
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}/>;
     }
@@ -129,13 +130,16 @@ export default class Application extends Component {
   }
 
   addDestination(newDestination) {
-    let destinations = this.state.destinationList.destinations;
-    destinations.append(newDestination);
+    this.setState(
+        {
+          destinationList: this.state.destinations.append(newDestination)
+        });
   }
 
-
   removeDestination(oldDestination) {
-    let destinations = this.state.destinationList.destinations;
-    destinations.splice(destinations.indexOf(oldDestination), 1);
+    let destinationList = this.state.destinations;
+    this.setState({
+      destinations: destinationList.splice(destinationList.indexOf(oldDestination), 1)
+    })
   }
 }

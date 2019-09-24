@@ -1,5 +1,16 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  ListGroupItem,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button
+} from 'reactstrap';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
@@ -17,10 +28,10 @@ export default class Home extends Component {
           <Row>
             <Col xs={12} sm={12} md={7} lg={8} xl={9}>
               {this.renderMap()}
+              {this.renderDestinations()}
             </Col>
             <Col xs={12} sm={12} md={5} lg={4} xl={3}>
               {this.renderIntro()}
-              {this.renderDestinations()}
             </Col>
           </Row>
         </Container>
@@ -63,56 +74,60 @@ export default class Home extends Component {
   renderDestinations() {
     return (
         <Pane header={'Destinations:'}
-                   bodyJSX={this.renderDestinationList(
-                       this.props.destinationList.destinations
-                   )}/>
+              bodyJSX={this.renderDestinationList()}/>
     );
   }
 
   renderDestinationList() {
     return (
-        this.renderList(),
-        this.renderAddDestination()
+        <ListGroup>
+          {this.renderList()}
+          {this.renderAddDestination()}
+        </ListGroup>
     );
   }
 
   renderList() {
     return (
-      <ListGroup>
-        { this.props.destinationList.destinations.map((destination, index) => (
-            <ListGroupItem key={'destination_' + index}>{destination.name}
-              <Button className='btn-csu w-100 text-left'
+        this.props.destinations.map((destination, index) => (
+            <ListGroupItem key={'destination_' + index}>
+              {destination.name}, {destination.latitude}, {destination.longitude}
+              <Button className='btn-csu h-5 w-25 text-left'
+                      size={'sm'}
                       key={"button_" + destination.name}
                       value='Remove'
-                      onClick={this.props.removeDestination({destination})}
-              /></ListGroupItem>
-        ))}
-      </ListGroup>
+                      active={false}
+                      onClick={() => console.log(`Remove clicked`)
+                        /*this.props.removeDestination({destination})*/}
+              >Remove</Button>
+              </ListGroupItem>
+        ))
     );
   }
 
   renderAddDestination() {
     return (
-      <Form >
-        <FormGroup>
-          <Label for='add_destination'>New Destination</Label>
-          <Input type='text' name='newDest' id='add_destination' placeholder='Name Lat Long' />
-          <Button
-              className='btn-csu w-100 text-left'
-              key={"button_add"}
-              active={true}
-              value={'add_destination'.value}
-              onClick={(event) => this.props.addDestination(
-                  event.target.value.splice(" ")[0],
-                  event.target.value.splice(" ")[1],
-                  event.target.value.splice(" ")[2])}>
+        <Form>
+          <FormGroup>
+            <Label for='add_destination'>New Destination</Label>
+            <Input type='text' name='newDest' id='add_destination'
+                   placeholder='Name Lat Long'/>
+            <Button
+                className='btn-csu w-100 text-left'
+                key={"button_add"}
+                active={true}
+                value={'add_destination'.value}
+                onClick={() => console.log(`Add clicked`)
+                  /*(event) => this.props.addDestination(
+                    event.target.value.splice(" ")[0],
+                    event.target.value.splice(" ")[1],
+                    event.target.value.splice(" ")[2])*/}>
               Add
-          </Button>
-        </FormGroup>
-      </Form>
+            </Button>
+          </FormGroup>
+        </Form>
     );
   }
-
 
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado
