@@ -11,7 +11,7 @@ import Pane from './Pane'
  */
 export default class Home extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       newDestination: {name: '', latitude: 0, longitude: 0}
@@ -22,12 +22,12 @@ export default class Home extends Component {
     return (
         <Container>
           <Row>
-            <Col xs={12} sm={12} md={7} lg={8} xl={9}>
+            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderMap()}
-              {this.renderDestinations()}
             </Col>
-            <Col xs={12} sm={12} md={5} lg={4} xl={3}>
+            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderIntro()}
+              {this.renderDestinations()}
             </Col>
           </Row>
         </Container>
