@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {
   Card,
   CardHeader,
@@ -17,18 +17,18 @@ import hgqPhoto from './images/hqMongoose.jpg'
 export default class About extends Component {
   render() {
     let team = [[cabeleinPhoto, "Christopher Abelein",
-                  "Has a psychological dependency on writing out plans "
-                  + "for projects. Mongoose. That's a cool team name."],
-                [dbacaPhoto, "Damien Baca",
-                  "a CS Senior with a Math Minor"],
-                [jamesl84Photo, "James Lounsbury",
-                  "A CS and Physics major"],
-                [longChenPhoto, "Long Chen",
-                  "a ME major."],
-                [hgqPhoto, "Hayden Quintana",
-                  "likes long walks on the beach and poking dead things "
-                  + "with a stick"]
-                ];
+      "Has a psychological dependency on writing out plans "
+      + "for projects. Mongoose. That's a cool team name."],
+      [dbacaPhoto, "Damien Baca",
+        "a CS Senior with a Math Minor"],
+      [jamesl84Photo, "James Lounsbury",
+        "A CS and Physics major"],
+      [longChenPhoto, "Long Chen",
+        "a ME major."],
+      [hgqPhoto, "Hayden Quintana",
+        "likes long walks on the beach and poking dead things "
+        + "with a stick"]
+    ];
 
     return (
         this.generateCardGroups(team)
@@ -65,7 +65,7 @@ export default class About extends Component {
 
   showCard(img, title, text) {
     return (
-        <Card style={{ minWidth: '8rem' }}>
+        <Card style={{minWidth: '8rem'}}>
           <CardHeader>
             <CardImg top src={img}/>
           </CardHeader>

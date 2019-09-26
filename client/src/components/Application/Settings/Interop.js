@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Button, Input } from 'reactstrap'
+import {Button, Input} from 'reactstrap'
 import Pane from '../Pane'
 
 export default class Interop extends Component {
@@ -23,14 +23,16 @@ export default class Interop extends Component {
               bodyJSX={
                 <div>
                   <p>Current server name:</p>
-                    <Input value={currentServerName} disabled='disabled' className='font-weight-semibold'/>
+                  <Input value={currentServerName} disabled='disabled'
+                         className='font-weight-semibold'/>
                   <p>Configure new server:</p>
                   <form onSubmit={this.updateServerPort}>
                     <Input onChange={this.updateInputText}
                            value={this.state.inputText}
                            placeholder={this.props.serverPort}/>
                     <br/>
-                    <Button type='submit' className='btn-csu w-100'>Configure</Button>
+                    <Button type='submit'
+                            className='btn-csu w-100'>Configure</Button>
                   </form>
                 </div>
               }/>

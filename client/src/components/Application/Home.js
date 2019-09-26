@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Container, Row, Col} from 'reactstrap';
+import {Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
-import { Map, Marker, Popup, TileLayer} from 'react-leaflet';
+import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
 
 /*
@@ -13,23 +13,24 @@ export default class Home extends Component {
 
   render() {
     return (
-      <Container>
-        <Row>
-          <Col xs={12} sm={12} md={7} lg={8} xl={9}>
-            {this.renderMap()}
-          </Col>
-          <Col xs={12} sm={12} md={5} lg={4} xl={3}>
-            {this.renderIntro()}
-          </Col>
-        </Row>
-      </Container>
+        <Container>
+          <Row>
+            <Col xs={12} sm={12} md={7} lg={8} xl={9}>
+              {this.renderMap()}
+            </Col>
+            <Col xs={12} sm={12} md={5} lg={4} xl={3}>
+              {this.renderIntro()}
+              {this.renderDestinations()}
+            </Col>
+          </Row>
+        </Container>
     );
   }
 
   renderMap() {
     return (
-      <Pane header={'Where Am I?'}
-            bodyJSX={this.renderLeafletMap()}/>
+        <Pane header={'Where Am I?'}
+              bodyJSX={this.renderLeafletMap()}/>
     );
   }
 
@@ -38,25 +39,80 @@ export default class Home extends Component {
     // 1: bounds={this.coloradoGeographicBoundaries()}
     // 2: center={this.csuOvalGeographicCoordinates()} zoom={10}
     return (
-      <Map center={this.csuOvalGeographicCoordinates()} zoom={10}
-           style={{height: 500, maxwidth: 700}}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                   attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-        />
-        <Marker position={this.csuOvalGeographicCoordinates()}
-                icon={this.markerIcon()}>
-          <Popup className="font-weight-extrabold">Colorado State University</Popup>
-        </Marker>
-      </Map>
+        <Map center={this.csuOvalGeographicCoordinates()} zoom={10}
+             style={{height: 500, maxwidth: 700}}>
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                     attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+          />
+          <Marker position={this.csuOvalGeographicCoordinates()}
+                  icon={this.markerIcon()}>
+            <Popup className="font-weight-extrabold">Colorado State
+              University</Popup>
+          </Marker>
+        </Map>
     )
   }
 
   renderIntro() {
-    return(
-      <Pane header={'Bon Voyage!'}
-            bodyJSX={'Let us help you plan your next trip.'}/>
+    return (
+        <Pane header={'Bon Voyage!'}
+              bodyJSX={'Let us plan your next trip!'}/>
     );
   }
+
+  renderDestinations() {
+    return (
+        <Pane header={'Destinations:'}
+                   bodyJSX={this.renderDestinationList(
+                       this.props.destinationList.destinations
+                   )}/>
+    );
+  }
+
+  renderDestinationList() {
+    return (
+        this.renderList(),
+        this.renderAddDestination()
+    );
+  }
+
+  renderList() {
+    return (
+      <ListGroup>
+        { this.props.destinationList.destinations.map((destination, index) => (
+            <ListGroupItem key={'destination_' + index}>{destination.name}
+              <Button className='btn-csu w-100 text-left'
+                      key={"button_" + destination.name}
+                      value='Remove'
+                      onClick={this.props.removeDestination({destination})}
+              /></ListGroupItem>
+        ))}
+      </ListGroup>
+    );
+  }
+
+  renderAddDestination() {
+    return (
+      <Form >
+        <FormGroup>
+          <Label for='add_destination'>New Destination</Label>
+          <Input type='text' name='newDest' id='add_destination' placeholder='Name Lat Long' />
+          <Button
+              className='btn-csu w-100 text-left'
+              key={"button_add"}
+              active={true}
+              value={'add_destination'.value}
+              onClick={(event) => this.props.addDestination(
+                  event.target.value.splice(" ")[0],
+                  event.target.value.splice(" ")[1],
+                  event.target.value.splice(" ")[2])}>
+              Add
+          </Button>
+        </FormGroup>
+      </Form>
+    );
+  }
+
 
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado
@@ -73,7 +129,7 @@ export default class Home extends Component {
     return L.icon({
       iconUrl: icon,
       shadowUrl: iconShadow,
-      iconAnchor: [12,40]  // for proper placement
+      iconAnchor: [12, 40]  // for proper placement
     })
   }
 }
