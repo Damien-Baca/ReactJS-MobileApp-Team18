@@ -7,10 +7,12 @@ function testInitialState() {
   const home = shallow(<Home/>);
   let initialNewDestination = {name: '', latitude: 0, longitude: 0};
 
-  expect(home.state.newDestination).toEqual(initialNewDestination);
+  expect(home.state().newDestination).toEqual(initialNewDestination);
 }
 
-function testNewDestinationName() {
+test('Testing inital state.', testInitialState());
+
+function testUpdateDestinationName() {
   const home = shallow(<Home/>);
   let newName = {
     target: {
@@ -19,7 +21,41 @@ function testNewDestinationName() {
     }
   };
 
-  home.updateNewDestinationOnChange(newName);
+  home.instance().updateNewDestinationOnChange(newName);
 
-  expect(home.state.newDestination.name).toEqual(newName.target.name);
+  expect(home.state().newDestination.name).toEqual(newName.target.name);
 }
+
+test('Testing newDestination name update.', testUpdateDestinationName);
+
+function testUpdateLatitude() {
+  const home = shallow(<Home/>);
+  let newName = {
+    target: {
+      name: 'latitude',
+      value: 24.42
+    }
+  };
+
+  home.instance().updateNewDestinationOnChange(newName);
+
+  expect(home.state().newDestination.name).toEqual(newName.target.name);
+}
+
+test('Testing newDestination latitude update.', testUpdateLatitude);
+
+function testUpdateLongitude() {
+  const home = shallow(<Home/>);
+  let newName = {
+    target: {
+      name: 'longitude',
+      value: 42.24
+    }
+  };
+
+  home.instance().updateNewDestinationOnChange(newName);
+
+  expect(home.state().newDestination.name).toEqual(newName.target.name);
+}
+
+test('Testing newDestination longitude update.', testUpdateLongitude);
