@@ -86,14 +86,18 @@ export default class Home extends Component {
     return (
         this.props.destinations.map((destination, index) => (
             <ListGroupItem key={'destination_' + index}>
+              <Row>
               {destination.name}, {destination.latitude}, {destination.longitude}
-              <Button className='btn-csu h-5 w-25 text-left'
+              </Row>
+              <Row>
+              <Button className='btn-csu h-5 w-50 text-left'
                       size={'sm'}
                       key={"button_" + destination.name}
                       value='Remove'
                       active={false}
                       onClick={() => this.props.removeDestination(index)}
               >Remove</Button>
+              </Row>
             </ListGroupItem>
         ))
     );

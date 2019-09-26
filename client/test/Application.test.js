@@ -72,7 +72,7 @@ test("Testing Application's addDestination function.", testAddDestination);
 
 function testRemoveDestination() {
   const app = shallow(<Application/>);
-  let expectedDestination = [];
+  let expectedDestination = app.state().destinations;
   let newDestination = {
     name: 'Disney Land',
     latitude: 33.812511,

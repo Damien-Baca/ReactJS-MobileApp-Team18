@@ -32,9 +32,7 @@ export default class Application extends Component {
         serverPort: getOriginalServerPort()
       },
       //FIXME test value
-      destinations: [
-        {name: 'Disney Land', latitude: 33.812511, longitude: -117.918976}
-      ],
+      destinations: [],
       errorMessage: null
     };
 
