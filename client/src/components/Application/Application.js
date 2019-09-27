@@ -32,7 +32,11 @@ export default class Application extends Component {
         serverPort: getOriginalServerPort()
       },
       //FIXME test value
-      destinations: [],
+      destinations: [{
+        name: '',
+        latitude: '',
+        longitude: ''
+      }],
       errorMessage: null
     };
 

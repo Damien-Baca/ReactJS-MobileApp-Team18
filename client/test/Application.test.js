@@ -15,7 +15,7 @@ function testInitialState() {
 
   let actualOptions = app.state().planOptions;
   let expectedOptions = {
-    units: {miles: 3959},
+    units: {kilometers: 6371, miles: 3959},
     activeUnit: 'miles'
   };
 
@@ -72,7 +72,7 @@ test("Testing Application's addDestination function.", testAddDestination);
 
 function testRemoveDestination() {
   const app = shallow(<Application/>);
-  let expectedDestination = app.state().destinations;
+  let expectedDestination = app.state.destinations;
   let newDestination = {
     name: 'Disney Land',
     latitude: 33.812511,
