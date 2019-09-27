@@ -56,14 +56,14 @@ test("Testing Application's updatePlanOption function", testUpdateOption);
 
 function testAddDestination() {
   const app = shallow(<Application/>);
-  let expectedDestination = {
+  let expectedDestination = [{
     name: 'Disney Land',
     latitude: 33.812511,
     longitude: -117.918976
-  };
+  }];
 
-  app.instance().addDestination(expectedDestination);
-  let actualDestination = app.state().destination;
+  app.instance().addDestination(expectedDestination[0]);
+  let actualDestination = app.state().destinations;
 
   expect(actualDestination).toEqual(expectedDestination);
 }
@@ -72,16 +72,16 @@ test("Testing Application's addDestination function.", testAddDestination);
 
 function testRemoveDestination() {
   const app = shallow(<Application/>);
-  let expectedDestination = app.state.destinations;
-  let newDestination = {
+  let expectedDestination = app.state().destinations;
+  let newDestination = [{
     name: 'Disney Land',
     latitude: 33.812511,
     longitude: -117.918976
-  };
+  }];
 
   app.instance().addDestination(newDestination);
-  app.instance().removeDestination(newDestination);
-  let actualDestination = app.state().destination;
+  app.instance().removeDestination(newDestination[0]);
+  let actualDestination = app.state().destinations;
 
   expect(actualDestination).toEqual(expectedDestination);
 }

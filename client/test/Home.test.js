@@ -45,7 +45,7 @@ function testUpdateLatitude() {
   let expected = newLat.target.value;
 
   home.instance().updateNewDestinationOnChange(newLat);
-  let actual = home.state().newDestination.name;
+  let actual = home.state().newDestination.latitude;
 
   expect(actual).toEqual(expected);
 }
@@ -54,16 +54,16 @@ test('Testing newDestination latitude update.', testUpdateLatitude);
 
 function testUpdateLongitude() {
   const home = mount((<Home destinations={destinations}/>));
-  let newLong = {
+  let newLon = {
     target: {
       name: 'longitude',
       value: 42.24
     }
   };
-  let expected = newName.target.value;
+  let expected = newLon.target.value;
 
-  home.instance().updateNewDestinationOnChange(newLong);
-  let actual = home.state().newDestination.name;
+  home.instance().updateNewDestinationOnChange(newLon);
+  let actual = home.state().newDestination.longitude;
 
   expect(actual).toEqual(expected);
 }
