@@ -10,15 +10,22 @@ import Pane from './Pane'
  * Renders the home page.
  */
 export default class Home extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      newDestination: {name: '', latitude: 0, longitude: 0}
+    }
+  }
 
   render() {
     return (
         <Container>
           <Row>
-            <Col xs={12} sm={12} md={7} lg={8} xl={9}>
+            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderMap()}
             </Col>
-            <Col xs={12} sm={12} md={5} lg={4} xl={3}>
+            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderIntro()}
               {this.renderDestinations()}
             </Col>
@@ -56,63 +63,82 @@ export default class Home extends Component {
   renderIntro() {
     return (
         <Pane header={'Bon Voyage!'}
-              bodyJSX={'Let us plan your next trip!'}/>
+              bodyJSX={this.renderAddDestination()}/>
     );
   }
 
   renderDestinations() {
     return (
         <Pane header={'Destinations:'}
-                   bodyJSX={this.renderDestinationList(
-                       this.props.destinationList.destinations
-                   )}/>
+              bodyJSX={this.renderDestinationList()}/>
     );
   }
 
   renderDestinationList() {
     return (
-        this.renderList(),
-        this.renderAddDestination()
+        <ListGroup>
+          {this.renderList()}
+        </ListGroup>
     );
   }
 
   renderList() {
     return (
-      <ListGroup>
-        { this.props.destinationList.destinations.map((destination, index) => (
-            <ListGroupItem key={'destination_' + index}>{destination.name}
-              <Button className='btn-csu w-100 text-left'
+        this.props.destinations.map((destination, index) => (
+            <ListGroupItem key={'destination_' + index}>
+              <Row>
+              {destination.name}, {destination.latitude}, {destination.longitude}
+              </Row>
+              <Row>
+              <Button className='btn-csu h-5 w-50 text-left'
+                      size={'sm'}
                       key={"button_" + destination.name}
                       value='Remove'
-                      onClick={this.props.removeDestination({destination})}
-              /></ListGroupItem>
-        ))}
-      </ListGroup>
+                      active={false}
+                      onClick={() => this.props.removeDestination(index)}
+              >Remove</Button>
+              </Row>
+            </ListGroupItem>
+        ))
     );
   }
 
   renderAddDestination() {
     return (
-      <Form >
-        <FormGroup>
-          <Label for='add_destination'>New Destination</Label>
-          <Input type='text' name='newDest' id='add_destination' placeholder='Name Lat Long' />
-          <Button
-              className='btn-csu w-100 text-left'
-              key={"button_add"}
-              active={true}
-              value={'add_destination'.value}
-              onClick={(event) => this.props.addDestination(
-                  event.target.value.splice(" ")[0],
-                  event.target.value.splice(" ")[1],
-                  event.target.value.splice(" ")[2])}>
+        <Form>
+          <FormGroup>
+            <Label for='add_name'>New Destination</Label>
+            <Input type='text'
+                   name='name'
+                   id='add_name'
+                   placeholder='Name'
+                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
+            <Input type='text'
+                   name='latitude'
+                   id='add_latitude'
+                   placeholder='Latitude'
+                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
+            <Input type='text'
+                   name='longitude'
+                   id='add_longitude'
+                   placeholder='Longitude'
+                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
+            <Button
+                className='btn-csu w-100 text-left'
+                key={"button_add"}
+                active={true}
+                value={this.state.newDestination}
+                onClick={() => this.props.addDestination(Object.assign({}, this.state.newDestination))}>
               Add
-          </Button>
-        </FormGroup>
-      </Form>
+            </Button>
+          </FormGroup>
+        </Form>
     );
   }
 
+  updateNewDestinationOnChange(event) {
+    this.state.newDestination[event.target.name] = event.target.value;
+  }
 
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado

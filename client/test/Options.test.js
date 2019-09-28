@@ -1,6 +1,6 @@
 import './enzyme.config.js'
 import React from 'react'
-import { shallow } from 'enzyme'
+import {shallow} from 'enzyme'
 import Options from '../src/components/Application/Options/Options'
 import Units from '../src/components/Application/Options/Units'
 

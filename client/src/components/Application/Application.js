@@ -31,9 +31,7 @@ export default class Application extends Component {
       clientSettings: {
         serverPort: getOriginalServerPort()
       },
-      destinationList: {
-        destinations: []
-      },
+      destinations: [],
       errorMessage: null
     };
 
@@ -103,7 +101,7 @@ export default class Application extends Component {
                          updateSetting={this.updateClientSetting}/>;
       default:
         return <Home options={this.state.planOptions}
-                     destinationList={this.state.destinationList}
+                     destinations={this.state.destinations}
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}/>;
     }
@@ -128,14 +126,21 @@ export default class Application extends Component {
     }
   }
 
-  addDestination(newDestination) {
-    let destinations = this.state.destinationList.destinations;
-    destinations.append(newDestination);
+  addDestination(newDestination, index = (this.state.destinations.length)) {
+    if (newDestination.name !== '' && newDestination.latitude !== '' && newDestination.longitude !== '') {
+      let newDestinationList = this.state.destinations;
+      newDestinationList.splice(index, 0, newDestination);
+
+      this.setState({
+        destinations: newDestinationList
+      });
+    }
   }
 
-
-  removeDestination(oldDestination) {
-    let destinations = this.state.destinationList.destinations;
-    destinations.splice(destinations.indexOf(oldDestination), 1);
+  removeDestination(index) {
+    this.state.destinations.splice(index, 1);
+    this.setState({
+      destinations: this.state.destinations
+    });
   }
 }
