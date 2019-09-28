@@ -127,7 +127,7 @@ export default class Home extends Component {
                 className='btn-csu w-100 text-left'
                 key={"button_add"}
                 active={true}
-                value={'add_destination'.value}
+                value={this.state.newDestination}
                 onClick={() => this.props.addDestination(this.state.newDestination)}>
               Add
             </Button>

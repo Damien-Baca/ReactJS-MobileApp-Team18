@@ -31,7 +31,6 @@ export default class Application extends Component {
       clientSettings: {
         serverPort: getOriginalServerPort()
       },
-      //FIXME test value
       destinations: [],
       errorMessage: null
     };
@@ -127,12 +126,14 @@ export default class Application extends Component {
     }
   }
 
-  addDestination(newDestination, index = (this.state.destinations.length)) {
-    console.log(`Adding destination ${newDestination.name}, ${newDestination.latitude}, ${newDestination.longitude} at ${index}`);
-    if (newDestination.name !== '') {
-      this.state.destinations.splice(index, 0, newDestination);
+  addDestination(destination, index = (this.state.destinations.length)) {
+    let newDestination = Object.assign({}, destination);
+    if (newDestination.name !== '' && newDestination.latitude !== '' && newDestination.longitude !== '') {
+      let newDestinationList = this.state.destinations;
+      newDestinationList.splice(index, 0, newDestination);
+
       this.setState({
-        destinationList: this.state.destinations
+        destinations: newDestinationList
       });
     }
   }
