@@ -17,13 +17,13 @@ export default class Home extends Component {
     }
     this.userLocation=this.userLocation.bind(this);
 
-    if(nabigator.geolocation){
+    if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition((this.userLocation));
     }else{
-      navigator.geolocation="Geolocation is not supported by this browser.";
     }
 
   }
+
   userLocation(position){
     this.setState({lat:position.coords.latitude, lon:position.coords.longitude})
   }
