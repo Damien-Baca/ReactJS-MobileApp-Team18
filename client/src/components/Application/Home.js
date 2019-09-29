@@ -19,7 +19,7 @@ export default class Home extends Component {
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
       },
-      newDestination: {name: '', latitude: 0, longitude: 0}
+      newDestination: {name: '', latitude: '', longitude: ''}
     }
   }
 
@@ -62,17 +62,11 @@ export default class Home extends Component {
   }
 
   renderMarkers() {
-    console.log(this.state.userLocation);
     let markerList = [Object.assign({}, this.state.userLocation)];
 
     if (this.props.destinations.length > 0) {
-      console.log("Adding destination to map.");
       markerList = Object.assign([], this.props.destinations);
     }
-
-    markerList.map((marker) => {
-      console.log(`Adding markers: ${marker.name}, ${marker.latitude}, ${marker.longitude}`);
-    });
 
     return (
         markerList.map((marker, index) => (
@@ -143,23 +137,25 @@ export default class Home extends Component {
                    name='name'
                    id='add_name'
                    placeholder='Name'
+                   value={this.state.newDestination.name}
                    onChange={(event) => this.updateNewDestinationOnChange(event)}/>
             <Input type='text'
                    name='latitude'
                    id='add_latitude'
                    placeholder='Latitude'
+                   value={this.state.newDestination.latitude}
                    onChange={(event) => this.updateNewDestinationOnChange(event)}/>
             <Input type='text'
                    name='longitude'
                    id='add_longitude'
                    placeholder='Longitude'
+                   value={this.state.newDestination.longitude}
                    onChange={(event) => this.updateNewDestinationOnChange(event)}/>
             <Button
                 className='btn-csu w-100 text-left'
                 key={"button_add"}
                 active={true}
-                value={this.state.newDestination}
-                onClick={() => this.props.addDestination(Object.assign({}, this.state.newDestination))}>
+                onClick={() => this.handleNewDestination()}>
               Add
             </Button>
           </FormGroup>
@@ -167,8 +163,20 @@ export default class Home extends Component {
     );
   }
 
+  handleNewDestination() {
+    this.props.addDestination(Object.assign({}, this.state.newDestination));
+    this.setState({
+      newDestination: {name: '', latitude: '', longitude: ''}
+    });
+  }
+
   updateNewDestinationOnChange(event) {
-    this.state.newDestination[event.target.name] = event.target.value;
+    let update = Object.assign({}, this.state.newDestination);
+    update[event.target.name] = event.target.value;
+
+    this.setState({
+      newDestination: update
+    });
   }
 
   coloradoGeographicBoundaries() {
