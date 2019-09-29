@@ -14,6 +14,11 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
+      userLocation: {
+        name: 'Colorado State University',
+        latitude: this.csuOvalGeographicCoordinates().latitude,
+        longitude: this.csuOvalGeographicCoordinates().longitude
+      },
       newDestination: {name: '', latitude: 0, longitude: 0}
     }
   }
@@ -51,13 +56,32 @@ export default class Home extends Component {
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
-          <Marker position={this.csuOvalGeographicCoordinates()}
-                  icon={this.markerIcon()}>
-            <Popup className="font-weight-extrabold">Colorado State
-              University</Popup>
-          </Marker>
+          {this.renderMarkers()}
         </Map>
     )
+  }
+
+  renderMarkers() {
+    let markerList = Object.assign([], this.state.userLocation);
+    /*
+    if (this.props.destinations.length > 0) {
+      markerList = Object.assign([], this.props.destinations);
+    }*/
+
+    return (
+        markerList.map((marker) => (
+          <Marker>
+            position = {L.latLng(marker.latitude, marker.longitude)}
+            icon = {this.markerIcon()} >
+            < Popup
+                className="font-weight-extrabold">{marker.name}</Popup>
+          </Marker>
+        ))
+    );
+  }
+
+  convertLatLng(latitude, longitude) {
+    return L.latLng(latitude, longitude);
   }
 
   renderIntro() {
