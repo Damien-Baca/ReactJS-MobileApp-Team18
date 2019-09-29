@@ -10,6 +10,23 @@ import Pane from './Pane'
  * Renders the home page.
  */
 export default class Home extends Component {
+  constructor(){
+    super();
+    this.state={
+      lat:40.576179, lon:-105.083372
+    }
+    this.userLocation=this.userLocation.bind(this);
+
+    if(nabigator.geolocation){
+      navigator.geolocation.getCurrentPosition((this.userLocation));
+    }else{
+      navigator.geolocation="Geolocation is not supported by this browser.";
+    }
+
+  }
+  userLocation(position){
+    this.setState({lat:position.coords.latitude, lon:position.coords.longitude})
+  }
 
   render() {
     return (
