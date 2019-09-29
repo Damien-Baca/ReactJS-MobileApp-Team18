@@ -16,8 +16,8 @@ export default class Home extends Component {
     this.state = {
       userLocation: {
         name: 'Colorado State University',
-        latitude: this.csuOvalGeographicCoordinates().latitude,
-        longitude: this.csuOvalGeographicCoordinates().longitude
+        latitude: this.csuOvalGeographicCoordinates().lat,
+        longitude: this.csuOvalGeographicCoordinates().lng
       },
       newDestination: {name: '', latitude: 0, longitude: 0}
     }
@@ -51,7 +51,7 @@ export default class Home extends Component {
     // 1: bounds={this.coloradoGeographicBoundaries()}
     // 2: center={this.csuOvalGeographicCoordinates()} zoom={10}
     return (
-        <Map center={this.csuOvalGeographicCoordinates()} zoom={10}
+        <Map center={this.convertLatLng(this.state.userLocation.latitude, this.state.userLocation.longitude)} zoom={10}
              style={{height: 500, maxwidth: 700}}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -62,17 +62,24 @@ export default class Home extends Component {
   }
 
   renderMarkers() {
-    let markerList = Object.assign([], this.state.userLocation);
-    /*
+    console.log(this.state.userLocation);
+    let markerList = [Object.assign({}, this.state.userLocation)];
+
     if (this.props.destinations.length > 0) {
+      console.log("Adding destination to map.");
       markerList = Object.assign([], this.props.destinations);
-    }*/
+    }
+
+    markerList.map((marker) => {
+      console.log(`Adding markers: ${marker.name}, ${marker.latitude}, ${marker.longitude}`);
+    });
 
     return (
-        markerList.map((marker) => (
-          <Marker>
-            position = {L.latLng(marker.latitude, marker.longitude)}
-            icon = {this.markerIcon()} >
+        markerList.map((marker, index) => (
+          <Marker
+            key={`marker_${index}`}
+            position={L.latLng(marker.latitude, marker.longitude)}
+            icon={this.markerIcon()}>
             < Popup
                 className="font-weight-extrabold">{marker.name}</Popup>
           </Marker>
