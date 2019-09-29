@@ -133,24 +133,7 @@ export default class Home extends Component {
         <Form>
           <FormGroup>
             <Label for='add_name'>New Destination</Label>
-            <Input type='text'
-                   name='name'
-                   id='add_name'
-                   placeholder='Name'
-                   value={this.state.newDestination.name}
-                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
-            <Input type='text'
-                   name='latitude'
-                   id='add_latitude'
-                   placeholder='Latitude'
-                   value={this.state.newDestination.latitude}
-                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
-            <Input type='text'
-                   name='longitude'
-                   id='add_longitude'
-                   placeholder='Longitude'
-                   value={this.state.newDestination.longitude}
-                   onChange={(event) => this.updateNewDestinationOnChange(event)}/>
+            {this.generateCoordinateInput()}
             <Button
                 className='btn-csu w-100 text-left'
                 key={"button_add"}
@@ -161,6 +144,17 @@ export default class Home extends Component {
           </FormGroup>
         </Form>
     );
+  }
+
+  generateCoordinateInput() {
+    return (Object.keys(this.state.newDestination).map((field) => (
+        <Input type='text'
+               name={field}
+               id={`add_${field}`}
+               placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
+               value={this.state.newDestination[field]}
+               onChange={(event) => this.updateNewDestinationOnChange(event)}/>
+    )));
   }
 
   handleNewDestination() {
