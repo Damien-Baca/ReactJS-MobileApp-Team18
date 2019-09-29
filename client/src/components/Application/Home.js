@@ -127,8 +127,8 @@ export default class Home extends Component {
                 className='btn-csu w-100 text-left'
                 key={"button_add"}
                 active={true}
-                value={'add_destination'.value}
-                onClick={() => this.props.addDestination(this.state.newDestination)}>
+                value={this.state.newDestination}
+                onClick={() => this.props.addDestination(Object.assign({}, this.state.newDestination))}>
               Add
             </Button>
           </FormGroup>
