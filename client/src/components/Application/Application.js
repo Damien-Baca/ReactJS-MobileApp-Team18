@@ -102,6 +102,7 @@ export default class Application extends Component {
       default:
         return <Home options={this.state.planOptions}
                      destinations={this.state.destinations}
+                     settings={this.state.clientSettings}
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}/>;
     }

@@ -62,6 +62,7 @@ class MicroServer {
   private void processRestfulAPIrequests() {
     Spark.get("/api/config", this::processTIPconfigRequest);
     Spark.post("/api/distance", this::processTIPdistanceRequest);
+    Spark.post("/api/trip", this::processTIPtripRequest);
     Spark.get("/api/echo", this::echoHTTPrequest);
     log.trace("Restful configuration complete");
   }
@@ -91,7 +92,7 @@ class MicroServer {
     return processTIPrequest(TIPDistance.class, request, response);
   }
 
-  private String processTIPTripRequest(Request request, Response response) {
+  private String processTIPtripRequest(Request request, Response response) {
     return processTIPrequest(TIPTrip.class, request, response);
   }
 

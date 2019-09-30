@@ -5,7 +5,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
-import {sendServerRequestWithBody} from '../../../api/restfulAPI'
+import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
 /*
  * Renders the home page.
@@ -15,18 +15,21 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
+      errorMessage: null,
       userLocation: {
         name: 'Colorado State University',
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
       },
-      newDestination: {name: '', latitude: '', longitude: ''}
+      newDestination: {name: '', latitude: '', longitude: ''},
+      tripDistances: []
     }
   }
 
   render() {
     return (
         <Container>
+          {this.state.errorMessage}
           <Row>
             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderMap()}
@@ -102,10 +105,14 @@ export default class Home extends Component {
 
   renderDestinationControls() {
     return (
-        <Row>
-          {this.renderAddDestination()}
-          {this.renderDestinationControls()}
-        </Row>
+        <Container>
+          <Row>
+            {this.renderAddDestination()}
+          </Row>
+          <Row>
+            {this.renderDestinationOptions()}
+          </Row>
+        </Container>
     );
   }
 
@@ -135,11 +142,11 @@ export default class Home extends Component {
     );
   }
 
-  renderDestinationControls() {
+  renderDestinationOptions() {
     return (
-      <Button>
-
-      </Button>
+      <Button
+          onClick={() => this.calculateDistances()}
+      >Calculate Trip Distances</Button>
     );
   }
 
@@ -188,6 +195,38 @@ export default class Home extends Component {
 
     this.setState({
       newDestination: update
+    });
+  }
+
+  calculateDistances() {
+    const tipConfigRequest = {
+      'type': 'trip',
+      'version': 2,
+      'options': {
+        'title': 'My Trip',
+        'earthRadius': this.props.options.units[this.props.options.activeUnit],
+        'optimization': 'none'
+      },
+      'destination': this.props.destinations,
+      'distances': []
+    };
+
+    sendServerRequestWithBody('trip', tipConfigRequest,
+        this.props.settings.serverPort).then((response) => {
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        this.setState({
+          tripDistances: response.body.distance,
+          errorMessage: null
+        });
+      } else {
+        this.setState({
+          errorMessage: this.props.createErrorBanner(
+              response.statusText,
+              response.statusCode,
+              `Request to ${this.props.settings.serverPort} failed.`
+          )
+        });
+      }
     });
   }
 
