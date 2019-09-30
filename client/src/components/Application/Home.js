@@ -206,8 +206,8 @@ export default class Home extends Component {
                placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
                value={this.state.newDestination[field]}
                onChange={(event) => this.updateNewDestinationOnChange(event)}
-               valid={ (this.state.validLatLon && (this.state.newDestination.latitude != '' && this.state.newDestination.longitude != '')) }
-               invalid={( (!this.state.validLatLon )&& (this.state.newDestination.latitude != '' && this.state.newDestination.longitude != '')) }/>
+               valid={( this.state.validLatLon ) }
+               invalid={( !this.state.validLatLon ) }/>
     )));
   }
 
@@ -221,7 +221,11 @@ export default class Home extends Component {
   updateNewDestinationOnChange(event) {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
-    let validationCheck = validateCoordinates(this.state.newDestination.latitude, this.state.newDestination.longitude);
+    let validationCheck = validateCoordinates(update.latitude, update.longitude);
+    if (event.target.value === '') {
+      validationCheck = false;
+    }
+
     this.setState({
       validLatLon: validationCheck,
       newDestination: update
