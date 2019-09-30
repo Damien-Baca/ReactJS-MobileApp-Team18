@@ -5,6 +5,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
+import {sendServerRequestWithBody} from '../../../api/restfulAPI'
 
 /*
  * Renders the home page.
@@ -88,7 +89,7 @@ export default class Home extends Component {
   renderIntro() {
     return (
         <Pane header={'Bon Voyage!'}
-              bodyJSX={this.renderAddDestination()}/>
+              bodyJSX={this.renderDestinationControls()}/>
     );
   }
 
@@ -99,11 +100,46 @@ export default class Home extends Component {
     );
   }
 
+  renderDestinationControls() {
+    return (
+        <Row>
+          {this.renderAddDestination()}
+          {this.renderDestinationControls()}
+        </Row>
+    );
+  }
+
   renderDestinationList() {
     return (
         <ListGroup>
           {this.renderList()}
         </ListGroup>
+    );
+  }
+
+  renderAddDestination() {
+    return (
+        <Form>
+          <FormGroup>
+            <Label for='add_name'>New Destination</Label>
+            {this.generateCoordinateInput()}
+            <Button
+                className='btn-csu w-100 text-left'
+                key={"button_add"}
+                active={true}
+                onClick={() => this.handleNewDestination()}>
+              Add
+            </Button>
+          </FormGroup>
+        </Form>
+    );
+  }
+
+  renderDestinationControls() {
+    return (
+      <Button>
+
+      </Button>
     );
   }
 
@@ -125,24 +161,6 @@ export default class Home extends Component {
               </Row>
             </ListGroupItem>
         ))
-    );
-  }
-
-  renderAddDestination() {
-    return (
-        <Form>
-          <FormGroup>
-            <Label for='add_name'>New Destination</Label>
-            {this.generateCoordinateInput()}
-            <Button
-                className='btn-csu w-100 text-left'
-                key={"button_add"}
-                active={true}
-                onClick={() => this.handleNewDestination()}>
-              Add
-            </Button>
-          </FormGroup>
-        </Form>
     );
   }
 
