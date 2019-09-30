@@ -209,9 +209,10 @@ export default class Home extends Component {
     handleLoadJSON() {
       if(this.state.fileContents) {
         try {
-          let newDestinations = JSON.parse(this.state.fileContents);
+          let newTrip = JSON.parse(this.state.fileContents);
           this.setState({loadJSON_errorMessage: null});
-          newDestinations.forEach((destination) => (
+
+          newTrip.places.forEach((destination) => (
             this.props.addDestination(Object.assign({}, destination))
           ));
         } catch (e) {
