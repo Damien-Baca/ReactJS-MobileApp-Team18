@@ -40,16 +40,17 @@ public class TIPTrip extends TIPHeader {
 
   @Override
   public void buildResponse() {
-    //GreatCircleDistance calculate = new GreatCircleDistance();
+    GreatCircleDistance calculate = new GreatCircleDistance();
+    float earthRadius = Float.parseFloat((String) options.get("earthRadius"));
 
     for (int i = 0; i < this.places.size(); ++i) {
-      /*
-      if (i < (places.length - 1)) {
-        this.distances.add(calculate.calculateDistance(destinations[i], destinations[i + 1], Float.parseFloat((String) options.get("earthRadius"))));
-      } else {
-        this.distances.add(calculate.calculateDistance(destinations[i], destinations[0], Float.parseFloat((String) options.get("earthRadius"))));
-      }*/
-      this.distances.add(1);
+      Map origin = places.get(i);
+      Map destination = places.get(0);
+      if (i < (places.size() - 1)) {
+        destination = places.get(i + 1);
+      }
+
+      this.distances.add(calculate.calculateDistance(origin, destination, earthRadius));
     }
     log.trace("buildResponse -> {}", this);
   }
