@@ -8,6 +8,7 @@ import About from './About/About';
 import Settings from './Settings/Settings';
 import {getOriginalServerPort, sendServerRequest} from '../../api/restfulAPI';
 import ErrorBanner from './ErrorBanner';
+import 'coordinate-parser';
 
 /* Renders the application.
  * Holds the destinations and options state shared with the trip.
@@ -21,6 +22,7 @@ export default class Application extends Component {
     this.createApplicationPage = this.createApplicationPage.bind(this);
     this.addDestination = this.addDestination.bind(this);
     this.removeDestination = this.removeDestination.bind(this);
+    this.validateCoordinates = this.validateCoordinates.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -143,4 +145,22 @@ export default class Application extends Component {
       destinations: this.state.destinations
     });
   }
+
+  validateCoordinates(latitude, longitude){
+    let Coordinates = require('coordinate-parser');
+
+    let position = new Coordinates(latitude+ " " +longitude);
+
+    let isValid;
+    try {
+      isValid = true;
+      new Coordinates(position);
+      //set error banner : null
+      return isValid;
+    } catch (error) {
+      isValid = false;
+      //error banner throw
+      return isValid;
+    }
+  };
 }

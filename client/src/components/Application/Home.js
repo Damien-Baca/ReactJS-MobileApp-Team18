@@ -5,6 +5,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
+import validateCoordinates from "./Application";
 
 /*
  * Renders the home page.
@@ -25,7 +26,8 @@ export default class Home extends Component {
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
       },
-      newDestination: {name: '', latitude: '', longitude: ''}
+      newDestination: {name: '', latitude: '', longitude: ''},
+      validLatLon: false
     };
 
     this.getUserLocation();
@@ -165,7 +167,8 @@ export default class Home extends Component {
                 className='btn-csu w-100 text-left'
                 key={"button_add"}
                 active={true}
-                onClick={() => this.handleNewDestination()}>
+                onClick={() => this.handleNewDestination()}
+            >
               Add
             </Button>
             <hr/>
@@ -202,7 +205,9 @@ export default class Home extends Component {
                id={`add_${field}`}
                placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
                value={this.state.newDestination[field]}
-               onChange={(event) => this.updateNewDestinationOnChange(event)}/>
+               onChange={(event) => this.updateNewDestinationOnChange(event)}
+               valid={ (this.state.validLatLon && (this.state.newDestination.latitude != '' && this.state.newDestination.longitude != '')) }
+               invalid={( (!this.state.validLatLon )&& (this.state.newDestination.latitude != '' && this.state.newDestination.longitude != '')) }/>
     )));
   }
 
@@ -216,8 +221,9 @@ export default class Home extends Component {
   updateNewDestinationOnChange(event) {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
-
+    let validationCheck = validateCoordinates(this.state.newDestination.latitude, this.state.newDestination.longitude);
     this.setState({
+      validLatLon: validationCheck,
       newDestination: update
     });
   }
