@@ -13,6 +13,8 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
+    this.toggle_FileError = this.toggle_FileError.bind(this);
+    this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
@@ -25,7 +27,9 @@ export default class Home extends Component {
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
       },
-      newDestination: {name: '', latitude: '', longitude: ''}
+      newDestination: {name: '', latitude: '', longitude: ''},
+
+      FileError_isHidden: true
     };
 
     this.getUserLocation();
@@ -161,6 +165,7 @@ export default class Home extends Component {
           <FormGroup>
             <Label for='add_name'>New Destination</Label>
             {this.generateCoordinateInput()}
+            <p/>
             <Button
                 className='btn-csu w-100 text-left'
                 key={"button_add"}
@@ -170,14 +175,28 @@ export default class Home extends Component {
             </Button>
             <hr/>
             <input type='file' id='fileItem' onChange={event => this.onFileChange(event)}/>
+            <p/>
+            {!this.state.FileError_isHidden &&
+                <div>Error: You must select a JSON file.<p/></div>
+            }
+            <Button
+                className='btn-csu w-100 text-left'
+                key={"button_loadJSON"}
+                active={true}
+                onClick={() => this.handleLoadJSON()}>
+                Import JSON
+            </Button>
           </FormGroup>
         </Form>
     );
   }
 
+  toggle_FileError() {
+    this.setState({FileError_isHidden: !this.state.FileError_isHidden});
+  }
+
   fileCallback(string) {
     this.fileContents = string;
-    console.log(this.fileContents);
   }
 
   onFileChange(event) {
@@ -193,6 +212,21 @@ export default class Home extends Component {
 
       reader.readAsText(file);
       }
+    }
+
+    handleLoadJSON() {
+      if(this.fileContents) {
+        let newDestinations = JSON.parse(this.fileContents);
+
+        newDestinations.forEach((destination) => (
+            this.props.addDestination(Object.assign({}, destination))
+        ));
+
+        if(!this.state.FileError_isHidden)
+            this.toggle_FileError();
+
+      } else if(this.state.FileError_isHidden)
+          this.toggle_FileError();
     }
 
   generateCoordinateInput() {
