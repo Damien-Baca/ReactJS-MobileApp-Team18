@@ -207,7 +207,7 @@ export default class Home extends Component {
         'earthRadius': String(this.props.options.units[this.props.options.activeUnit]),
         'optimization': 'none'
       },
-      'destination': this.props.destinations,
+      'places': this.props.destinations,
       'distances': []
     };
 
@@ -226,10 +226,9 @@ export default class Home extends Component {
               `Request to ${this.props.settings.serverPort} failed.`
           )
         });
+        console.log(`Distances returned: ${this.state.tripDistances}`);
       }
     });
-
-    console.log(`Distances returned: ${this.state.tripDistances}`);
   }
 
   coloradoGeographicBoundaries() {

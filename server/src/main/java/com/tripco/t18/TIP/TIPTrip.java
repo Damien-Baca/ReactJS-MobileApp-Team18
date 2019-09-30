@@ -21,17 +21,17 @@ import java.util.ArrayList;
  */
 public class TIPTrip extends TIPHeader {
   private Map options;
-  private ArrayList<Map> destinations;
-  private ArrayList<Integer>distances;
+  private ArrayList<Map> places;
+  private ArrayList<Integer> distances;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPDistance.class);
 
 
-  TIPTrip(int version, Map options, ArrayList<Map> destinations, ArrayList<Integer> distances) {
+  TIPTrip(int version, Map options, ArrayList<Map> places, ArrayList<Integer> distances) {
     this();
     this.requestVersion = version;
     this.options = options;
-    this.destinations = destinations;
+    this.places = places;
     this.distances = new ArrayList<>();
   }
 
@@ -41,28 +41,24 @@ public class TIPTrip extends TIPHeader {
   @Override
   public void buildResponse() {
     //GreatCircleDistance calculate = new GreatCircleDistance();
-    this.distances.add(this.destinations.size());
-    this.distances.add(2);
-    /*
-    for (int i = 0; i < this.destinations.length; ++i) {
 
-      if (i < (destinations.length - 1)) {
+    for (int i = 0; i < this.places.size(); ++i) {
+      /*
+      if (i < (places.length - 1)) {
         this.distances.add(calculate.calculateDistance(destinations[i], destinations[i + 1], Float.parseFloat((String) options.get("earthRadius"))));
       } else {
         this.distances.add(calculate.calculateDistance(destinations[i], destinations[0], Float.parseFloat((String) options.get("earthRadius"))));
-      }
+      }*/
       this.distances.add(1);
-    }*/
+    }
     log.trace("buildResponse -> {}", this);
   }
 
   public Map getOptions() {
     return options;
   }
-/*
-  public ArrayList<Integer> getDistances() {
-    return distances;
-  }*/
 
-  public ArrayList<Map> getDestinations() { return destinations; }
+  public ArrayList<Integer> getDistances() { return distances; }
+
+  public ArrayList<Map> getPlaces() { return places; }
 }
