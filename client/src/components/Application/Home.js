@@ -221,14 +221,20 @@ export default class Home extends Component {
   updateNewDestinationOnChange(event) {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
-    let validationCheck = validateCoordinates(update.latitude, update.longitude);
-    if (event.target.value === '') {
-      validationCheck = false;
-    }
 
     this.setState({
-      validLatLon: validationCheck,
       newDestination: update
+    });
+    this.validation(update);
+  }
+
+  validation(update){
+    let validationCheck = validateCoordinates(update.latitude, update.longitude);
+    if (update.latitude === '' || update.longitude === '') {
+      validationCheck = false;
+    }
+    this.setState({
+      validLatLon: validationCheck,
     });
   }
 
