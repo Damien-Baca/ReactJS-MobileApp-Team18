@@ -22,7 +22,8 @@ export default class Home extends Component {
         longitude: this.csuOvalGeographicCoordinates().lng
       },
       newDestination: {name: '', latitude: '', longitude: ''},
-      tripDistances: [-1]
+      distances: [],
+      optimizations: null,
     }
   }
 
@@ -215,7 +216,7 @@ export default class Home extends Component {
         this.props.settings.serverPort).then((response) => {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         this.setState({
-          tripDistances: response.body.distances,
+          distances: response.body.distances,
           errorMessage: null
         });
       } else {
