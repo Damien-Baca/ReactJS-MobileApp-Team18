@@ -187,7 +187,7 @@ To use it, first package and run your JAR:
 # Package Java code
 mvn package
 # Run the JAR on the port you specify
-java -jar target/server-0.1.jar [serverPort]
+java -jar target/server-1.0.jar [serverPort]
 ```
 
 Next, adjust the `const server_port = 31400`; line in

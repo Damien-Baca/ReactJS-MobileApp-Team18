@@ -8,14 +8,14 @@ import Application from './Application/Application';
 import Footer from './Margins/Footer';
 
 export default class App extends Component {
-  constructor (props){
+  constructor(props) {
     super(props);
     this.pages = [
-      { title: 'T18 MONGOOSE', page: ''},
-      { title: 'Calculator', page: 'calc'},
-      { title: 'Options', page: 'options'},
-      { title: 'About', page: 'about'},
-      { title: '\u2699', page: 'settings' }
+      {title: 't18 Mongoose', page: ''},
+      {title: 'Calculator', page: 'calc'},
+      {title: 'Options', page: 'options'},
+      {title: 'About', page: 'about'},
+      {title: '\u2699', page: 'settings'}
     ];
 
     this.state = {
@@ -25,20 +25,18 @@ export default class App extends Component {
     this.setAppPage = this.setAppPage.bind(this);
   }
 
-
   render() {
     return (
-      <div className="csu-branding">
-        <Header pages={this.pages} setAppPage={this.setAppPage}/>
-        <Navigation pages={this.pages} setAppPage={this.setAppPage}/>
-        <Application page={this.state.current_page}/>
-        <Footer/>
-      </div>
+        <div className="csu-branding">
+          <Header pages={this.pages} setAppPage={this.setAppPage}/>
+          <Navigation pages={this.pages} setAppPage={this.setAppPage}/>
+          <Application page={this.state.current_page}/>
+          <Footer/>
+        </div>
     );
   }
 
-
-  setAppPage (page) {
+  setAppPage(page) {
     this.setState({current_page: page})
   }
 
