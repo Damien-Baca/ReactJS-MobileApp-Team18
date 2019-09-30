@@ -19,8 +19,6 @@ export default class Home extends Component {
     this.fileCallback = this.fileCallback.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
 
-    this.fileContents = "";
-
     this.state = {
       userLocation: {
         name: 'Colorado State University',
@@ -29,6 +27,7 @@ export default class Home extends Component {
       },
       newDestination: {name: '', latitude: '', longitude: ''},
 
+      fileContents : "",
       FileError_isHidden: true
     };
 
@@ -174,10 +173,10 @@ export default class Home extends Component {
               Add
             </Button>
             <hr/>
-            <input type='file' id='fileItem' onChange={event => this.onFileChange(event)}/>
+            <input type='file' id='fileItem' accept={"application/json"} onChange={event => this.onFileChange(event)}/>
             <p/>
             {!this.state.FileError_isHidden &&
-                <div>Error: You must select a JSON file.<p/></div>
+                <div>Error: Invalid file selected.<p/></div>
             }
             <Button
                 className='btn-csu w-100 text-left'
@@ -196,7 +195,7 @@ export default class Home extends Component {
   }
 
   fileCallback(string) {
-    this.fileContents = string;
+      this.setState({fileContents : string});
   }
 
   onFileChange(event) {
@@ -215,9 +214,12 @@ export default class Home extends Component {
     }
 
     handleLoadJSON() {
-      if(this.fileContents) {
-        let newDestinations = JSON.parse(this.fileContents);
+      let newDestinations;
+      try {
+          newDestinations = JSON.parse(this.state.fileContents);
+      } catch(e) {}
 
+      if(newDestinations) {
         newDestinations.forEach((destination) => (
             this.props.addDestination(Object.assign({}, destination))
         ));
