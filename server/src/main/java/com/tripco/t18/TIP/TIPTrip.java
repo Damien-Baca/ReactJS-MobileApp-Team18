@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class TIPTrip extends TIPHeader {
   private Map options;
   private ArrayList<Map> places;
-  private ArrayList<Integer> distances;
+  private Integer[] distances;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPDistance.class);
 
@@ -41,6 +41,7 @@ public class TIPTrip extends TIPHeader {
 
   @Override
   public void buildResponse() {
+    this.distances.set([1, 2, 3]);
     log.trace("buildResponse -> {}", this);
   }
 

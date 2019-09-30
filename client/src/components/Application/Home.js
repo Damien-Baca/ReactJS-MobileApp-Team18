@@ -22,7 +22,7 @@ export default class Home extends Component {
         longitude: this.csuOvalGeographicCoordinates().lng
       },
       newDestination: {name: '', latitude: '', longitude: ''},
-      tripDistances: []
+      tripDistances: [-1]
     }
   }
 
@@ -228,6 +228,8 @@ export default class Home extends Component {
         });
       }
     });
+
+    console.log(`Distances returned: ${this.state.tripDistances}`);
   }
 
   coloradoGeographicBoundaries() {
