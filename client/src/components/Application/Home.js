@@ -13,7 +13,6 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.toggle_FileError = this.toggle_FileError.bind(this);
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
@@ -28,7 +27,7 @@ export default class Home extends Component {
       newDestination: {name: '', latitude: '', longitude: ''},
 
       fileContents : "",
-      FileError_isHidden: true
+      loadJSON_errorMessage: null
     };
 
     this.getUserLocation();
@@ -175,9 +174,7 @@ export default class Home extends Component {
             <hr/>
             <input type='file' id='fileItem' accept={"application/json"} onChange={event => this.onFileChange(event)}/>
             <p/>
-            {!this.state.FileError_isHidden &&
-                <div>Error: Invalid file selected.<p/></div>
-            }
+            {this.state.loadJSON_errorMessage}
             <Button
                 className='btn-csu w-100 text-left'
                 key={"button_loadJSON"}
@@ -188,10 +185,6 @@ export default class Home extends Component {
           </FormGroup>
         </Form>
     );
-  }
-
-  toggle_FileError() {
-    this.setState({FileError_isHidden: !this.state.FileError_isHidden});
   }
 
   fileCallback(string) {
@@ -214,21 +207,19 @@ export default class Home extends Component {
     }
 
     handleLoadJSON() {
-      let newDestinations;
-      try {
-          newDestinations = JSON.parse(this.state.fileContents);
-      } catch(e) {}
-
-      if(newDestinations) {
-        newDestinations.forEach((destination) => (
+      if(this.state.fileContents) {
+        try {
+          let newDestinations = JSON.parse(this.state.fileContents);
+          this.setState({loadJSON_errorMessage: null});
+          newDestinations.forEach((destination) => (
             this.props.addDestination(Object.assign({}, destination))
-        ));
-
-        if(!this.state.FileError_isHidden)
-            this.toggle_FileError();
-
-      } else if(this.state.FileError_isHidden)
-          this.toggle_FileError();
+          ));
+        } catch (e) {
+          this.setState({loadJSON_errorMessage: <div>Error: Selected file is invalid JSON format<p/></div>});
+        }
+      } else {
+        this.setState({loadJSON_errorMessage: <div>Error: No file has been selected<p/></div>});
+      }
     }
 
   generateCoordinateInput() {
