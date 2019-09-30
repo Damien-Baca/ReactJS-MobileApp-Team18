@@ -33,7 +33,7 @@ public class TestTIPConfig {
   @Test
   public void testServerName() {
     String name = conf.getServerName();
-    assertEquals("config name", "t18 Mongoose", name);
+    assertEquals("config name", "T18 MONGOOSE", name);
   }
 
   @Test

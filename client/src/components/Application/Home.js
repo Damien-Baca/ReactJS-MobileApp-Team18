@@ -13,6 +13,8 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
+    this.storeUserLocation = this.storeUserLocation.bind(this);
+
     this.state = {
       userLocation: {
         name: 'Colorado State University',
@@ -20,7 +22,28 @@ export default class Home extends Component {
         longitude: this.csuOvalGeographicCoordinates().lng
       },
       newDestination: {name: '', latitude: '', longitude: ''}
+    };
+
+    this.getUserLocation();
+  }
+
+  getUserLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((this.storeUserLocation));
+    } else {
     }
+  }
+
+  storeUserLocation(position) {
+    let newUserLocation = {
+      name: 'You Are Here',
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+
+    this.setState({
+      userLocation: newUserLocation
+    })
   }
 
   render() {
