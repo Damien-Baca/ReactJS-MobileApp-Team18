@@ -227,7 +227,6 @@ export default class Home extends Component {
               `Request to ${this.props.settings.serverPort} failed.`
           )
         });
-        console.log(`Distances returned: ${this.state.tripDistances}`);
       }
     });
   }
