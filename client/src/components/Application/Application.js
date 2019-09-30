@@ -104,7 +104,8 @@ export default class Application extends Component {
                      destinations={this.state.destinations}
                      settings={this.state.clientSettings}
                      addDestination={this.addDestination}
-                     removeDestination={this.removeDestination}/>;
+                     removeDestination={this.removeDestination}
+                     createErrorBanner={this.createErrorBanner}/>;
     }
   }
 

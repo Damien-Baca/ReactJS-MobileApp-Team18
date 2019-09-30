@@ -21,34 +21,44 @@ import java.util.ArrayList;
  */
 public class TIPTrip extends TIPHeader {
   private Map options;
-  private ArrayList<Map> places;
-  private Integer[] distances;
+  private Map[] destinations;
+  private ArrayList<Integer> distances;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPDistance.class);
 
 
-  TIPTrip(int version, Map options, ArrayList<Map> places) {
+  TIPTrip(int version, Map options, Map[] destinations, ArrayList<Integer> distances) {
     this();
     this.requestVersion = version;
     this.options = options;
-    this.places = places;
-    this.distances = new ArrayList<>();
+    this.destinations = destinations;
+    this.distances = distances;
   }
-
 
   private TIPTrip() { this.requestType = "trip"; }
 
 
   @Override
   public void buildResponse() {
-    this.distances.set([1, 2, 3]);
+    GreatCircleDistance calculate = new GreatCircleDistance();
+
+    for (int i = 0; i < destinations.length; ++i) {
+      if (i < (destinations.length - 1)) {
+        this.distances.add(calculate.calculateDistance(destinations[i], destinations[i + 1], Float.parseFloat((String) options.get("earthRadius"))));
+      } else {
+        this.distances.add(calculate.calculateDistance(destinations[i], destinations[0], Float.parseFloat((String) options.get("earthRadius"))));
+      }
+    }
     log.trace("buildResponse -> {}", this);
   }
 
+  public Map getOptions() {
+    return options;
+  }
 
   public ArrayList<Integer> getDistances() {
     return distances;
   }
 
-  public ArrayList<Map> getPlaces() { return places; }
+  public Map[] getDestinations() { return destinations; }
 }

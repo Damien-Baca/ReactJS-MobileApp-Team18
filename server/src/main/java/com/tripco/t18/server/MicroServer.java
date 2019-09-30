@@ -12,14 +12,16 @@ import java.lang.reflect.Type;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
+
 import static spark.Spark.secure;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/** A micro server for a single page web application that serves the static files
- * and processes restful API requests.
+/**
+ * A micro server for a single page web application that serves the static files and processes
+ * restful API requests.
  */
 class MicroServer {
 
@@ -43,8 +45,7 @@ class MicroServer {
       log.info("Keystore file: {}", keystoreFile);
       log.info("Keystore password: {}", keystorePassword);
       log.info("MicroServer using HTTPS.");
-    }
-    else {
+    } else {
       log.info("MicroServer using HTTP.");
     }
     log.trace("Server configuration complete");
@@ -54,7 +55,10 @@ class MicroServer {
   private void serveStaticPages() {
     String path = "/public/";
     Spark.staticFileLocation(path);
-    Spark.get("/", (req, res) -> { res.redirect("index.html"); return null; });
+    Spark.get("/", (req, res) -> {
+      res.redirect("index.html");
+      return null;
+    });
     log.trace("Static file configuration complete");
   }
 
