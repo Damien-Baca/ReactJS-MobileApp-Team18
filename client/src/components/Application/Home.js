@@ -204,7 +204,7 @@ export default class Home extends Component {
       'version': 2,
       'options': {
         'title': 'My Trip',
-        'earthRadius': this.props.options.units[this.props.options.activeUnit],
+        'earthRadius': String(this.props.options.units[this.props.options.activeUnit]),
         'optimization': 'none'
       },
       'destination': this.props.destinations,
