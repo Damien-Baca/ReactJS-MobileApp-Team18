@@ -32,7 +32,7 @@ public class TIPTrip extends TIPHeader {
     this.requestVersion = version;
     this.options = options;
     this.places = places;
-    this.distances = new ArrayList<Integer>();
+    this.distances = new ArrayList<>();
   }
 
 
@@ -45,7 +45,9 @@ public class TIPTrip extends TIPHeader {
   }
 
 
-  ArrayList<Integer> getDistances() {
+  public ArrayList<Integer> getDistances() {
     return distances;
   }
+
+  public ArrayList<Map> getPlaces() { return places; }
 }
