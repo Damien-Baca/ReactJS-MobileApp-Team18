@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import com.tripco.t18.TIP.TIPConfig;
 import com.tripco.t18.TIP.TIPDistance;
+import com.tripco.t18.TIP.TIPTrip;
 import com.tripco.t18.TIP.TIPHeader;
 
 import java.lang.reflect.Type;
@@ -88,6 +89,10 @@ class MicroServer {
 
   private String processTIPdistanceRequest(Request request, Response response) {
     return processTIPrequest(TIPDistance.class, request, response);
+  }
+
+  private String processTIPTripRequest(Request request, Response response) {
+    return processTIPrequest(TIPTrip.class, request, response);
   }
 
 

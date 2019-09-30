@@ -4,7 +4,7 @@ import com.tripco.t18.misc.GreatCircleDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 /** Defines the TIP trip object.
  *
@@ -21,18 +21,18 @@ import java.util.Arrays;
  */
 public class TIPTrip extends TIPHeader {
   private Map options;
-  private List<Map> places;
-  private List<int>
+  private ArrayList<Map> places;
+  private ArrayList<Integer> distances;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPDistance.class);
 
 
-  TIPTrip(int version, Map options, List<Map> places) {
+  TIPTrip(int version, Map options, ArrayList<Map> places) {
     this();
     this.requestVersion = version;
     this.options = options;
     this.places = places;
-    this.distances = [];
+    this.distances = new ArrayList<Integer>();
   }
 
 
@@ -41,12 +41,11 @@ public class TIPTrip extends TIPHeader {
 
   @Override
   public void buildResponse() {
-    this.distance = new GreatCircleDistance().calculateDistance(origin, destination, earthRadius);
     log.trace("buildResponse -> {}", this);
   }
 
 
-  int getDistance() {
-    return distance;
+  ArrayList<Integer> getDistances() {
+    return distances;
   }
 }
