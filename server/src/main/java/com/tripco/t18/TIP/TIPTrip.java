@@ -23,25 +23,20 @@ public class TIPTrip extends TIPHeader {
   private Map options;
   private List<Map> places;
   private List<int>
-  private Float earthRadius;
-  private Integer distance;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPDistance.class);
 
 
-  TIPTrip(int version, Map origin, Map destination, float earthRadius) {
+  TIPTrip(int version, Map options, List<Map> places) {
     this();
     this.requestVersion = version;
-    this.origin = origin;
-    this.destination = destination;
-    this.earthRadius = earthRadius;
-    this.distance = 0;
+    this.options = options;
+    this.places = places;
+    this.distances = [];
   }
 
 
-  private TIPDistance() {
-    this.requestType = "distance";
-  }
+  private TIPTrip() { this.requestType = "trip"; }
 
 
   @Override

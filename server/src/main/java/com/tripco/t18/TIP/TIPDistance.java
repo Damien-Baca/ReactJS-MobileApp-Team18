@@ -39,9 +39,7 @@ public class TIPDistance extends TIPHeader {
   }
 
 
-  private TIPDistance() {
-    this.requestType = "distance";
-  }
+  private TIPDistance() { this.requestType = "distance"; }
 
 
   @Override
