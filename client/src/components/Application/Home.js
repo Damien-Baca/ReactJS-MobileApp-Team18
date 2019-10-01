@@ -120,14 +120,24 @@ export default class Home extends Component {
         ))
     );
   }
-/*
+
   renderPolylines() {
     let polylineList = [];
 
-    if (this.props.destinations.length > 0) {
-      po
+    if (this.props.destinations.length > 1) {
+      Object.entries(this.props.destinations).map((destination, index) => (
+          polylineList.splice(1, 0,L.latLng(destination.latitude, destination.longitude))
+      ));
     }
-  }*/
+
+    return (
+        polylineList.map((line, index) => (
+      <Polyline
+          key={'leg_' + index}
+          position={L.polyline(polylineList)}
+      >Leg {index}</Polyline>
+    )));
+  }
 
   renderIntro() {
     return (
