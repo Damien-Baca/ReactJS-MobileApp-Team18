@@ -172,6 +172,7 @@ export default class Home extends Component {
   renderDestinationOptions() {
     return (
       <Button
+          name='calculate'
           onClick={() => this.calculateDistances()}
       >Calculate Trip Distances</Button>
     );
@@ -182,10 +183,11 @@ export default class Home extends Component {
         <ListGroupItem>
           <Button className='btn-csu h-5 w-100 text-left'
                   size={'sm'}
+                  name='clear_destinations'
                   key={"button_clear_all_destinations"}
                   value='Clear Destinations'
                   active={false}
-                  onClick={() => this.clearDestinations()}
+                  onClick={() => this.props.clearDestinations()}
           >Clear Destinations</Button>
         </ListGroupItem>
     );
@@ -202,6 +204,7 @@ export default class Home extends Component {
               <Row>
                 <Button className='btn-csu h-5 w-50 text-left'
                         size={'sm'}
+                        name={'remove_' + index}
                         key={"button_" + destination.name}
                         value='Remove Destination'
                         active={false}
@@ -236,20 +239,24 @@ export default class Home extends Component {
             {this.generateCoordinateInput()}
             <Button
                 className='btn-csu w-100 text-left'
-                key={"button_add_destination"}
+                name='add_new_destination'
+                key='button_add_destination'
                 active={true}
                 onClick={() => this.handleNewDestination()}>
               Add New Destination
             </Button>
             <Button
                 className='btn-csu w-100 text-left'
-                key={"button_add_user_destination"}
+                name='add_user_destination'
+                key='button_add_user_destination'
                 active={true}
                 onClick={() => this.handleUserDestination()}>
               Add User Location
             </Button>
             <Input type='file'
                    id='fileItem'
+                   key='input_json_file'
+                   name='json_file'
                    onChange={event => this.onFileChange(event)}/>
           </FormGroup>
         </Form>
@@ -279,6 +286,7 @@ export default class Home extends Component {
   generateCoordinateInput() {
     return (Object.keys(this.state.newDestination).map((field) => (
         <Input type='text'
+               key={'input_' + field}
                name={field}
                id={`add_${field}`}
                placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
@@ -307,13 +315,7 @@ export default class Home extends Component {
     });
   }
 
-  clearDestinations() {
-    let oldDestinations = Object.assign([], this.props.destinations);
 
-    oldDestinations.forEach((destination) => {
-      this.props.removeDestination(destination);
-    });
-  }
 
   calculateDistances() {
     const tipConfigRequest = {

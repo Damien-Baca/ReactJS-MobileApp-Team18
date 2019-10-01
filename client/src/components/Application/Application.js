@@ -21,6 +21,7 @@ export default class Application extends Component {
     this.createApplicationPage = this.createApplicationPage.bind(this);
     this.addDestination = this.addDestination.bind(this);
     this.removeDestination = this.removeDestination.bind(this);
+    this.clearDestinations = this.clearDestinations.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -105,6 +106,7 @@ export default class Application extends Component {
                      settings={this.state.clientSettings}
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}
+                     clearDestinations={this.clearDestinations}
                      createErrorBanner={this.createErrorBanner}/>;
     }
   }
@@ -140,9 +142,19 @@ export default class Application extends Component {
   }
 
   removeDestination(index) {
-    this.state.destinations.splice(index, 1);
+    let newDestinationList = Object.assign([], this.state.destinations);
+    newDestinationList.splice(index, 1);
+
     this.setState({
-      destinations: this.state.destinations
+      destinations: newDestinationList
+    });
+  }
+
+  clearDestinations() {
+    let clearDestinations = [];
+
+    this.setState({
+      destinations: clearDestinations
     });
   }
 }
