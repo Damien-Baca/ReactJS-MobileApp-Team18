@@ -8,7 +8,7 @@ const destinations = [];
 
 function testInitialState() {
   const home = mount((<Home destinations = {destinations}/>));
-  let expected = {name: '', latitude: 0, longitude: 0};
+  let expected = {name: '', latitude: '', longitude: ''};
   let actual = home.state().newDestination;
 
   expect(actual).toEqual(expected);
