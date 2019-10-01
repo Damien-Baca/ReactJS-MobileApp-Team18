@@ -224,7 +224,7 @@ export default class Home extends Component {
     if (update.latitude === '' || update.longitude === ''){
       event.target.valid = false;
       event.target.invalid = false;
-    } else if (this.validation(update) ) {
+    } else if (this.validation(update) === true) {
       event.target.valid = true;
     } else {
       event.target.valid = false;
