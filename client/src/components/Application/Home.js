@@ -28,7 +28,8 @@ export default class Home extends Component {
         longitude: this.csuOvalGeographicCoordinates().lng
       },
       newDestination: {name: '', latitude: '', longitude: ''},
-      distances: [],
+      cumulativeDistance: null,
+      distances: null,
       optimizations: null
     };
 
@@ -45,8 +46,8 @@ export default class Home extends Component {
   storeUserLocation(position) {
     let newUserLocation = {
       name: 'You Are Here',
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
+      latitude: String(position.coords.latitude),
+      longitude: String(position.coords.longitude)
     };
 
     this.setState({
@@ -135,12 +136,27 @@ export default class Home extends Component {
     return (
         <Container>
           <Row>
+            {this.renderConditionalCumulativeDistance()}
+          </Row>
+          <Row>
             {this.renderAddDestination()}
           </Row>
           <Row>
             {this.renderDestinationOptions()}
           </Row>
         </Container>
+    );
+  }
+
+  renderConditionalCumulativeDistance() {
+    if (this.state.cumulativeDistance !== null) {
+      return (
+          <Label>Cumulative Trip Distance: {this.state.cumulativeDistance}</Label>
+      );
+    }
+
+    return (
+      <Label>Distance not yet calculated.</Label>
     );
   }
 
@@ -167,6 +183,7 @@ export default class Home extends Component {
               <Row>
                 {destination.name}, {destination.latitude}, {destination.longitude}
               </Row>
+              {this.renderConditionalDistance(index)}
               <Row>
                 <Button className='btn-csu h-5 w-50 text-left'
                         size={'sm'}
@@ -181,6 +198,21 @@ export default class Home extends Component {
     );
   }
 
+  renderConditionalDistance(index) {
+    if (this.state.distances !== null) {
+      return (
+          <Row>
+            Distance to Next Destination: {this.state.distances[index]}
+          </Row>
+      );
+    }
+    return (
+        <Row>
+          Distances not yet calculated.
+        </Row>
+    )
+  }
+
   renderAddDestination() {
     return (
         <Form>
@@ -189,10 +221,17 @@ export default class Home extends Component {
             {this.generateCoordinateInput()}
             <Button
                 className='btn-csu w-100 text-left'
-                key={"button_add"}
+                key={"button_add_destination"}
                 active={true}
                 onClick={() => this.handleNewDestination()}>
               Add
+            </Button>
+            <Button
+                className='btn-csu w-100 text-left'
+                key={"button_add_user_destination"}
+                active={true}
+                onClick={() => this.handleUserDestination()}>
+              Add User Location
             </Button>
             <hr/>
             <input type='file' id='fileItem' onChange={event => this.onFileChange(event)}/>
@@ -239,6 +278,10 @@ export default class Home extends Component {
     });
   }
 
+  handleUserDestination() {
+    this.props.addDestination(Object.assign({}, this.state.userLocation));
+  }
+
   updateNewDestinationOnChange(event) {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
@@ -268,6 +311,7 @@ export default class Home extends Component {
           distances: response.body.distances,
           errorMessage: null
         });
+        this.updateCumulativeDistance(Object.assign([], this));
       } else {
         this.setState({
           errorMessage: this.props.createErrorBanner(
@@ -278,6 +322,16 @@ export default class Home extends Component {
         });
       }
     });
+  }
+
+  updateCumulativeDistance(distances) {
+    let sum = 0;
+    distances.forEach((distance) => {
+      sum += distance;
+    });
+    this.setState({
+      cumulativeDistance: String(sum)
+    })
   }
 
   coloradoGeographicBoundaries() {
