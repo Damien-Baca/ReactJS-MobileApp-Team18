@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import com.tripco.t18.TIP.TIPConfig;
 import com.tripco.t18.TIP.TIPDistance;
+import com.tripco.t18.TIP.TIPTrip;
 import com.tripco.t18.TIP.TIPHeader;
 
 import java.lang.reflect.Type;
@@ -11,14 +12,16 @@ import java.lang.reflect.Type;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
+
 import static spark.Spark.secure;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/** A micro server for a single page web application that serves the static files
- * and processes restful API requests.
+/**
+ * A micro server for a single page web application that serves the static files and processes
+ * restful API requests.
  */
 class MicroServer {
 
@@ -42,8 +45,7 @@ class MicroServer {
       log.info("Keystore file: {}", keystoreFile);
       log.info("Keystore password: {}", keystorePassword);
       log.info("MicroServer using HTTPS.");
-    }
-    else {
+    } else {
       log.info("MicroServer using HTTP.");
     }
     log.trace("Server configuration complete");
@@ -53,7 +55,10 @@ class MicroServer {
   private void serveStaticPages() {
     String path = "/public/";
     Spark.staticFileLocation(path);
-    Spark.get("/", (req, res) -> { res.redirect("index.html"); return null; });
+    Spark.get("/", (req, res) -> {
+      res.redirect("index.html");
+      return null;
+    });
     log.trace("Static file configuration complete");
   }
 
@@ -61,6 +66,7 @@ class MicroServer {
   private void processRestfulAPIrequests() {
     Spark.get("/api/config", this::processTIPconfigRequest);
     Spark.post("/api/distance", this::processTIPdistanceRequest);
+    Spark.post("/api/trip", this::processTIPtripRequest);
     Spark.get("/api/echo", this::echoHTTPrequest);
     log.trace("Restful configuration complete");
   }
@@ -88,6 +94,10 @@ class MicroServer {
 
   private String processTIPdistanceRequest(Request request, Response response) {
     return processTIPrequest(TIPDistance.class, request, response);
+  }
+
+  private String processTIPtripRequest(Request request, Response response) {
+    return processTIPrequest(TIPTrip.class, request, response);
   }
 
 

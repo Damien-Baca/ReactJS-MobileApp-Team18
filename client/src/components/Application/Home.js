@@ -5,6 +5,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
+import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
 /*
  * Renders the home page.
@@ -19,13 +20,15 @@ export default class Home extends Component {
     this.storeUserLocation = this.storeUserLocation.bind(this);
 
     this.state = {
+      errorMessage: null,
       userLocation: {
         name: 'Colorado State University',
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
       },
       newDestination: {name: '', latitude: '', longitude: ''},
-
+      distances: [],
+      optimizations: null,
       fileContents : "",
       loadJSON_errorMessage: null
     };
@@ -55,6 +58,7 @@ export default class Home extends Component {
   render() {
     return (
         <Container>
+          {this.state.errorMessage}
           <Row>
             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderMap()}
@@ -117,7 +121,7 @@ export default class Home extends Component {
   renderIntro() {
     return (
         <Pane header={'Bon Voyage!'}
-              bodyJSX={this.renderAddDestination()}/>
+              bodyJSX={this.renderDestinationControls()}/>
     );
   }
 
@@ -128,11 +132,32 @@ export default class Home extends Component {
     );
   }
 
+  renderDestinationControls() {
+    return (
+        <Container>
+          <Row>
+            {this.renderAddDestination()}
+          </Row>
+          <Row>
+            {this.renderDestinationOptions()}
+          </Row>
+        </Container>
+    );
+  }
+
   renderDestinationList() {
     return (
         <ListGroup>
           {this.renderList()}
         </ListGroup>
+    );
+  }
+
+  renderDestinationOptions() {
+    return (
+      <Button
+          onClick={() => this.calculateDistances()}
+      >Calculate Trip Distances</Button>
     );
   }
 
@@ -247,6 +272,38 @@ export default class Home extends Component {
 
     this.setState({
       newDestination: update
+    });
+  }
+
+  calculateDistances() {
+    const tipConfigRequest = {
+      'type': 'trip',
+      'version': 2,
+      'options': {
+        'title': 'My Trip',
+        'earthRadius': String(this.props.options.units[this.props.options.activeUnit]),
+        'optimization': 'none'
+      },
+      'places': this.props.destinations,
+      'distances': []
+    };
+
+    sendServerRequestWithBody('trip', tipConfigRequest,
+        this.props.settings.serverPort).then((response) => {
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        this.setState({
+          distances: response.body.distances,
+          errorMessage: null
+        });
+      } else {
+        this.setState({
+          errorMessage: this.props.createErrorBanner(
+              response.statusText,
+              response.statusCode,
+              `Request to ${this.props.settings.serverPort} failed.`
+          )
+        });
+      }
     });
   }
 
