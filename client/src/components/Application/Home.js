@@ -25,9 +25,12 @@ export default class Home extends Component {
         name: 'Colorado State University',
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
+
       },
+
       newDestination: {name: '', latitude: '', longitude: ''},
-      validLatLon: false
+      valid: {name: '', latitude: '', longitude: ''},
+
     };
 
     this.getUserLocation();
@@ -205,7 +208,7 @@ export default class Home extends Component {
                id={`add_${field}`}
                placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
                value={this.state.newDestination[field]}
-               valid={ false }
+               valid={ false } //THIS.STATE.VALID[FIELD]
                invalid={ false }
                onChange={(event) => this.updateNewDestinationOnChange(event)}/>
     )));
@@ -221,23 +224,23 @@ export default class Home extends Component {
   updateNewDestinationOnChange(event) {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
-    if (update.latitude === '' || update.longitude === ''){
-      event.target.valid = false;
-      event.target.invalid = false;
-    } else if (this.validation(update) === true) {
-      event.target.valid = true;
-    } else {
-      event.target.valid = false;
-      event.target.invalid = true;
-    }
-    this.setState({
-      newDestination: update
-    });
+    if (this.validation(event.target.name, event.target.value)) {
+      this.setState({
+        newDestination: update
 
+      });
+    }
   }
 
-  validation(update){
-    return this.props.validateCoordinates(update.latitude, update.longitude);
+  validation(name, value){
+    let valid = false;
+    if (name === 'name')  {valid = true;}
+    else if (name === 'latitude') {
+      valid = this.props.validateCoordinates(value, 0);
+    } else if (name === 'longitude') {
+      valid = this.props.validateCoordinates(0, value);
+    }
+    return valid;
     //console.log(validationCheck);
 
   }
