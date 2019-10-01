@@ -96,7 +96,7 @@ export default class Home extends Component {
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           {this.renderMarkers()}
-          {this.renderPolylines()}
+          {this.renderPolyline()}
         </Map>
     )
   }
@@ -121,22 +121,35 @@ export default class Home extends Component {
     );
   }
 
-  renderPolylines() {
+  renderPolyline() {
     let polylineList = [];
 
     if (this.props.destinations.length > 1) {
-      Object.entries(this.props.destinations).map((destination, index) => (
-          polylineList.splice(1, 0,L.latLng(destination.latitude, destination.longitude))
-      ));
-    }
+      let origin = [];
+      polylineList.splice(0, 1);
 
-    return (
-        polylineList.map((line, index) => (
-      <Polyline
-          key={'leg_' + index}
-          position={L.polyline(polylineList)}
-      >Leg {index}</Polyline>
-    )));
+      this.props.destinations.map((destination, index) => {
+        if (index === 0) {
+          origin = [parseFloat(destination.latitude),
+            parseFloat(destination.longitude)];
+        }
+        polylineList.splice(polylineList.length, 0,
+            [parseFloat(destination.latitude),
+              parseFloat(destination.longitude)]);
+        //} else {
+        //  previous = [destination.latitude, destination.longitude];
+        //}
+      });
+
+      polylineList.splice(polylineList.length, 0, origin);
+
+      return (
+          <Polyline
+              color={'blue'}
+              positions={polylineList}
+          >Trip</Polyline>
+      );
+    }
   }
 
   renderIntro() {
@@ -287,7 +300,6 @@ export default class Home extends Component {
 
   fileCallback(string) {
     this.fileContents = string;
-    console.log(this.fileContents);
   }
 
   onFileChange(event) {
@@ -387,7 +399,6 @@ export default class Home extends Component {
 
     if (this.props.destinations.length > 0) {
       Object.keys(boundaries).map((field) => {
-        console.log(field);
         if (field === 'maxLat' || field === 'maxLng') {
           boundaries[field] = -181;
         } else {
@@ -396,12 +407,6 @@ export default class Home extends Component {
       });
 
       this.props.destinations.forEach((destination) => {
-        console.log(destination);
-        console.log(boundaries);
-        Object.keys(boundaries).map((field) => {
-          console.log(field);
-        });
-
         if (destination.latitude > boundaries.maxLat) {
           boundaries.maxLat =  parseFloat(destination.latitude) + 0.1;
         }
@@ -416,8 +421,6 @@ export default class Home extends Component {
         }
       });
     }
-
-    console.log(boundaries);
 
     const topLeftBound = L.latLng(boundaries.maxLat, boundaries.minLng);
     const bottomRightBound = L.latLng(boundaries.minLat, boundaries.maxLng);
