@@ -152,24 +152,6 @@ export default class Home extends Component {
     );
   }
 
-  renderAddDestination() {
-    return (
-        <Form>
-          <FormGroup>
-            <Label for='add_name'>New Destination</Label>
-            {this.generateCoordinateInput()}
-            <Button
-                className='btn-csu w-100 text-left'
-                key={"button_add"}
-                active={true}
-                onClick={() => this.handleNewDestination()}>
-              Add
-            </Button>
-          </FormGroup>
-        </Form>
-    );
-  }
-
   renderDestinationOptions() {
     return (
       <Button
