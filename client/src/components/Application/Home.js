@@ -206,8 +206,8 @@ export default class Home extends Component {
                placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
                value={this.state.newDestination[field]}
                onChange={(event) => this.updateNewDestinationOnChange(event)}
-               valid={( this.state.validLatLon ) }
-               invalid={( !this.state.validLatLon ) }/>
+               valid={( false ) }
+               invalid={( false ) }/>
     )));
   }
 
@@ -225,16 +225,21 @@ export default class Home extends Component {
     this.setState({
       newDestination: update
     });
-    this.validation(update);
+    if (update.latitude === '' || update.longitude === ''){
+      event.target.valid = false;
+      event.target.invalid = false;
+    } else if (this.validation(update) ) {
+      event.target.valid = true;
+    } else {
+      event.target.valid = false;
+      event.target.invalid = true;
+    }
   }
 
   validation(update){
     let validationCheck = this.props.validateCoordinates(update.latitude, update.longitude);
-    console.log(validationCheck);
-    if (update.latitude === '' || update.longitude === '') {
-      validationCheck = false;
-    }
-    console.log(validationCheck);
+
+    //console.log(validationCheck);
     this.setState({
       validLatLon: validationCheck,
     });

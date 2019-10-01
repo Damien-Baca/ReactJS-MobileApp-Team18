@@ -149,8 +149,6 @@ export default class Application extends Component {
 
   validateCoordinates(latitude, longitude){
     let Coordinates = require('coordinate-parser');
-
-
     let isValid = true;
     try {
       new Coordinates(latitude+ " " +longitude);
