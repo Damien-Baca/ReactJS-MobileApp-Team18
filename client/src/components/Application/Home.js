@@ -163,6 +163,7 @@ export default class Home extends Component {
   renderDestinationList() {
     return (
         <ListGroup>
+          {this.renderClearDestinations()}
           {this.renderList()}
         </ListGroup>
     );
@@ -173,6 +174,20 @@ export default class Home extends Component {
       <Button
           onClick={() => this.calculateDistances()}
       >Calculate Trip Distances</Button>
+    );
+  }
+
+  renderClearDestinations() {
+    return (
+        <ListGroupItem>
+          <Button className='btn-csu h-5 w-100 text-left'
+                  size={'sm'}
+                  key={"button_clear_all_destinations"}
+                  value='Clear Destinations'
+                  active={false}
+                  onClick={() => this.clearDestinations()}
+          >Clear Destinations</Button>
+        </ListGroupItem>
     );
   }
 
@@ -188,7 +203,7 @@ export default class Home extends Component {
                 <Button className='btn-csu h-5 w-50 text-left'
                         size={'sm'}
                         key={"button_" + destination.name}
-                        value='Remove'
+                        value='Remove Destination'
                         active={false}
                         onClick={() => this.props.removeDestination(index)}
                 >Remove</Button>
@@ -224,7 +239,7 @@ export default class Home extends Component {
                 key={"button_add_destination"}
                 active={true}
                 onClick={() => this.handleNewDestination()}>
-              Add
+              Add New Destination
             </Button>
             <Button
                 className='btn-csu w-100 text-left'
@@ -233,8 +248,9 @@ export default class Home extends Component {
                 onClick={() => this.handleUserDestination()}>
               Add User Location
             </Button>
-            <hr/>
-            <input type='file' id='fileItem' onChange={event => this.onFileChange(event)}/>
+            <Input type='file'
+                   id='fileItem'
+                   onChange={event => this.onFileChange(event)}/>
           </FormGroup>
         </Form>
     );
@@ -291,6 +307,14 @@ export default class Home extends Component {
     });
   }
 
+  clearDestinations() {
+    let oldDestinations = Object.assign([], this.props.destinations);
+
+    oldDestinations.forEach((destination) => {
+      this.props.removeDestination(destination);
+    });
+  }
+
   calculateDistances() {
     const tipConfigRequest = {
       'type': 'trip',
@@ -307,6 +331,10 @@ export default class Home extends Component {
     sendServerRequestWithBody('trip', tipConfigRequest,
         this.props.settings.serverPort).then((response) => {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
+        const reducer = (sum, current) => {
+          return sum + current;
+        };
+
         this.setState({
           cumulativeDistance: Object.assign([], response.body.distances).reduce(reducer),
           distances: Object.assign([], response.body.distances),
@@ -323,6 +351,7 @@ export default class Home extends Component {
       }
     });
   }
+
 
 
   coloradoGeographicBoundaries() {
