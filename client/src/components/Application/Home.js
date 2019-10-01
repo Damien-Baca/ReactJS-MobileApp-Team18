@@ -30,7 +30,13 @@ export default class Home extends Component {
       newDestination: {name: '', latitude: '', longitude: ''},
       cumulativeDistance: null,
       distances: null,
-      optimizations: null
+      optimizations: null,
+      mapBoundaries: {
+        maxLat: this.csuOvalGeographicCoordinates().lat + 0.5,
+        minLat: this.csuOvalGeographicCoordinates().lat - 0.5,
+        maxLon: this.csuOvalGeographicCoordinates().lng + 0.5,
+        minLon: this.csuOvalGeographicCoordinates().lng - 0.5
+      }
     };
 
     this.getUserLocation();
@@ -84,7 +90,7 @@ export default class Home extends Component {
     // 1: bounds={this.coloradoGeographicBoundaries()}
     // 2: center={this.csuOvalGeographicCoordinates()} zoom={10}
     return (
-        <Map center={this.convertLatLng(this.state.userLocation.latitude, this.state.userLocation.longitude)} zoom={10}
+        <Map bounds={this.itineraryBounds()}
              style={{height: 500, maxwidth: 700}}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -112,10 +118,6 @@ export default class Home extends Component {
           </Marker>
         ))
     );
-  }
-
-  convertLatLng(latitude, longitude) {
-    return L.latLng(latitude, longitude);
   }
 
   renderIntro() {
@@ -354,7 +356,42 @@ export default class Home extends Component {
     });
   }
 
+  itineraryBounds() {
+    let boundaries = {
+      maxLat: parseFloat(this.state.userLocation.latitude) + 0.1,
+      minLat: parseFloat(this.state.userLocation.latitude) - 0.1,
+      maxLng: parseFloat(this.state.userLocation.longitude) + 0.1,
+      minLng: parseFloat(this.state.userLocation.longitude) - 0.1
+    };
 
+    if (this.props.destinations.length > 0) {
+      Object.keys(boundaries).map((field) => {
+        console.log(field);
+        boundaries[field] = null;
+      });
+
+      this.props.destinations.forEach((destination) => {
+        console.log(destination);
+        if (destination.latitude > boundaries.maxLat) {
+          boundaries.maxLat = parseFloat(destination.latitude) + 0.1;
+        }
+        if (destination.latitude < boundaries.minLat) {
+          boundaries.minLat = parseFloat(destination.latitude) - 0.1;
+        }
+        if (destination.longitude > boundaries.maxLng) {
+          boundaries.maxLng = parseFloat(destination.longitude) + 0.1;
+        }
+        if (destination.longitude < boundaries.minLng) {
+          boundaries.minLng = parseFloat(destination.longitude) - 0.1;
+        }
+      });
+    }
+
+    const topLeftBound = L.latLng(boundaries.maxLat, boundaries.minLng);
+    const bottomRightBound = L.latLng(boundaries.minLat, boundaries.maxLng);
+
+    return L.latLngBounds(topLeftBound, bottomRightBound);
+  }
 
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado
