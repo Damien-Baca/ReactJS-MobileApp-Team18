@@ -3,7 +3,7 @@ import {Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, I
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
-import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
+import {Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
@@ -96,6 +96,7 @@ export default class Home extends Component {
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           {this.renderMarkers()}
+          {this.renderPolylines()}
         </Map>
     )
   }
@@ -109,16 +110,24 @@ export default class Home extends Component {
 
     return (
         markerList.map((marker, index) => (
-          <Marker
-            key={`marker_${index}`}
-            position={L.latLng(marker.latitude, marker.longitude)}
-            icon={this.markerIcon()}>
-            < Popup
-                className="font-weight-extrabold">{marker.name}</Popup>
-          </Marker>
+            <Marker
+                key={`marker_${index}`}
+                position={L.latLng(marker.latitude, marker.longitude)}
+                icon={this.markerIcon()}>
+              < Popup
+                  className="font-weight-extrabold">{marker.name}</Popup>
+            </Marker>
         ))
     );
   }
+/*
+  renderPolylines() {
+    let polylineList = [];
+
+    if (this.props.destinations.length > 0) {
+      po
+    }
+  }*/
 
   renderIntro() {
     return (
@@ -153,12 +162,13 @@ export default class Home extends Component {
   renderConditionalCumulativeDistance() {
     if (this.state.cumulativeDistance !== null) {
       return (
-          <Label>Cumulative Trip Distance: {this.state.cumulativeDistance}</Label>
+          <Label>Cumulative Trip
+            Distance: {this.state.cumulativeDistance}</Label>
       );
     }
 
     return (
-      <Label>Distance not yet calculated.</Label>
+        <Label>Distance not yet calculated.</Label>
     );
   }
 
@@ -173,10 +183,10 @@ export default class Home extends Component {
 
   renderDestinationOptions() {
     return (
-      <Button
-          name='calculate'
-          onClick={() => this.calculateDistances()}
-      >Calculate Trip Distances</Button>
+        <Button
+            name='calculate'
+            onClick={() => this.calculateDistances()}
+        >Calculate Trip Distances</Button>
     );
   }
 
@@ -273,17 +283,17 @@ export default class Home extends Component {
   onFileChange(event) {
     let callback = this.fileCallback;
     let fileIn = event.target;
-    if(fileIn) {
+    if (fileIn) {
       let file = fileIn.files[0];
       let reader = new FileReader();
 
-      reader.onloadend = function() {
+      reader.onloadend = function () {
         callback(this.result);
       };
 
       reader.readAsText(file);
-      }
     }
+  }
 
   generateCoordinateInput() {
     return (Object.keys(this.state.newDestination).map((field) => (
@@ -291,7 +301,8 @@ export default class Home extends Component {
                key={'input_' + field}
                name={field}
                id={`add_${field}`}
-               placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
+               placeholder={field.charAt(0).toUpperCase() + field.substring(1,
+                   field.length)}
                value={this.state.newDestination[field]}
                onChange={(event) => this.updateNewDestinationOnChange(event)}/>
     )));
@@ -317,15 +328,14 @@ export default class Home extends Component {
     });
   }
 
-
-
   calculateDistances() {
     const tipConfigRequest = {
       'type': 'trip',
       'version': 2,
       'options': {
         'title': 'My Trip',
-        'earthRadius': String(this.props.options.units[this.props.options.activeUnit]),
+        'earthRadius': String(
+            this.props.options.units[this.props.options.activeUnit]),
         'optimization': 'none'
       },
       'places': this.props.destinations,
@@ -340,7 +350,8 @@ export default class Home extends Component {
         };
 
         this.setState({
-          cumulativeDistance: Object.assign([], response.body.distances).reduce(reducer),
+          cumulativeDistance: Object.assign([], response.body.distances).reduce(
+              reducer),
           distances: Object.assign([], response.body.distances),
           errorMessage: null
         });
@@ -367,13 +378,22 @@ export default class Home extends Component {
     if (this.props.destinations.length > 0) {
       Object.keys(boundaries).map((field) => {
         console.log(field);
-        boundaries[field] = null;
+        if (field === 'maxLat' || field === 'maxLng') {
+          boundaries[field] = -181;
+        } else {
+          boundaries[field] = 181;
+        }
       });
 
       this.props.destinations.forEach((destination) => {
         console.log(destination);
+        console.log(boundaries);
+        Object.keys(boundaries).map((field) => {
+          console.log(field);
+        });
+
         if (destination.latitude > boundaries.maxLat) {
-          boundaries.maxLat = parseFloat(destination.latitude) + 0.1;
+          boundaries.maxLat =  parseFloat(destination.latitude) + 0.1;
         }
         if (destination.latitude < boundaries.minLat) {
           boundaries.minLat = parseFloat(destination.latitude) - 0.1;
@@ -386,6 +406,8 @@ export default class Home extends Component {
         }
       });
     }
+
+    console.log(boundaries);
 
     const topLeftBound = L.latLng(boundaries.maxLat, boundaries.minLng);
     const bottomRightBound = L.latLng(boundaries.minLat, boundaries.maxLng);
