@@ -308,10 +308,10 @@ export default class Home extends Component {
         this.props.settings.serverPort).then((response) => {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         this.setState({
-          distances: response.body.distances,
+          cumulativeDistance: Object.assign([], response.body.distances).reduce(reducer),
+          distances: Object.assign([], response.body.distances),
           errorMessage: null
         });
-        this.updateCumulativeDistance(Object.assign([], this));
       } else {
         this.setState({
           errorMessage: this.props.createErrorBanner(
@@ -324,15 +324,6 @@ export default class Home extends Component {
     });
   }
 
-  updateCumulativeDistance(distances) {
-    let sum = 0;
-    distances.forEach((distance) => {
-      sum += distance;
-    });
-    this.setState({
-      cumulativeDistance: String(sum)
-    })
-  }
 
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado
