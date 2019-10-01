@@ -105,7 +105,8 @@ export default class Application extends Component {
         return <Home options={this.state.planOptions}
                      destinations={this.state.destinations}
                      addDestination={this.addDestination}
-                     removeDestination={this.removeDestination}/>;
+                     removeDestination={this.removeDestination}
+                     validateCoordinates={this.validateCoordinates}/>;
     }
   }
 
@@ -149,12 +150,10 @@ export default class Application extends Component {
   validateCoordinates(latitude, longitude){
     let Coordinates = require('coordinate-parser');
 
-    let position = new Coordinates(latitude+ " " +longitude);
 
-    let isValid;
+    let isValid = true;
     try {
-      isValid = true;
-      new Coordinates(position);
+      new Coordinates(latitude+ " " +longitude);
       //set error banner : null
       return isValid;
     } catch (error) {

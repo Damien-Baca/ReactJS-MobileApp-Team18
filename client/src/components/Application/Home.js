@@ -229,10 +229,12 @@ export default class Home extends Component {
   }
 
   validation(update){
-    let validationCheck = validateCoordinates(update.latitude, update.longitude);
+    let validationCheck = this.props.validateCoordinates(update.latitude, update.longitude);
+    console.log(validationCheck);
     if (update.latitude === '' || update.longitude === '') {
       validationCheck = false;
     }
+    console.log(validationCheck);
     this.setState({
       validLatLon: validationCheck,
     });
