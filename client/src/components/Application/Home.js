@@ -14,6 +14,12 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
+    this.onFileChange = this.onFileChange.bind(this);
+    this.fileCallback = this.fileCallback.bind(this);
+    this.storeUserLocation = this.storeUserLocation.bind(this);
+
+    this.fileContents = "";
+
     this.state = {
       errorMessage: null,
       userLocation: {
@@ -23,8 +29,29 @@ export default class Home extends Component {
       },
       newDestination: {name: '', latitude: '', longitude: ''},
       distances: [],
-      optimizations: null,
+      optimizations: null
+    };
+
+    this.getUserLocation();
+  }
+
+  getUserLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((this.storeUserLocation));
+    } else {
     }
+  }
+
+  storeUserLocation(position) {
+    let newUserLocation = {
+      name: 'You Are Here',
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+
+    this.setState({
+      userLocation: newUserLocation
+    })
   }
 
   render() {
@@ -171,6 +198,46 @@ export default class Home extends Component {
         ))
     );
   }
+
+  renderAddDestination() {
+    return (
+        <Form>
+          <FormGroup>
+            <Label for='add_name'>New Destination</Label>
+            {this.generateCoordinateInput()}
+            <Button
+                className='btn-csu w-100 text-left'
+                key={"button_add"}
+                active={true}
+                onClick={() => this.handleNewDestination()}>
+              Add
+            </Button>
+            <hr/>
+            <input type='file' id='fileItem' onChange={event => this.onFileChange(event)}/>
+          </FormGroup>
+        </Form>
+    );
+  }
+
+  fileCallback(string) {
+    this.fileContents = string;
+    console.log(this.fileContents);
+  }
+
+  onFileChange(event) {
+    let callback = this.fileCallback;
+    let fileIn = event.target;
+    if(fileIn) {
+      let file = fileIn.files[0];
+      let reader = new FileReader();
+
+      reader.onloadend = function() {
+        callback(this.result);
+      };
+
+      reader.readAsText(file);
+      }
+    }
 
   generateCoordinateInput() {
     return (Object.keys(this.state.newDestination).map((field) => (
