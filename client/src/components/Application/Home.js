@@ -27,7 +27,8 @@ export default class Home extends Component {
         longitude: this.csuOvalGeographicCoordinates().lng
       },
       newDestination: {name: '', latitude: '', longitude: ''},
-      distances: [],
+      cumulativeDistance: null,
+      distances: null,
       optimizations: null,
       fileContents : "",
       loadJSON_errorMessage: null
@@ -46,8 +47,8 @@ export default class Home extends Component {
   storeUserLocation(position) {
     let newUserLocation = {
       name: 'You Are Here',
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
+      latitude: String(position.coords.latitude),
+      longitude: String(position.coords.longitude)
     };
 
     this.setState({
@@ -136,6 +137,9 @@ export default class Home extends Component {
     return (
         <Container>
           <Row>
+            {this.renderConditionalCumulativeDistance()}
+          </Row>
+          <Row>
             {this.renderAddDestination()}
           </Row>
           <Row>
@@ -145,9 +149,22 @@ export default class Home extends Component {
     );
   }
 
+  renderConditionalCumulativeDistance() {
+    if (this.state.cumulativeDistance !== null) {
+      return (
+          <Label>Cumulative Trip Distance: {this.state.cumulativeDistance}</Label>
+      );
+    }
+
+    return (
+      <Label>Distance not yet calculated.</Label>
+    );
+  }
+
   renderDestinationList() {
     return (
         <ListGroup>
+          {this.renderClearDestinations()}
           {this.renderList()}
         </ListGroup>
     );
@@ -156,8 +173,24 @@ export default class Home extends Component {
   renderDestinationOptions() {
     return (
       <Button
+          name='calculate'
           onClick={() => this.calculateDistances()}
       >Calculate Trip Distances</Button>
+    );
+  }
+
+  renderClearDestinations() {
+    return (
+        <ListGroupItem>
+          <Button className='btn-csu h-5 w-100 text-left'
+                  size={'sm'}
+                  name='clear_destinations'
+                  key={"button_clear_all_destinations"}
+                  value='Clear Destinations'
+                  active={false}
+                  onClick={() => this.props.clearDestinations()}
+          >Clear Destinations</Button>
+        </ListGroupItem>
     );
   }
 
@@ -168,11 +201,13 @@ export default class Home extends Component {
               <Row>
                 {destination.name}, {destination.latitude}, {destination.longitude}
               </Row>
+              {this.renderConditionalDistance(index)}
               <Row>
                 <Button className='btn-csu h-5 w-50 text-left'
                         size={'sm'}
+                        name={'remove_' + index}
                         key={"button_" + destination.name}
-                        value='Remove'
+                        value='Remove Destination'
                         active={false}
                         onClick={() => this.props.removeDestination(index)}
                 >Remove</Button>
@@ -180,6 +215,21 @@ export default class Home extends Component {
             </ListGroupItem>
         ))
     );
+  }
+
+  renderConditionalDistance(index) {
+    if (this.state.distances !== null) {
+      return (
+          <Row>
+            Distance to Next Destination: {this.state.distances[index]}
+          </Row>
+      );
+    }
+    return (
+        <Row>
+          Distances not yet calculated.
+        </Row>
+    )
   }
 
   renderAddDestination() {
@@ -191,18 +241,30 @@ export default class Home extends Component {
             <p/>
             <Button
                 className='btn-csu w-100 text-left'
-                key={"button_add"}
+                name='add_new_destination'
+                key='button_add_destination'
                 active={true}
                 onClick={() => this.handleNewDestination()}>
-              Add
+              Add New Destination
             </Button>
-            <hr/>
-            <input type='file' id='fileItem' accept={"application/json"} onChange={event => this.onFileChange(event)}/>
-            <p/>
+            <Button
+                className='btn-csu w-100 text-left'
+                name='add_user_destination'
+                key='button_add_user_destination'
+                active={true}
+                onClick={() => this.handleUserDestination()}>
+              Add User Location
+            </Button>
+            <Input type='file'
+                   id='fileItem'
+                   key='input_json_file'
+                   name='json_file'
+                   onChange={event => this.onFileChange(event)}/>
             {this.state.loadJSON_errorMessage}
             <Button
                 className='btn-csu w-100 text-left'
-                key={"button_loadJSON"}
+                name='loadJSON'
+                key='button_loadJSON'
                 active={true}
                 onClick={() => this.handleLoadJSON()}>
                 Import JSON
@@ -251,6 +313,7 @@ export default class Home extends Component {
   generateCoordinateInput() {
     return (Object.keys(this.state.newDestination).map((field) => (
         <Input type='text'
+               key={'input_' + field}
                name={field}
                id={`add_${field}`}
                placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
@@ -266,6 +329,10 @@ export default class Home extends Component {
     });
   }
 
+  handleUserDestination() {
+    this.props.addDestination(Object.assign({}, this.state.userLocation));
+  }
+
   updateNewDestinationOnChange(event) {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
@@ -274,6 +341,8 @@ export default class Home extends Component {
       newDestination: update
     });
   }
+
+
 
   calculateDistances() {
     const tipConfigRequest = {
@@ -291,8 +360,13 @@ export default class Home extends Component {
     sendServerRequestWithBody('trip', tipConfigRequest,
         this.props.settings.serverPort).then((response) => {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
+        const reducer = (sum, current) => {
+          return sum + current;
+        };
+
         this.setState({
-          distances: response.body.distances,
+          cumulativeDistance: Object.assign([], response.body.distances).reduce(reducer),
+          distances: Object.assign([], response.body.distances),
           errorMessage: null
         });
       } else {
@@ -306,6 +380,8 @@ export default class Home extends Component {
       }
     });
   }
+
+
 
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado
