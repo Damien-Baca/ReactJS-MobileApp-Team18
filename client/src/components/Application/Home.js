@@ -205,9 +205,9 @@ export default class Home extends Component {
                id={`add_${field}`}
                placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
                value={this.state.newDestination[field]}
-               onChange={(event) => this.updateNewDestinationOnChange(event)}
-               valid={( false ) }
-               invalid={( false ) }/>
+               valid={ false }
+               invalid={ false }
+               onChange={(event) => this.updateNewDestinationOnChange(event)}/>
     )));
   }
 
@@ -221,10 +221,6 @@ export default class Home extends Component {
   updateNewDestinationOnChange(event) {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
-
-    this.setState({
-      newDestination: update
-    });
     if (update.latitude === '' || update.longitude === ''){
       event.target.valid = false;
       event.target.invalid = false;
@@ -234,15 +230,16 @@ export default class Home extends Component {
       event.target.valid = false;
       event.target.invalid = true;
     }
+    this.setState({
+      newDestination: update
+    });
+
   }
 
   validation(update){
-    let validationCheck = this.props.validateCoordinates(update.latitude, update.longitude);
-
+    return this.props.validateCoordinates(update.latitude, update.longitude);
     //console.log(validationCheck);
-    this.setState({
-      validLatLon: validationCheck,
-    });
+
   }
 
   coloradoGeographicBoundaries() {
