@@ -208,6 +208,7 @@ export default class Home extends Component {
         <Button
             name='calculate'
             onClick={() => this.calculateDistances()}
+            disabled={this.props.destinations.length === 0}
         >Calculate Trip Distances</Button>
     );
   }
