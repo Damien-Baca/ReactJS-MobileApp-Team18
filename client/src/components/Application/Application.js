@@ -89,7 +89,9 @@ export default class Application extends Component {
       case 'calc':
         return <Calculator options={this.state.planOptions}
                            settings={this.state.clientSettings}
-                           createErrorBanner={this.createErrorBanner}/>;
+                           createErrorBanner={this.createErrorBanner}
+                           convertCoordinates={this.convertCoordinates}/>;
+
       case 'options':
         return <Options options={this.state.planOptions}
                         config={this.state.serverConfig}
