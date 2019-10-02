@@ -224,11 +224,19 @@ export default class Home extends Component {
   updateNewDestinationOnChange(event) {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
-    if (this.validation(event.target.name, event.target.value)) {
+    if (event.target.value === '' || event.target.name === 'name' ) { //empty or field is name
       this.setState({
-        newDestination: update,
-        valid:{name: true}
-
+        newDestination: update
+      });
+    } else if (this.validation(event.target.name, event.target.value) ) { //if coord is good
+      this.setValidState(event.target.name, true, false);
+      this.setState({
+        newDestination: update
+      });
+    } else { //bad coord
+      this.setValidState(event.target.name, false, true);
+      this.setState({
+        newDestination: update
       });
     }
   }
@@ -242,8 +250,17 @@ export default class Home extends Component {
       valid = this.props.validateCoordinates(0, value);
     }
     return valid;
-    //console.log(validationCheck);
+  }
 
+  setValidState(subfield, valid, invalid) {
+    let cloneValid = Object.assign({}, this.state.valid);
+    cloneValid[subfield] = valid;
+    let cloneInvalid = Object.assign({}, this.state.invalid);
+    cloneInvalid[subfield] = invalid;
+    this.setState({
+      valid: cloneValid,
+      invalid: cloneInvalid
+    });
   }
 
   coloradoGeographicBoundaries() {
