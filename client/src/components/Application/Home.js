@@ -407,6 +407,12 @@ export default class Home extends Component {
   }
 
   calculateDistances() {
+    let convertedDestinations = [];
+    this.props.destinations.forEach((destination) =>{
+      let convertedDestination = {name: destination.name};
+      Object.assign(convertedDestination, this.props.convertCoordinates(destination.latitude,destination.longitude));
+      convertedDestinations.push(convertedDestination);
+    });
     const tipConfigRequest = {
       'type': 'trip',
       'version': 2,
@@ -416,7 +422,7 @@ export default class Home extends Component {
             this.props.options.units[this.props.options.activeUnit]),
         'optimization': 'none'
       },
-      'places': this.props.destinations,
+      'places': convertedDestinations,
       'distances': []
     };
 

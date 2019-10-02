@@ -111,7 +111,8 @@ export default class Application extends Component {
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}
                      clearDestinations={this.clearDestinations}
-                     createErrorBanner={this.createErrorBanner}/>;
+                     createErrorBanner={this.createErrorBanner}
+                     convertCoordinates={this.convertCoordinates}/>;
     }
   }
 
