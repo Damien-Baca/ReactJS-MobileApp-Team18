@@ -29,8 +29,8 @@ export default class Home extends Component {
       },
 
       newDestination: {name: '', latitude: '', longitude: ''},
-      valid: {name: '', latitude: '', longitude: ''},
-
+      valid: {name: false, latitude: false, longitude: false},
+      invalid: {name: false, latitude: false, longitude: false},
     };
 
     this.getUserLocation();
@@ -208,8 +208,8 @@ export default class Home extends Component {
                id={`add_${field}`}
                placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
                value={this.state.newDestination[field]}
-               valid={ false } //THIS.STATE.VALID[FIELD]
-               invalid={ false }
+               valid={ this.state.valid[field] } //THIS.STATE.VALID[FIELD]
+               invalid={ this.state.invalid[field] }
                onChange={(event) => this.updateNewDestinationOnChange(event)}/>
     )));
   }
@@ -226,7 +226,8 @@ export default class Home extends Component {
     update[event.target.name] = event.target.value;
     if (this.validation(event.target.name, event.target.value)) {
       this.setState({
-        newDestination: update
+        newDestination: update,
+        valid:{name: true}
 
       });
     }
