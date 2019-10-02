@@ -138,7 +138,9 @@ export default class Application extends Component {
   addDestination(newDestination, index = (this.state.destinations.length)) {
     if (newDestination.name !== '' && newDestination.latitude !== '' && newDestination.longitude !== '') {
       let newDestinationList = this.state.destinations;
-      newDestinationList.splice(index, 0, newDestination);
+      let convertedNewDestination = {name: newDestination.name};
+      Object.assign(convertedNewDestination,this.convertCoordinates(newDestination.latitude,newDestination.longitude));
+      newDestinationList.splice(index, 0, convertedNewDestination);
 
       this.setState({
         destinations: newDestinationList
