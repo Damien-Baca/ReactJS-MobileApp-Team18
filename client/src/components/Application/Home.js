@@ -28,7 +28,6 @@ export default class Home extends Component {
         longitude: this.csuOvalGeographicCoordinates().lng
       },
       newDestination: {name: '', latitude: '', longitude: ''},
-      cumulativeDistance: null,
       distances: null,
       optimizations: null,
       mapBoundaries: {
@@ -183,10 +182,10 @@ export default class Home extends Component {
   }
 
   renderConditionalCumulativeDistance() {
-    if (this.state.cumulativeDistance !== null) {
+    if (this.state.distances !== null) {
       return (
           <Label>Cumulative Trip
-            Distance: {this.state.cumulativeDistance}</Label>
+            Distance: {this.sumDistances()}</Label>
       );
     }
 
@@ -222,7 +221,7 @@ export default class Home extends Component {
                   key={"button_clear_all_destinations"}
                   value='Clear Destinations'
                   active={false}
-                  onClick={() => this.props.clearDestinations()}
+                  onClick={() => this.handleClearDestinations()}
           >Clear Destinations</Button>
         </ListGroupItem>
     );
@@ -350,6 +349,13 @@ export default class Home extends Component {
     });
   }
 
+  handleClearDestinations() {
+    this.props.clearDestinations();
+    this.setState({
+      distances: null
+    });
+  }
+
   calculateDistances() {
     const tipConfigRequest = {
       'type': 'trip',
@@ -367,13 +373,7 @@ export default class Home extends Component {
     sendServerRequestWithBody('trip', tipConfigRequest,
         this.props.settings.serverPort).then((response) => {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        const reducer = (sum, current) => {
-          return sum + current;
-        };
-
         this.setState({
-          cumulativeDistance: Object.assign([], response.body.distances).reduce(
-              reducer),
           distances: Object.assign([], response.body.distances),
           errorMessage: null
         });
@@ -387,6 +387,20 @@ export default class Home extends Component {
         });
       }
     });
+  }
+
+  sumDistances() {
+    let tripSum = null;
+
+    if (this.state.distances != null) {
+      const reducer = (sum, current) => {
+        return sum + current;
+      };
+
+      tripSum = Object.assign([], this.state.distances).reduce(reducer);
+    }
+
+    return tripSum
   }
 
   itineraryBounds() {
