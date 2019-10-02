@@ -227,7 +227,7 @@ export default class Home extends Component {
     if (this.validation(event.target.name, event.target.value)) {
       this.setState({
         newDestination: update,
-        valid:{name: true}
+        valid:{event.target.name: true}
 
       });
     }
