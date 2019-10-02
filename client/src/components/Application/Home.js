@@ -198,7 +198,7 @@ export default class Home extends Component {
     return (
         <ListGroup>
           {this.renderClearDestinations()}
-          {this.renderList()}
+          {this.generateList()}
         </ListGroup>
     );
   }
@@ -227,7 +227,7 @@ export default class Home extends Component {
     );
   }
 
-  renderList() {
+  generateList() {
     return (
         this.props.destinations.map((destination, index) => (
             <ListGroupItem key={'destination_' + index}>
@@ -242,7 +242,7 @@ export default class Home extends Component {
                         key={"button_" + destination.name}
                         value='Remove Destination'
                         active={false}
-                        onClick={() => this.props.removeDestination(index)}
+                        onClick={() => this.handleRemoveDestination(index)}
                 >Remove</Button>
               </Row>
             </ListGroupItem>
@@ -347,6 +347,13 @@ export default class Home extends Component {
     this.setState({
       newDestination: update
     });
+  }
+
+  handleRemoveDestination(index) {
+    this.setState({
+      distances: null
+    });
+    this.props.removeDestination(index);
   }
 
   handleClearDestinations() {
