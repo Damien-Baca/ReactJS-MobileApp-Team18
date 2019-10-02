@@ -8,6 +8,7 @@ import About from './About/About';
 import Settings from './Settings/Settings';
 import {getOriginalServerPort, sendServerRequest} from '../../api/restfulAPI';
 import ErrorBanner from './ErrorBanner';
+import 'coordinate-parser';
 
 /* Renders the application.
  * Holds the destinations and options state shared with the trip.
@@ -22,6 +23,7 @@ export default class Application extends Component {
     this.addDestination = this.addDestination.bind(this);
     this.removeDestination = this.removeDestination.bind(this);
     this.clearDestinations = this.clearDestinations.bind(this);
+    this.convertCoordinates = this.convertCoordinates.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -156,5 +158,10 @@ export default class Application extends Component {
     this.setState({
       destinations: clearDestinations
     });
+  }
+  convertCoordinates(latitude,longitude) {
+    let Coordinates = require('coordinate-parser');
+    let converter = new Coordinates(`${latitude} ${longitude}`);
+    return {latitude: String(converter.getLatitude()),longitude: String(converter.getLongitude())};
   }
 }
