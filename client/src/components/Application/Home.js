@@ -171,6 +171,7 @@ export default class Home extends Component {
                 key={"button_add"}
                 active={true}
                 onClick={() => this.handleNewDestination()}
+                disabled={ this.state.valid.latitude && this.state.valid.longitude }
             >
               Add
             </Button>
@@ -225,6 +226,7 @@ export default class Home extends Component {
     let update = Object.assign({}, this.state.newDestination);
     update[event.target.name] = event.target.value;
     if (event.target.value === '' || event.target.name === 'name' ) { //empty or field is name
+      this.setValidState(event.target.name, false, false);
       this.setState({
         newDestination: update
       });
