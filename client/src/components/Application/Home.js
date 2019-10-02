@@ -30,7 +30,7 @@ export default class Home extends Component {
       cumulativeDistance: null,
       distances: null,
       optimizations: null,
-      fileContents : "",
+      fileContents : null,
       loadJSON_errorMessage: null
     };
 
@@ -291,6 +291,7 @@ export default class Home extends Component {
 
       reader.readAsText(file);
       }
+    console.log(this.state);
     }
 
     handleLoadJSON() {
@@ -302,8 +303,17 @@ export default class Home extends Component {
           newTrip.places.forEach((destination) => (
             this.props.addDestination(Object.assign({}, destination))
           ));
+
+          let newDist = [];
+          Object.assign(newDist, this.state.distances);
+          newTrip.distances.forEach((distance) => (
+              newDist.push(distance)
+          ));
+          this.setState({distances : newDist});
+          this.setState({optimizations : newTrip.options["optimization"]});
+
         } catch (e) {
-          this.setState({loadJSON_errorMessage: <div>Error: Selected file is invalid JSON format<p/></div>});
+            this.setState({loadJSON_errorMessage: <div>Error: Selected file is invalid JSON TIP Trip format<p/></div>});
         }
       } else {
         this.setState({loadJSON_errorMessage: <div>Error: No file has been selected<p/></div>});
