@@ -30,7 +30,6 @@ export default class Home extends Component {
       distances: null,
       optimizations: null,
       fileContents : null,
-      loadJSON_errorMessage: null,
       mapBoundaries: {
         maxLat: this.csuOvalGeographicCoordinates().lat + 0.5,
         minLat: this.csuOvalGeographicCoordinates().lat - 0.5,
@@ -293,7 +292,6 @@ export default class Home extends Component {
                    key='input_json_file'
                    name='json_file'
                    onChange={event => this.onFileChange(event)}/>
-            {this.state.loadJSON_errorMessage}
             <Button
                 className='btn-csu w-100 text-left'
                 name='loadJSON'
@@ -330,7 +328,7 @@ export default class Home extends Component {
       if(this.state.fileContents) {
         try {
           let newTrip = JSON.parse(this.state.fileContents);
-          this.setState({loadJSON_errorMessage: null});
+          this.setState({errorMessage: null});
 
           newTrip.places.forEach((destination) => (
             this.props.addDestination(Object.assign({}, destination))
@@ -345,10 +343,18 @@ export default class Home extends Component {
           this.setState({optimizations : newTrip.options["optimization"]});
 
         } catch (e) {
-            this.setState({loadJSON_errorMessage: <div>Error: Selected file is invalid JSON TIP Trip format<p/></div>});
+            this.setState({errorMessage: this.props.createErrorBanner(
+                "File Error",
+                0,
+                "File has invalid JSON TIP Trip format."
+            )});
         }
       } else {
-        this.setState({loadJSON_errorMessage: <div>Error: No file has been selected<p/></div>});
+          this.setState({errorMessage: this.props.createErrorBanner(
+              "File Error",
+              0,
+              "No file has been selected."
+          )});
       }
     }
 
