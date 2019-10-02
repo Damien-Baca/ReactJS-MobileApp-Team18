@@ -332,15 +332,18 @@ export default class Home extends Component {
           this.setState({errorMessage: null});
 
           newTrip.places.forEach((destination) => (
-            this.props.addDestination(Object.assign({}, destination))
+              this.props.addDestination(Object.assign({}, destination))
           ));
 
-          let newDist = [];
-          Object.assign(newDist, this.state.distances);
-          newTrip.distances.forEach((distance) => (
-              newDist.push(distance)
-          ));
-          this.setState({distances : newDist});
+          if (newTrip.hasOwnProperty('distances')) {
+            let newDist = [];
+            Object.assign(newDist, this.state.distances);
+            newTrip.distances.forEach((distance) => (
+                newDist.push(distance)
+            ));
+            this.setState({distances: newDist});
+          }
+
           this.setState({optimizations : newTrip.options["optimization"]});
 
         } catch (e) {
