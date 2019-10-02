@@ -14,11 +14,10 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
+    this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
-
-    this.fileContents = "";
 
     this.state = {
       errorMessage: null,
@@ -30,6 +29,7 @@ export default class Home extends Component {
       newDestination: {name: '', latitude: '', longitude: ''},
       distances: null,
       optimizations: null,
+      fileContents : null,
       mapBoundaries: {
         maxLat: this.csuOvalGeographicCoordinates().lat + 0.5,
         minLat: this.csuOvalGeographicCoordinates().lat - 0.5,
@@ -292,13 +292,21 @@ export default class Home extends Component {
                    key='input_json_file'
                    name='json_file'
                    onChange={event => this.onFileChange(event)}/>
+            <Button
+                className='btn-csu w-100 text-left'
+                name='loadJSON'
+                key='button_loadJSON'
+                active={true}
+                onClick={() => this.handleLoadJSON()}>
+                Import JSON
+            </Button>
           </FormGroup>
         </Form>
     );
   }
 
   fileCallback(string) {
-    this.fileContents = string;
+      this.setState({fileContents : string});
   }
 
   onFileChange(event) {
@@ -315,6 +323,40 @@ export default class Home extends Component {
       reader.readAsText(file);
     }
   }
+
+    handleLoadJSON() {
+      if(this.state.fileContents) {
+        try {
+          let newTrip = JSON.parse(this.state.fileContents);
+          this.setState({errorMessage: null});
+
+          newTrip.places.forEach((destination) => (
+            this.props.addDestination(Object.assign({}, destination))
+          ));
+
+          let newDist = [];
+          Object.assign(newDist, this.state.distances);
+          newTrip.distances.forEach((distance) => (
+              newDist.push(distance)
+          ));
+          this.setState({distances : newDist});
+          this.setState({optimizations : newTrip.options["optimization"]});
+
+        } catch (e) {
+            this.setState({errorMessage: this.props.createErrorBanner(
+                "File Error",
+                0,
+                "File has invalid JSON TIP Trip format."
+            )});
+        }
+      } else {
+          this.setState({errorMessage: this.props.createErrorBanner(
+              "File Error",
+              0,
+              "No file has been selected."
+          )});
+      }
+    }
 
   generateCoordinateInput() {
     return (Object.keys(this.state.newDestination).map((field) => (
