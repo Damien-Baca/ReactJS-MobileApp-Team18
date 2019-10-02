@@ -238,7 +238,6 @@ export default class Home extends Component {
           <FormGroup>
             <Label for='add_name'>New Destination</Label>
             {this.generateCoordinateInput()}
-            <p/>
             <Button
                 className='btn-csu w-100 text-left'
                 name='add_new_destination'
