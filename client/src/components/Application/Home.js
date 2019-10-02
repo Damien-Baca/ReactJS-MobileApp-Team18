@@ -290,7 +290,6 @@ export default class Home extends Component {
 
       reader.readAsText(file);
       }
-    console.log(this.state);
     }
 
     handleLoadJSON() {
