@@ -3,6 +3,19 @@ import React from 'react'
 import {shallow} from 'enzyme'
 import Application from '../src/components/Application/Application'
 
+const newDestinations = [{
+  name: 'Fort Collins',
+  latitude: 40.5853,
+  longitude: -105.0844
+}, {
+  name: 'Fish Lake National Park',
+  latitude: 38.6816,
+  longitude: -112.3338
+}, {
+  name: 'Disney Land',
+  latitude: 33.812511,
+  longitude: -117.918976
+}];
 
 function testInitialState() {
   mockConfigResponse();
@@ -56,34 +69,47 @@ test("Testing Application's updatePlanOption function", testUpdateOption);
 
 function testAddDestination() {
   const app = shallow(<Application/>);
-  let expectedDestination = [{
-    name: 'Disney Land',
-    latitude: 33.812511,
-    longitude: -117.918976
-  }];
+  let expectedDestinations = newDestinations;
 
-  app.instance().addDestination(expectedDestination[0]);
-  let actualDestination = app.state().destinations;
+  newDestinations.forEach((destination) => {
+    app.instance().addDestination(destination);
+  });
 
-  expect(actualDestination).toEqual(expectedDestination);
+  let actualDestinations = app.state().destinations;
+
+  expect(actualDestinations).toEqual(expectedDestinations);
 }
 
 test("Testing Application's addDestination function.", testAddDestination);
 
 function testRemoveDestination() {
   const app = shallow(<Application/>);
-  let expectedDestination = app.state().destinations;
-  let newDestination = [{
-    name: 'Disney Land',
-    latitude: 33.812511,
-    longitude: -117.918976
-  }];
+  let expectedDestinations = Object.assign([],app.state().destinations);
 
-  app.instance().addDestination(newDestination);
-  app.instance().removeDestination(newDestination[0]);
-  let actualDestination = app.state().destinations;
+  app.instance().addDestination(newDestinations[0]);
+  app.instance().addDestination(newDestinations[1]);
+  app.instance().addDestination(newDestinations[2]);
+  app.instance().removeDestination(1);
+  app.instance().removeDestination(0);
+  app.instance().removeDestination(0);
+  let actualDestinations = app.state().destinations;
 
-  expect(actualDestination).toEqual(expectedDestination);
+  expect(actualDestinations).toEqual(expectedDestinations);
 }
 
 test("Testing Application's removeDestination function.", testRemoveDestination);
+
+function testClearDestinationList() {
+  const app = shallow(<Application/>);
+  let expected = Object.assign([], app.state().destinations);
+
+  app.instance().addDestination(newDestinations[0]);
+  app.instance().addDestination(newDestinations[1]);
+  app.instance().addDestination(newDestinations[2]);
+  app.instance().clearDestinations();
+  let actual = app.state().destinations;
+
+  expect(actual).toEqual(expected);
+}
+
+test('Testing clearDestination.', testClearDestinationList);

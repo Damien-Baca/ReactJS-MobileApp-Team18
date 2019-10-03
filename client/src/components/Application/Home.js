@@ -3,9 +3,10 @@ import {Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, I
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
-import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
+import {Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
 import validateCoordinates from "./Application";
+import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
 /*
  * Renders the home page.
@@ -14,13 +15,13 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
+    this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
 
-    this.fileContents = "";
-
     this.state = {
+      errorMessage: null,
       userLocation: {
         name: 'Colorado State University',
         latitude: this.csuOvalGeographicCoordinates().lat,
@@ -29,8 +30,17 @@ export default class Home extends Component {
       },
 
       newDestination: {name: '', latitude: '', longitude: ''},
-      valid: {name: false, latitude: false, longitude: false},
-      invalid: {name: false, latitude: false, longitude: false},
+      distances: null,
+      optimizations: null,
+      fileContents : null,
+      mapBoundaries: {
+        maxLat: this.csuOvalGeographicCoordinates().lat + 0.5,
+        minLat: this.csuOvalGeographicCoordinates().lat - 0.5,
+        maxLon: this.csuOvalGeographicCoordinates().lng + 0.5,
+        minLon: this.csuOvalGeographicCoordinates().lng - 0.5
+      },
+     valid: {name: false, latitude: false, longitude: false},
+     invalid: {name: false, latitude: false, longitude: false},
     };
 
     this.getUserLocation();
@@ -46,8 +56,8 @@ export default class Home extends Component {
   storeUserLocation(position) {
     let newUserLocation = {
       name: 'You Are Here',
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
+      latitude: String(position.coords.latitude),
+      longitude: String(position.coords.longitude)
     };
 
     this.setState({
@@ -58,6 +68,7 @@ export default class Home extends Component {
   render() {
     return (
         <Container>
+          {this.state.errorMessage}
           <Row>
             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderMap()}
@@ -83,12 +94,13 @@ export default class Home extends Component {
     // 1: bounds={this.coloradoGeographicBoundaries()}
     // 2: center={this.csuOvalGeographicCoordinates()} zoom={10}
     return (
-        <Map center={this.convertLatLng(this.state.userLocation.latitude, this.state.userLocation.longitude)} zoom={10}
+        <Map bounds={this.itineraryBounds()}
              style={{height: 500, maxwidth: 700}}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           {this.renderMarkers()}
+          {this.renderPolyline()}
         </Map>
     )
   }
@@ -102,25 +114,52 @@ export default class Home extends Component {
 
     return (
         markerList.map((marker, index) => (
-          <Marker
-            key={`marker_${index}`}
-            position={L.latLng(marker.latitude, marker.longitude)}
-            icon={this.markerIcon()}>
-            < Popup
-                className="font-weight-extrabold">{marker.name}</Popup>
-          </Marker>
+            <Marker
+                key={`marker_${index}`}
+                position={L.latLng(marker.latitude, marker.longitude)}
+                icon={this.markerIcon()}>
+              < Popup
+                  className="font-weight-extrabold">{marker.name}</Popup>
+            </Marker>
         ))
     );
   }
 
-  convertLatLng(latitude, longitude) {
-    return L.latLng(latitude, longitude);
+  renderPolyline() {
+    let polylineList = [];
+
+    if (this.props.destinations.length > 1) {
+      let origin = [];
+      polylineList.splice(0, 1);
+
+      this.props.destinations.map((destination, index) => {
+        if (index === 0) {
+          origin = [parseFloat(destination.latitude),
+            parseFloat(destination.longitude)];
+        }
+        polylineList.splice(polylineList.length, 0,
+            [parseFloat(destination.latitude),
+              parseFloat(destination.longitude)]);
+        //} else {
+        //  previous = [destination.latitude, destination.longitude];
+        //}
+      });
+
+      polylineList.splice(polylineList.length, 0, origin);
+
+      return (
+          <Polyline
+              color={'blue'}
+              positions={polylineList}
+          >Trip</Polyline>
+      );
+    }
   }
 
   renderIntro() {
     return (
         <Pane header={'Bon Voyage!'}
-              bodyJSX={this.renderAddDestination()}/>
+              bodyJSX={this.renderDestinationControls()}/>
     );
   }
 
@@ -131,33 +170,105 @@ export default class Home extends Component {
     );
   }
 
+  renderDestinationControls() {
+    return (
+        <Container>
+          <Row>
+            {this.renderConditionalCumulativeDistance()}
+          </Row>
+          <Row>
+            {this.renderAddDestination()}
+          </Row>
+          <Row>
+            {this.renderDestinationOptions()}
+          </Row>
+        </Container>
+    );
+  }
+
+  renderConditionalCumulativeDistance() {
+    if (this.state.distances !== null) {
+      return (
+          <Label>Cumulative Trip
+            Distance: {this.sumDistances()}</Label>
+      );
+    }
+
+    return (
+        <Label>Distance not yet calculated.</Label>
+    );
+  }
+
   renderDestinationList() {
     return (
         <ListGroup>
-          {this.renderList()}
+          {this.renderClearDestinations()}
+          {this.generateList()}
         </ListGroup>
     );
   }
 
-  renderList() {
+  renderDestinationOptions() {
+    return (
+        <Button
+            name='calculate'
+            onClick={() => this.calculateDistances()}
+            disabled={this.props.destinations.length === 0}
+        >Calculate Trip Distances</Button>
+    );
+  }
+
+  renderClearDestinations() {
+    return (
+        <ListGroupItem>
+          <Button className='btn-csu h-5 w-100 text-left'
+                  size={'sm'}
+                  name='clear_destinations'
+                  key={"button_clear_all_destinations"}
+                  value='Clear Destinations'
+                  active={false}
+                  onClick={() => this.handleClearDestinations()}
+          >Clear Destinations</Button>
+        </ListGroupItem>
+    );
+  }
+
+  generateList() {
     return (
         this.props.destinations.map((destination, index) => (
             <ListGroupItem key={'destination_' + index}>
               <Row>
                 {destination.name}, {destination.latitude}, {destination.longitude}
               </Row>
+              {this.renderConditionalDistance(index)}
               <Row>
                 <Button className='btn-csu h-5 w-50 text-left'
                         size={'sm'}
+                        name={'remove_' + index}
                         key={"button_" + destination.name}
-                        value='Remove'
+                        value='Remove Destination'
                         active={false}
-                        onClick={() => this.props.removeDestination(index)}
+                        onClick={() => this.handleRemoveDestination(index)}
                 >Remove</Button>
               </Row>
             </ListGroupItem>
         ))
     );
+  }
+
+  renderConditionalDistance(index) {
+    if (this.state.distances !== null) {
+      return (
+          <Row>
+            Distance to Next Destination: {this.state.distances[index]}
+          </Row>
+      );
+    }
+    return (
+        <Row>
+          Distances not yet calculated.
+        </Row>
+    )
   }
 
   renderAddDestination() {
@@ -168,47 +279,104 @@ export default class Home extends Component {
             {this.generateCoordinateInput()}
             <Button
                 className='btn-csu w-100 text-left'
-                key={"button_add"}
+                name='add_new_destination'
+                key='button_add_destination'
                 active={true}
                 onClick={() => this.handleNewDestination()}
                 disabled={ !(this.state.valid.latitude && this.state.valid.longitude)
-                          || (this.state.newDestination.name === '')}
-            >
-              Add
+                          || (this.state.newDestination.name === '')}>
+              Add New Destination
             </Button>
-            <hr/>
-            <input type='file' id='fileItem' onChange={event => this.onFileChange(event)}/>
+            <Button
+                className='btn-csu w-100 text-left'
+                name='add_user_destination'
+                key='button_add_user_destination'
+                active={true}
+                onClick={() => this.handleUserDestination()}>
+              Add User Location
+            </Button>
+            <Input type='file'
+                   id='fileItem'
+                   key='input_json_file'
+                   name='json_file'
+                   onChange={event => this.onFileChange(event)}/>
+            <Button
+                className='btn-csu w-100 text-left'
+                name='loadJSON'
+                key='button_loadJSON'
+                active={true}
+                onClick={() => this.handleLoadJSON()}>
+                Import JSON
+            </Button>
           </FormGroup>
         </Form>
     );
   }
 
   fileCallback(string) {
-    this.fileContents = string;
-    console.log(this.fileContents);
+      this.setState({fileContents : string});
   }
 
   onFileChange(event) {
     let callback = this.fileCallback;
     let fileIn = event.target;
-    if(fileIn) {
+    if (fileIn) {
       let file = fileIn.files[0];
       let reader = new FileReader();
 
-      reader.onloadend = function() {
+      reader.onloadend = function () {
         callback(this.result);
       };
 
       reader.readAsText(file);
+    }
+  }
+
+    handleLoadJSON() {
+      if(this.state.fileContents) {
+        try {
+          let newTrip = JSON.parse(this.state.fileContents);
+          this.setState({errorMessage: null});
+
+          newTrip.places.forEach((destination) => (
+              this.props.addDestination(Object.assign({}, destination))
+          ));
+
+          if (newTrip.hasOwnProperty('distances')) {
+            let newDist = [];
+            Object.assign(newDist, this.state.distances);
+            newTrip.distances.forEach((distance) => (
+                newDist.push(distance)
+            ));
+            this.setState({distances: newDist});
+          }
+
+          this.setState({optimizations : newTrip.options["optimization"]});
+
+        } catch (e) {
+            this.setState({errorMessage: this.props.createErrorBanner(
+                "File Error",
+                0,
+                "File has invalid JSON TIP Trip format."
+            )});
+        }
+      } else {
+          this.setState({errorMessage: this.props.createErrorBanner(
+              "File Error",
+              0,
+              "No file has been selected."
+          )});
       }
     }
 
   generateCoordinateInput() {
     return (Object.keys(this.state.newDestination).map((field) => (
         <Input type='text'
+               key={'input_' + field}
                name={field}
                id={`add_${field}`}
-               placeholder={field.charAt(0).toUpperCase() + field.substring(1, field.length)}
+               placeholder={field.charAt(0).toUpperCase() + field.substring(1,
+                   field.length)}
                value={this.state.newDestination[field]}
                valid={ this.state.valid[field] } //THIS.STATE.VALID[FIELD]
                invalid={ this.state.invalid[field] }
@@ -224,6 +392,10 @@ export default class Home extends Component {
       valid: superFalse,
       invalid: superFalse
     });
+  }
+
+  handleUserDestination() {
+    this.props.addDestination(Object.assign({}, this.state.userLocation));
   }
 
   updateNewDestinationOnChange(event) {
@@ -260,6 +432,112 @@ export default class Home extends Component {
       valid: cloneValid,
       invalid: cloneInvalid
     });
+  }
+
+  handleRemoveDestination(index) {
+    this.setState({
+      distances: null
+    });
+    this.props.removeDestination(index);
+  }
+
+  handleClearDestinations() {
+    this.props.clearDestinations();
+    this.setState({
+      distances: null
+    });
+  }
+
+  calculateDistances() {
+    let convertedDestinations = [];
+    this.props.destinations.forEach((destination) =>{
+      let convertedDestination = {name: destination.name};
+      Object.assign(convertedDestination, this.props.convertCoordinates(destination.latitude,destination.longitude));
+      convertedDestinations.push(convertedDestination);
+    });
+    const tipConfigRequest = {
+      'type': 'trip',
+      'version': 2,
+      'options': {
+        'title': 'My Trip',
+        'earthRadius': String(
+            this.props.options.units[this.props.options.activeUnit]),
+        'optimization': 'none'
+      },
+      'places': convertedDestinations,
+      'distances': []
+    };
+
+    sendServerRequestWithBody('trip', tipConfigRequest,
+        this.props.settings.serverPort).then((response) => {
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        this.setState({
+          distances: Object.assign([], response.body.distances),
+          errorMessage: null
+        });
+      } else {
+        this.setState({
+          errorMessage: this.props.createErrorBanner(
+              response.statusText,
+              response.statusCode,
+              `Request to ${this.props.settings.serverPort} failed.`
+          )
+        });
+      }
+    });
+  }
+
+  sumDistances() {
+    let tripSum = null;
+
+    if (this.state.distances != null) {
+      const reducer = (sum, current) => {
+        return sum + current;
+      };
+
+      tripSum = Object.assign([], this.state.distances).reduce(reducer);
+    }
+
+    return tripSum
+  }
+
+  itineraryBounds() {
+    let boundaries = {
+      maxLat: parseFloat(this.state.userLocation.latitude) + 0.1,
+      minLat: parseFloat(this.state.userLocation.latitude) - 0.1,
+      maxLng: parseFloat(this.state.userLocation.longitude) + 0.1,
+      minLng: parseFloat(this.state.userLocation.longitude) - 0.1
+    };
+
+    if (this.props.destinations.length > 0) {
+      Object.keys(boundaries).map((field) => {
+        if (field === 'maxLat' || field === 'maxLng') {
+          boundaries[field] = -181;
+        } else {
+          boundaries[field] = 181;
+        }
+      });
+
+      this.props.destinations.forEach((destination) => {
+        if (destination.latitude > boundaries.maxLat) {
+          boundaries.maxLat =  parseFloat(destination.latitude) + 0.1;
+        }
+        if (destination.latitude < boundaries.minLat) {
+          boundaries.minLat = parseFloat(destination.latitude) - 0.1;
+        }
+        if (destination.longitude > boundaries.maxLng) {
+          boundaries.maxLng = parseFloat(destination.longitude) + 0.1;
+        }
+        if (destination.longitude < boundaries.minLng) {
+          boundaries.minLng = parseFloat(destination.longitude) - 0.1;
+        }
+      });
+    }
+
+    const topLeftBound = L.latLng(boundaries.maxLat, boundaries.minLng);
+    const bottomRightBound = L.latLng(boundaries.minLat, boundaries.maxLng);
+
+    return L.latLngBounds(topLeftBound, bottomRightBound);
   }
 
   coloradoGeographicBoundaries() {

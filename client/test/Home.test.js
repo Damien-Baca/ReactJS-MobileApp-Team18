@@ -1,14 +1,25 @@
 import './enzyme.config.js'
 import React from 'react'
-import {shallow} from 'enzyme'
 import Home from '../src/components/Application/Home'
-import {mount} from 'enzyme';
+import {mount} from 'enzyme'
 
 const destinations = [];
+const inputNames = [
+  'name',
+  'latitude',
+  'longitude',
+  'json_file'
+];
+const buttonNamesInitial = [
+  'add_new_destination',
+  'add_user_destination',
+  'calculate',
+  'clear_destinations'
+];
 
 function testInitialState() {
   const home = mount((<Home destinations = {destinations}/>));
-  let expected = {name: '', latitude: 0, longitude: 0};
+  let expected = {name: '', latitude: '', longitude: ''};
   let actual = home.state().newDestination;
 
   expect(actual).toEqual(expected);
@@ -69,3 +80,33 @@ function testUpdateLongitude() {
 }
 
 test('Testing newDestination longitude update.', testUpdateLongitude);
+
+function testCreateInputFields() {
+  const home = mount((<Home destinations={destinations}/>));
+  let expectedInputs = inputNames;
+
+  let numberOfInputs = home.find('Input').length;
+  expect(numberOfInputs).toEqual(inputNames.length);
+
+  let actualInputs = [];
+  home.find('Input').map((input) => actualInputs.push(input.prop('name')));
+
+  expect(actualInputs).toEqual(expectedInputs);
+}
+
+test('Testing Input rendering.', testCreateInputFields);
+
+function testCreateButtons() {
+  const home = mount((<Home destinations={destinations}/>));
+  let expectedButtons = buttonNamesInitial;
+
+  let numberOfButtons = home.find('Button').length;
+  expect(numberOfButtons).toEqual(expectedButtons.length);
+
+  let actualButtons = [];
+  home.find('Button').map((input) => actualButtons.push(input.prop('name')));
+
+  expect(actualButtons).toEqual(expectedButtons);
+}
+
+test('Testing Button rendering.', testCreateButtons);

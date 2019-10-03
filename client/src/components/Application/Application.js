@@ -22,6 +22,8 @@ export default class Application extends Component {
     this.createApplicationPage = this.createApplicationPage.bind(this);
     this.addDestination = this.addDestination.bind(this);
     this.removeDestination = this.removeDestination.bind(this);
+    this.clearDestinations = this.clearDestinations.bind(this);
+    this.convertCoordinates = this.convertCoordinates.bind(this);
     this.validateCoordinates = this.validateCoordinates.bind(this);
 
     this.state = {
@@ -88,7 +90,9 @@ export default class Application extends Component {
       case 'calc':
         return <Calculator options={this.state.planOptions}
                            settings={this.state.clientSettings}
-                           createErrorBanner={this.createErrorBanner}/>;
+                           createErrorBanner={this.createErrorBanner}
+                           convertCoordinates={this.convertCoordinates}/>;
+
       case 'options':
         return <Options options={this.state.planOptions}
                         config={this.state.serverConfig}
@@ -104,8 +108,12 @@ export default class Application extends Component {
       default:
         return <Home options={this.state.planOptions}
                      destinations={this.state.destinations}
+                     settings={this.state.clientSettings}
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}
+                     clearDestinations={this.clearDestinations}
+                     createErrorBanner={this.createErrorBanner}
+                     convertCoordinates={this.convertCoordinates}
                      validateCoordinates={this.validateCoordinates}/>;
     }
   }
@@ -132,7 +140,9 @@ export default class Application extends Component {
   addDestination(newDestination, index = (this.state.destinations.length)) {
     if (newDestination.name !== '' && newDestination.latitude !== '' && newDestination.longitude !== '') {
       let newDestinationList = this.state.destinations;
-      newDestinationList.splice(index, 0, newDestination);
+      let convertedNewDestination = {name: newDestination.name};
+      Object.assign(convertedNewDestination,this.convertCoordinates(newDestination.latitude,newDestination.longitude));
+      newDestinationList.splice(index, 0, convertedNewDestination);
 
       this.setState({
         destinations: newDestinationList
@@ -141,9 +151,19 @@ export default class Application extends Component {
   }
 
   removeDestination(index) {
-    this.state.destinations.splice(index, 1);
+    let newDestinationList = Object.assign([], this.state.destinations);
+    newDestinationList.splice(index, 1);
+
     this.setState({
-      destinations: this.state.destinations
+      destinations: newDestinationList
+    });
+  }
+
+  clearDestinations() {
+    let clearDestinations = [];
+
+    this.setState({
+      destinations: clearDestinations
     });
   }
 
@@ -159,5 +179,11 @@ export default class Application extends Component {
       //error banner throw
       return isValid;
     }
-  };
+  }
+
+  convertCoordinates(latitude,longitude) {
+    let Coordinates = require('coordinate-parser');
+    let converter = new Coordinates(`${latitude} ${longitude}`);
+    return {latitude: String(converter.getLatitude()),longitude: String(converter.getLongitude())};
+  }
 }
