@@ -17,7 +17,11 @@ export default class Calculator extends Component {
       origin: {latitude: '', longitude: ''},
       destination: {latitude: '', longitude: ''},
       distance: 0,
-      errorMessage: null
+      errorMessage: null,
+      valid1: {name: false, latitude: false, longitude: false},
+      invalid1: {name: false, latitude: false, longitude: false},
+      valid2: {name: false, latitude: false, longitude: false},
+      invalid2: {name: false, latitude: false, longitude: false}
     };
   }
 
@@ -90,7 +94,9 @@ export default class Calculator extends Component {
               bodyJSX={
                 <div>
                   <h5>{this.state.distance} {this.props.options.activeUnit}</h5>
-                  <Button onClick={this.calculateDistance}>Calculate</Button>
+                  <Button onClick={this.calculateDistance}
+                          disabled={ !(this.state.valid1.latitude && this.state.valid1.longitude && this.state.valid2.latitude && this.state.valid2.longitude) }
+                  >Calculate</Button>
                 </div>}
         />
     );
@@ -125,9 +131,36 @@ export default class Calculator extends Component {
     });
   }
 
-  updateLocationOnChange(stateVar, field, value) {
+  updateLocationOnChange(stateVar, field, value){ //origindest, target.name, target.value
+
+    if (value === '') { //empty
+      this.setValidState(stateVar, field, value, false, false, false, false);
+    } else if (this.validation(stateVar, field, alue) ) { //if coord is good
+      this.setValidState(sstateVar, field, value, true, false, true, false);
+    } else { //bad coord
+      this.setValidState(stateVar, field, value, false, true, false, true);
+    }
+  }
+
+
+  setValidState(stateVar, field, value, valid1, invalid1, valid2, invalid2) {
     let location = Object.assign({}, this.state[stateVar]);
     location[field] = value;
-    this.setState({[stateVar]: location});
+    let cloneValid1 = Object.assign({}, this.state.valid1);
+    cloneValid1[name] = valid1;
+    let cloneInvalid1 = Object.assign({}, this.state.invalid1);
+    cloneInvalid1[name] = invalid1;
+    let cloneValid2 = Object.assign({}, this.state.valid2);
+    cloneValid2[name] = valid2;
+    let cloneInvalid2 = Object.assign({}, this.state.invalid2);
+    cloneInvalid2[name] = invalid2;
+    this.setState({
+      [stateVar]: location,
+      valid1: cloneValid1,
+      invalid1: cloneInvalid1,
+      valid2: cloneValid2,
+      invalid2: cloneInvalid2
+    });
+
   }
 }
