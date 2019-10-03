@@ -171,8 +171,8 @@ export default class Home extends Component {
                 key={"button_add"}
                 active={true}
                 onClick={() => this.handleNewDestination()}
-                disabled={ !(this.state.valid.latitude && this.state.valid.longitude
-                          && !(this.state.userLocation.name === '') )}
+                disabled={ !(this.state.valid.latitude && this.state.valid.longitude)
+                          || (this.state.newDestination.name === '')}
             >
               Add
             </Button>
@@ -218,8 +218,11 @@ export default class Home extends Component {
 
   handleNewDestination() {
     this.props.addDestination(Object.assign({}, this.state.newDestination));
+    let superFalse = {latitude:false, longitude: false};
     this.setState({
-      newDestination: {name: '', latitude: '', longitude: ''}
+      newDestination: {name: '', latitude: '', longitude: ''},
+      valid: superFalse,
+      invalid: superFalse
     });
   }
 
