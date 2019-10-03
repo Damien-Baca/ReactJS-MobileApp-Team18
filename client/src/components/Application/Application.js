@@ -8,6 +8,7 @@ import About from './About/About';
 import Settings from './Settings/Settings';
 import {getOriginalServerPort, sendServerRequest} from '../../api/restfulAPI';
 import ErrorBanner from './ErrorBanner';
+import 'coordinate-parser';
 
 /* Renders the application.
  * Holds the destinations and options state shared with the trip.
@@ -22,6 +23,7 @@ export default class Application extends Component {
     this.addDestination = this.addDestination.bind(this);
     this.removeDestination = this.removeDestination.bind(this);
     this.clearDestinations = this.clearDestinations.bind(this);
+    this.convertCoordinates = this.convertCoordinates.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -87,7 +89,9 @@ export default class Application extends Component {
       case 'calc':
         return <Calculator options={this.state.planOptions}
                            settings={this.state.clientSettings}
-                           createErrorBanner={this.createErrorBanner}/>;
+                           createErrorBanner={this.createErrorBanner}
+                           convertCoordinates={this.convertCoordinates}/>;
+
       case 'options':
         return <Options options={this.state.planOptions}
                         config={this.state.serverConfig}
@@ -107,7 +111,8 @@ export default class Application extends Component {
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}
                      clearDestinations={this.clearDestinations}
-                     createErrorBanner={this.createErrorBanner}/>;
+                     createErrorBanner={this.createErrorBanner}
+                     convertCoordinates={this.convertCoordinates}/>;
     }
   }
 
@@ -133,7 +138,9 @@ export default class Application extends Component {
   addDestination(newDestination, index = (this.state.destinations.length)) {
     if (newDestination.name !== '' && newDestination.latitude !== '' && newDestination.longitude !== '') {
       let newDestinationList = this.state.destinations;
-      newDestinationList.splice(index, 0, newDestination);
+      let convertedNewDestination = {name: newDestination.name};
+      Object.assign(convertedNewDestination,this.convertCoordinates(newDestination.latitude,newDestination.longitude));
+      newDestinationList.splice(index, 0, convertedNewDestination);
 
       this.setState({
         destinations: newDestinationList
@@ -156,5 +163,10 @@ export default class Application extends Component {
     this.setState({
       destinations: clearDestinations
     });
+  }
+  convertCoordinates(latitude,longitude) {
+    let Coordinates = require('coordinate-parser');
+    let converter = new Coordinates(`${latitude} ${longitude}`);
+    return {latitude: String(converter.getLatitude()),longitude: String(converter.getLongitude())};
   }
 }
