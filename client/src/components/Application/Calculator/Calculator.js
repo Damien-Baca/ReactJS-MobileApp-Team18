@@ -160,7 +160,7 @@ export default class Calculator extends Component {
       invalid1: cloneInvalid1,
       valid2: cloneValid2,
       invalid2: cloneInvalid2
-    });
+    }); // this doesnt work
 
   }
 }
