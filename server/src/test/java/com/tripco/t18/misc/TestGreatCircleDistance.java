@@ -5,6 +5,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestGreatCircleDistance {
   private final float earthRadiusMiles=3959;
@@ -64,4 +65,17 @@ public class TestGreatCircleDistance {
     assertEquals("Walk up hill both ways",resultOne,resultTwo);
   }
 
+  @Test
+  public void testPositiveDistance(){
+    origin.replace("latitude","0");
+    origin.replace("longitude","0");
+    int[] Values ={0,1,2,3,4,5,6,-6,-5,-4,-3,-2,-1};
+    for (int num: Values){
+        destination.replace("latitude", Integer.toString(num*15));
+        destination.replace("longitude", Integer.toString(num*30));
+        int currentDistance = test.calculateDistance(origin, destination, earthRadiusMiles);
+        int minimumDistance = 0;
+        assertTrue("All distances should be positive", minimumDistance <= currentDistance);
+    }
+  }
 }
