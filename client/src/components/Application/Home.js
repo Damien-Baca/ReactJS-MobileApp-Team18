@@ -26,7 +26,6 @@ export default class Home extends Component {
         name: 'Colorado State University',
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
-
       },
 
       newDestination: {name: '', latitude: '', longitude: ''},
@@ -34,10 +33,10 @@ export default class Home extends Component {
       optimizations: null,
       fileContents : null,
       mapBoundaries: {
-        maxLat: this.csuOvalGeographicCoordinates().lat + 0.5,
-        minLat: this.csuOvalGeographicCoordinates().lat - 0.5,
-        maxLon: this.csuOvalGeographicCoordinates().lng + 0.5,
-        minLon: this.csuOvalGeographicCoordinates().lng - 0.5
+        maxLat: '',
+        minLat: '',
+        maxLon: '',
+        minLon: ''
       },
      valid: {name: false, latitude: false, longitude: false},
      invalid: {name: false, latitude: false, longitude: false},
@@ -503,10 +502,10 @@ export default class Home extends Component {
 
   itineraryBounds() {
     let boundaries = {
-      maxLat: parseFloat(this.state.userLocation.latitude) + 0.1,
-      minLat: parseFloat(this.state.userLocation.latitude) - 0.1,
-      maxLng: parseFloat(this.state.userLocation.longitude) + 0.1,
-      minLng: parseFloat(this.state.userLocation.longitude) - 0.1
+      maxLat: parseFloat(this.state.userLocation.latitude) + 0.02,
+      minLat: parseFloat(this.state.userLocation.latitude) - 0.02,
+      maxLng: parseFloat(this.state.userLocation.longitude) + 0.02,
+      minLng: parseFloat(this.state.userLocation.longitude) - 0.02
     };
 
     if (this.props.destinations.length > 0) {
@@ -520,16 +519,16 @@ export default class Home extends Component {
 
       this.props.destinations.forEach((destination) => {
         if (destination.latitude > boundaries.maxLat) {
-          boundaries.maxLat =  parseFloat(destination.latitude) + 0.1;
+          boundaries.maxLat =  parseFloat(destination.latitude) + 0.02;
         }
         if (destination.latitude < boundaries.minLat) {
-          boundaries.minLat = parseFloat(destination.latitude) - 0.1;
+          boundaries.minLat = parseFloat(destination.latitude) - 0.02;
         }
         if (destination.longitude > boundaries.maxLng) {
-          boundaries.maxLng = parseFloat(destination.longitude) + 0.1;
+          boundaries.maxLng = parseFloat(destination.longitude) + 0.02;
         }
         if (destination.longitude < boundaries.minLng) {
-          boundaries.minLng = parseFloat(destination.longitude) - 0.1;
+          boundaries.minLng = parseFloat(destination.longitude) - 0.02;
         }
       });
     }
