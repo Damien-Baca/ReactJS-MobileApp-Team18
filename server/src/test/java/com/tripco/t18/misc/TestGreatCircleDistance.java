@@ -27,8 +27,8 @@ public class TestGreatCircleDistance {
   public void testSameLocation(){
     origin.replace("latitude","40");
     origin.replace("longitude","-105");
-    int expect=0;
-    int actual=test.calculateDistance(origin,origin,earthRadiusMiles);
+    int expect = 0;
+    int actual = test.calculateDistance(origin,origin,earthRadiusMiles);
     assertEquals("traveled nowhere",expect,actual);
   }
   @Test
@@ -38,7 +38,19 @@ public class TestGreatCircleDistance {
     destination.replace("latitude","0");
     destination.replace("longitude","-180");
     int expect = 0;
-    int actual=test.calculateDistance(origin,destination,earthRadiusMiles);
+    int actual = test.calculateDistance(origin,destination,earthRadiusMiles);
     assertEquals("man 180 and -180 are close",expect,actual);
   }
+
+  @Test
+  public void testNPoleWithDifferentLong(){
+    origin.replace("latitude","90");
+    origin.replace("longitude","0");
+    destination.replace("latitude","90");
+    destination.replace("longitude","110");
+    int expect = 0;
+    int actual = test.calculateDistance(origin,destination,earthRadiusMiles);
+    assertEquals("Turn around",expect,actual);
+  }
+
 }
