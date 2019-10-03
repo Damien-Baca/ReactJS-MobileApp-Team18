@@ -53,4 +53,15 @@ public class TestGreatCircleDistance {
     assertEquals("Turn around",expect,actual);
   }
 
+  @Test
+  public void testBackAndForth(){
+    origin.replace("latitude","40");
+    origin.replace("longitude","-105");
+    destination.replace("latitude","40");
+    destination.replace("longitude","105");
+    int resultOne = test.calculateDistance(origin,destination,earthRadiusMiles);
+    int resultTwo = test.calculateDistance(destination,origin,earthRadiusMiles);
+    assertEquals("Walk up hill both ways",resultOne,resultTwo);
+  }
+
 }
