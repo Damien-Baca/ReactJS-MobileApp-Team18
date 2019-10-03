@@ -25,9 +25,9 @@ public class GreatCircleDistance {
     double denominator =
         Math.sin(origin_lat) * Math.sin(dest_lat) + Math.cos(origin_lat) * Math.cos(dest_lat) * Math
             .cos(delta_lon);
-    double arc = Math.atan(numerator / denominator);
+    double arc = Math.atan2(numerator,denominator);
 
-    return ((int) (arc * earthRadius));
+    return Math.round((int) (arc * earthRadius));
   }
 
   public double to_radians(double degrees) {
