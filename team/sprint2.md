@@ -66,9 +66,9 @@ Client Server Diagram for Short Trip Epic
 
 | Statistic | # Planned | # Completed |
 | --- | ---: | ---: |
-| Epics | *6* | *value* |
-| Tasks |  *11*   | *value* | 
-| Story Points |  *12*  | *value* | 
+| Epics | *6* | *5* |
+| Tasks |  *11*   | *22* | 
+| Story Points |  *12*  | *24* | 
 
 
 ## Scrums
@@ -80,6 +80,8 @@ Client Server Diagram for Short Trip Epic
 | *20/09/2019* | *#103 | *#86, #83, #92, #87, #96, #101, #102, #105* | *none* |
 | *24/09/2019* | *#86* | *#83, #92, #87, #96, #101, #102, #105* | *none* | 
 | *25/09/2019* | ** | *#83, #92, #87, #96, #101, #102, #105* | *none* | 
+| *25/09/2019* | ** | *#83, #92, #87, #96, #101, #102, #105* | *none* | 
+| *25/09/2019* | ** | *#83, #92, #87, #96, #101, #102, #105* | *none* | 
 
 
 ## Review (focus on solution and technology)
@@ -90,42 +92,47 @@ In this sprint, ...
 
 These Epics were completed.
 
-* *## epic title: comments*
-* 
+* *#69 Where Am I: comments*
+* *#70 Vincenty: comments*
+* *#71 Display map and itinerary: comments*
+* *#72 Geographic Coordinate Validation: comments*
+* *#72 Geographic Coordinate Formats: comments*
 
 #### Incomplete epics in Sprint Backlog 
 
 These Epics were not completed.
 
-* *## epic title: explanation*
-*
+* *#74 short trip: explanation*
+
 
 #### What went well
 
-The ...
-
+Collectively were able to better estimate the length and complexity of assigned epics and subsequent tasks.
+Were able to more effectively communicate and meet as a team.
+Began to improve comprehension of resources, javascript, and java.
+Learning to write more comprehensive, efficient, and effective tests.
 
 #### Problems encountered and resolutions
 
-The ...
-
+Underestimated the time required to finish tasks, as well as the time able to be devoted to tasks.
 
 ## Retrospective (focus on people, process, tools)
 
-In this sprint, ...
+In this sprint, we began to familiarize ourselves with intelliJ and the languages associated with the repository and its components.
+We completed most of the epics that we expected to be able to.
 
 #### What we changed this sprint
 
-Our changes for this sprint included ...
+Our changes for this sprint included being able to implement more complex functionality, and writing cleaner code.
 
 #### What we did well
 
-We ...
+We began to teach and support each other when struggling, as well as having the willingness to ask for help when necessary.
 
 #### What we need to work on
 
-We could improve ...
+We could improve working as a more cohesive unit, as well as beginning tasks earlier and working on consecutively smaller pieces.
 
 #### What we will change next sprint 
 
-We will change ...
+We will change how early we begin working on the epics, as well as breaking each epic down to smaller, more managable portions.
