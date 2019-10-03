@@ -311,8 +311,15 @@ export default class Home extends Component {
 
   handleGetUserLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((this.storeUserLocation));
+      navigator.geolocation.getCurrentPosition(this.storeUserLocation, this.reportGeoError);
     } else {
+      this.setState({
+        errorMessage: this.props.createErrorBanner(
+            "GEOLOCATOR ERROR:",
+            0,
+            `Geolocator not supported by your browser.`
+        )
+      });
     }
   }
 
@@ -326,6 +333,16 @@ export default class Home extends Component {
     this.setState({
       userLocation: newUserLocation
     })
+  }
+
+  reportGeoError(error) {
+    this.setState({
+      errorMessage: this.props.createErrorBanner(
+          "GEOLOCATOR ERROR:",
+          error.code,
+          error.message
+      )
+    });
   }
 
   fileCallback(string) {
