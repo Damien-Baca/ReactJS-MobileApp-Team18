@@ -171,7 +171,8 @@ export default class Home extends Component {
                 key={"button_add"}
                 active={true}
                 onClick={() => this.handleNewDestination()}
-                disabled={ this.state.valid.latitude && this.state.valid.longitude }
+                disabled={ !(this.state.valid.latitude && this.state.valid.longitude
+                          && !(this.state.userLocation.name === '') )}
             >
               Add
             </Button>
@@ -223,23 +224,13 @@ export default class Home extends Component {
   }
 
   updateNewDestinationOnChange(event) {
-    let update = Object.assign({}, this.state.newDestination);
-    update[event.target.name] = event.target.value;
+
     if (event.target.value === '' || event.target.name === 'name' ) { //empty or field is name
-      this.setValidState(event.target.name, false, false);
-      this.setState({
-        newDestination: update
-      });
+      this.setValidState(event.target.name, event.target.value, false, false);
     } else if (this.validation(event.target.name, event.target.value) ) { //if coord is good
-      this.setValidState(event.target.name, true, false);
-      this.setState({
-        newDestination: update
-      });
+      this.setValidState(event.target.name, event.target.value, true, false);
     } else { //bad coord
-      this.setValidState(event.target.name, false, true);
-      this.setState({
-        newDestination: update
-      });
+      this.setValidState(event.target.name, event.target.value, false, true);
     }
   }
 
@@ -254,12 +245,15 @@ export default class Home extends Component {
     return valid;
   }
 
-  setValidState(subfield, valid, invalid) {
+  setValidState(name, value, valid, invalid) {
+    let update = Object.assign({}, this.state.newDestination);
+    update[name] = value;
     let cloneValid = Object.assign({}, this.state.valid);
-    cloneValid[subfield] = valid;
+    cloneValid[name] = valid;
     let cloneInvalid = Object.assign({}, this.state.invalid);
-    cloneInvalid[subfield] = invalid;
+    cloneInvalid[name] = invalid;
     this.setState({
+      newDestination: update,
       valid: cloneValid,
       invalid: cloneInvalid
     });
