@@ -19,6 +19,7 @@ export default class Home extends Component {
     this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
+    this.reportGeoError = this.reportGeoError(this);
 
     this.state = {
       errorMessage: null,
@@ -310,13 +311,13 @@ export default class Home extends Component {
   }
 
   handleGetUserLocation() {
-    if (navigator.geolocation) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(this.storeUserLocation, this.reportGeoError);
     } else {
       this.setState({
         errorMessage: this.props.createErrorBanner(
             "GEOLOCATOR ERROR:",
-            0,
+            "0",
             `Geolocator not supported by your browser.`
         )
       });
@@ -336,6 +337,7 @@ export default class Home extends Component {
   }
 
   reportGeoError(error) {
+    console.log(error.message);
     this.setState({
       errorMessage: this.props.createErrorBanner(
           "GEOLOCATOR ERROR:",
