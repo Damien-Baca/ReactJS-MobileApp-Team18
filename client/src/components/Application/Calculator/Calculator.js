@@ -18,10 +18,14 @@ export default class Calculator extends Component {
       destination: {latitude: '', longitude: ''},
       distance: 0,
       errorMessage: null,
-      valid1: {latitude: false, longitude: false},
-      invalid1: {latitude: false, longitude: false},
-      valid2: {latitude: false, longitude: false},
-      invalid2: {latitude: false, longitude: false}
+      valid: {
+        originlatitude: false, originlongitude: false,
+        destinationatitude: false, destinationlongitude: false
+      },
+      invalid: {
+        originlatitude: false, originlongitude: false,
+        destinationlatitude: false, destinationlongitude: false
+      },
     };
   }
 
@@ -95,7 +99,7 @@ export default class Calculator extends Component {
                 <div>
                   <h5>{this.state.distance} {this.props.options.activeUnit}</h5>
                   <Button onClick={this.calculateDistance}
-                          disabled={ !(this.state.valid1.latitude && this.state.valid1.longitude && this.state.valid2.latitude && this.state.valid2.longitude) }
+                          disabled={ !(this.state.valid.origin.latitude && this.state.valid.origin.longitude && this.state.valid.destination.latitude && this.state.valid.destination.longitude) } //TODO
                   >Calculate</Button>
                 </div>}
         />
@@ -133,34 +137,35 @@ export default class Calculator extends Component {
 
   updateLocationOnChange(stateVar, field, value){ //origindest, target.name, target.value
 
-    if (field === '') { //empty
-      this.setValidState(stateVar, field, value, false, false, false, false);
-    } else if (this.validation(field, value) ) { //if coord is good
-      this.setValidState(stateVar, field, value, true, false, true, false);
+    if (value === '') { //empty
+      this.setValidState(stateVar, field, value, false, false);
+
+    } else if (this.props.validation(field, value) ) { //if coord is good
+      this.setValidState(stateVar, field, value, true, false);
     } else { //bad coord
-      this.setValidState(stateVar, field, value, false, true, false, true);
+      this.setValidState(stateVar, field, value, false, true);
     }
   }
 
 
-  setValidState(stateVar, field, value, valid1, invalid1, valid2, invalid2) {
+  setValidState(stateVar, field, value, valid, invalid) {
     let location = Object.assign({}, this.state[stateVar]);
     location[field] = value;
-    let cloneValid1 = Object.assign({}, this.state.valid1);
-    cloneValid1[field] = valid1;
-    let cloneInvalid1 = Object.assign({}, this.state.invalid1);
-    cloneInvalid1[field] = invalid1;
-    let cloneValid2 = Object.assign({}, this.state.valid2);
-    cloneValid2[field] = valid2;
-    let cloneInvalid2 = Object.assign({}, this.state.invalid2);
-    cloneInvalid2[field] = invalid2;
+    //console.log(location);
+    let validClone = Object.assign({}, this.state.valid);
+    validClone[stateVar][field] = valid;
+
+    let invalidClone = Object.assign({}, this.state.valid);
+    invalidClone[stateVar][field] = invalid;
+
+
     this.setState({
       [stateVar]: location,
-      valid1: cloneValid1,
-      invalid1: cloneInvalid1,
-      valid2: cloneValid2,
-      invalid2: cloneInvalid2
-    }); // this doesnt work
+      valid: validClone,
+      invalid: invalidClone
+    });
+    console.log(this.state.valid);
+    console.log(this.state.invalid);
 
   }
 }

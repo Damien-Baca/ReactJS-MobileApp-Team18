@@ -5,7 +5,6 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import {Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
-import validateCoordinates from "./Application";
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
 /*
@@ -401,23 +400,14 @@ export default class Home extends Component {
 
     if (event.target.value === '' || event.target.name === 'name' ) { //empty or field is name
       this.setValidState(event.target.name, event.target.value, false, false);
-    } else if (this.validation(event.target.name, event.target.value) ) { //if coord is good
+    } else if (this.props.validation(event.target.name, event.target.value) ) { //if coord is good
       this.setValidState(event.target.name, event.target.value, true, false);
     } else { //bad coord
       this.setValidState(event.target.name, event.target.value, false, true);
     }
   }
 
-  validation(name, value){
-    let valid = false;
-    if (name === 'name')  {valid = true;}
-    else if (name === 'latitude') {
-      valid = this.props.validateCoordinates(value, 0);
-    } else if (name === 'longitude') {
-      valid = this.props.validateCoordinates(0, value);
-    }
-    return valid;
-  }
+
 
   setValidState(name, value, valid, invalid) {
     let update = Object.assign({}, this.state.newDestination);
