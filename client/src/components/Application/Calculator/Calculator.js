@@ -18,10 +18,10 @@ export default class Calculator extends Component {
       destination: {latitude: '', longitude: ''},
       distance: 0,
       errorMessage: null,
-      valid1: {name: false, latitude: false, longitude: false},
-      invalid1: {name: false, latitude: false, longitude: false},
-      valid2: {name: false, latitude: false, longitude: false},
-      invalid2: {name: false, latitude: false, longitude: false}
+      valid1: {latitude: false, longitude: false},
+      invalid1: {latitude: false, longitude: false},
+      valid2: {latitude: false, longitude: false},
+      invalid2: {latitude: false, longitude: false}
     };
   }
 
@@ -133,10 +133,10 @@ export default class Calculator extends Component {
 
   updateLocationOnChange(stateVar, field, value){ //origindest, target.name, target.value
 
-    if (value === '') { //empty
+    if (stateVar === 'origin') { //empty
       this.setValidState(stateVar, field, value, false, false, false, false);
-    } else if (this.validation(stateVar, field, alue) ) { //if coord is good
-      this.setValidState(sstateVar, field, value, true, false, true, false);
+    } else if (this.validation(field, value) ) { //if coord is good
+      this.setValidState(stateVar, field, value, true, false, true, false);
     } else { //bad coord
       this.setValidState(stateVar, field, value, false, true, false, true);
     }
