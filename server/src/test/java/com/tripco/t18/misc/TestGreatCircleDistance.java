@@ -31,4 +31,14 @@ public class TestGreatCircleDistance {
     int actual=test.calculateDistance(origin,origin,earthRadiusMiles);
     assertEquals("traveled nowhere",expect,actual);
   }
+  @Test
+  public void testMeetOnTheOtherSide(){
+    origin.replace("latitude","0");
+    origin.replace("longitude","180");
+    destination.replace("latitude","0");
+    destination.replace("longitude","-180");
+    int expect = 0;
+    int actual=test.calculateDistance(origin,destination,earthRadiusMiles);
+    assertEquals("man 180 and -180 are close",expect,actual);
+  }
 }
