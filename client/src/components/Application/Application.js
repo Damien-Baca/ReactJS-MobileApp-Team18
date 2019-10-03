@@ -24,6 +24,7 @@ export default class Application extends Component {
     this.removeDestination = this.removeDestination.bind(this);
     this.clearDestinations = this.clearDestinations.bind(this);
     this.convertCoordinates = this.convertCoordinates.bind(this);
+    this.validateCoordinates = this.validateCoordinates.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -112,7 +113,8 @@ export default class Application extends Component {
                      removeDestination={this.removeDestination}
                      clearDestinations={this.clearDestinations}
                      createErrorBanner={this.createErrorBanner}
-                     convertCoordinates={this.convertCoordinates}/>;
+                     convertCoordinates={this.convertCoordinates}
+                     validateCoordinates={this.validateCoordinates}/>;
     }
   }
 
@@ -164,6 +166,21 @@ export default class Application extends Component {
       destinations: clearDestinations
     });
   }
+
+  validateCoordinates(latitude, longitude){
+    let Coordinates = require('coordinate-parser');
+    let isValid = true;
+    try {
+      new Coordinates(latitude+ " " +longitude);
+      //set error banner : null
+      return isValid;
+    } catch (error) {
+      isValid = false;
+      //error banner throw
+      return isValid;
+    }
+  }
+
   convertCoordinates(latitude,longitude) {
     let Coordinates = require('coordinate-parser');
     let converter = new Coordinates(`${latitude} ${longitude}`);

@@ -5,6 +5,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import {Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
+import validateCoordinates from "./Application";
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
 /*
@@ -25,7 +26,9 @@ export default class Home extends Component {
         name: 'Colorado State University',
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
+
       },
+
       newDestination: {name: '', latitude: '', longitude: ''},
       distances: null,
       optimizations: null,
@@ -35,7 +38,9 @@ export default class Home extends Component {
         minLat: this.csuOvalGeographicCoordinates().lat - 0.5,
         maxLon: this.csuOvalGeographicCoordinates().lng + 0.5,
         minLon: this.csuOvalGeographicCoordinates().lng - 0.5
-      }
+      },
+     valid: {name: false, latitude: false, longitude: false},
+     invalid: {name: false, latitude: false, longitude: false},
     };
 
     this.getUserLocation();
@@ -277,7 +282,9 @@ export default class Home extends Component {
                 name='add_new_destination'
                 key='button_add_destination'
                 active={true}
-                onClick={() => this.handleNewDestination()}>
+                onClick={() => this.handleNewDestination()}
+                disabled={ !(this.state.valid.latitude && this.state.valid.longitude)
+                          || (this.state.newDestination.name === '')}>
               Add New Destination
             </Button>
             <Button
@@ -371,14 +378,19 @@ export default class Home extends Component {
                placeholder={field.charAt(0).toUpperCase() + field.substring(1,
                    field.length)}
                value={this.state.newDestination[field]}
+               valid={ this.state.valid[field] } //THIS.STATE.VALID[FIELD]
+               invalid={ this.state.invalid[field] }
                onChange={(event) => this.updateNewDestinationOnChange(event)}/>
     )));
   }
 
   handleNewDestination() {
     this.props.addDestination(Object.assign({}, this.state.newDestination));
+    let superFalse = {latitude:false, longitude: false};
     this.setState({
-      newDestination: {name: '', latitude: '', longitude: ''}
+      newDestination: {name: '', latitude: '', longitude: ''},
+      valid: superFalse,
+      invalid: superFalse
     });
   }
 
@@ -387,11 +399,38 @@ export default class Home extends Component {
   }
 
   updateNewDestinationOnChange(event) {
-    let update = Object.assign({}, this.state.newDestination);
-    update[event.target.name] = event.target.value;
 
+    if (event.target.value === '' || event.target.name === 'name' ) { //empty or field is name
+      this.setValidState(event.target.name, event.target.value, false, false);
+    } else if (this.validation(event.target.name, event.target.value) ) { //if coord is good
+      this.setValidState(event.target.name, event.target.value, true, false);
+    } else { //bad coord
+      this.setValidState(event.target.name, event.target.value, false, true);
+    }
+  }
+
+  validation(name, value){
+    let valid = false;
+    if (name === 'name')  {valid = true;}
+    else if (name === 'latitude') {
+      valid = this.props.validateCoordinates(value, 0);
+    } else if (name === 'longitude') {
+      valid = this.props.validateCoordinates(0, value);
+    }
+    return valid;
+  }
+
+  setValidState(name, value, valid, invalid) {
+    let update = Object.assign({}, this.state.newDestination);
+    update[name] = value;
+    let cloneValid = Object.assign({}, this.state.valid);
+    cloneValid[name] = valid;
+    let cloneInvalid = Object.assign({}, this.state.invalid);
+    cloneInvalid[name] = invalid;
     this.setState({
-      newDestination: update
+      newDestination: update,
+      valid: cloneValid,
+      invalid: cloneInvalid
     });
   }
 
