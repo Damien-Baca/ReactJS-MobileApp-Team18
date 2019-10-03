@@ -41,27 +41,6 @@ export default class Home extends Component {
      valid: {name: false, latitude: false, longitude: false},
      invalid: {name: false, latitude: false, longitude: false},
     };
-
-    this.getUserLocation();
-  }
-
-  getUserLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((this.storeUserLocation));
-    } else {
-    }
-  }
-
-  storeUserLocation(position) {
-    let newUserLocation = {
-      name: 'You Are Here',
-      latitude: String(position.coords.latitude),
-      longitude: String(position.coords.longitude)
-    };
-
-    this.setState({
-      userLocation: newUserLocation
-    })
   }
 
   render() {
@@ -173,6 +152,9 @@ export default class Home extends Component {
     return (
         <Container>
           <Row>
+            {this.renderWhereAmI()}
+          </Row>
+          <Row>
             {this.renderConditionalCumulativeDistance()}
           </Row>
           <Row>
@@ -185,6 +167,21 @@ export default class Home extends Component {
     );
   }
 
+  renderWhereAmI() {
+    return (
+      <Button
+          className='btn-csu h-5 w-100 text-left'
+          size={'sm'}
+          name='clear_destinations'
+          key={"button_clear_all_destinations"}
+          value='Clear Destinations'
+          active={true}
+          onClick={() => this.handleGetUserLocation()}>
+        Where Am I?
+      </Button>
+    );
+  }
+
   renderConditionalCumulativeDistance() {
     if (this.state.distances !== null) {
       return (
@@ -194,7 +191,7 @@ export default class Home extends Component {
     }
 
     return (
-        <Label>Distance not yet calculated.</Label>
+        <Label>Trip distance not yet calculated.</Label>
     );
   }
 
@@ -310,6 +307,25 @@ export default class Home extends Component {
           </FormGroup>
         </Form>
     );
+  }
+
+  handleGetUserLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((this.storeUserLocation));
+    } else {
+    }
+  }
+
+  storeUserLocation(position) {
+    let newUserLocation = {
+      name: 'You Are Here',
+      latitude: String(position.coords.latitude),
+      longitude: String(position.coords.longitude)
+    };
+
+    this.setState({
+      userLocation: newUserLocation
+    })
   }
 
   fileCallback(string) {
