@@ -113,3 +113,13 @@ function testClearDestinationList() {
 }
 
 test('Testing clearDestination.', testClearDestinationList);
+
+function testConvertCoordinates() {
+  const app = shallow(<Application/>);
+  let expected = {latitude: "40",longitude: "110"};
+  let actual = app.instance().convertCoordinates("N 40","E 110");
+  expect(actual).toEqual(expected);
+
+}
+
+test('Testing convertCoordinates', testConvertCoordinates);
