@@ -1,4 +1,4 @@
-# Sprint 2 - *T18* - *MONGOOSE*
+# Sprint 2 - *T18* - *THE FIGHTING MONGOOSES*
 
 ## Goal
 
