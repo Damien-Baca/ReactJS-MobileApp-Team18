@@ -108,7 +108,7 @@ These Epics were completed.
 
 These Epics were not completed.
 
-* *#74 short trip: explanation*
+* *#74 short trip: ran out of time*
 
 
 #### What went well
