@@ -25,6 +25,7 @@ export default class Application extends Component {
     this.clearDestinations = this.clearDestinations.bind(this);
     this.convertCoordinates = this.convertCoordinates.bind(this);
     this.validateCoordinates = this.validateCoordinates.bind(this);
+    this.validation = this.validation.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -91,7 +92,8 @@ export default class Application extends Component {
         return <Calculator options={this.state.planOptions}
                            settings={this.state.clientSettings}
                            createErrorBanner={this.createErrorBanner}
-                           convertCoordinates={this.convertCoordinates}/>;
+                           convertCoordinates={this.convertCoordinates}
+                           validation={this.validation}/>;
 
       case 'options':
         return <Options options={this.state.planOptions}
@@ -165,6 +167,17 @@ export default class Application extends Component {
     this.setState({
       destinations: clearDestinations
     });
+  }
+
+  validation(name, value){
+    let valid = false;
+    if (name === 'name')  {valid = true;}
+    else if (name === 'latitude') {
+      valid = this.validateCoordinates(value, 0);
+    } else if (name === 'longitude') {
+      valid = this.validateCoordinates(0, value);
+    }
+    return valid;
   }
 
   validateCoordinates(latitude, longitude){
