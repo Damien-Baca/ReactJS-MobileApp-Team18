@@ -18,6 +18,9 @@ const buttonNamesInitial = [
   'calculate',
   'clear_destinations',
 ];
+const validation = () => {
+  return true
+};
 
 function testInitialState() {
   const home = mount((<Home destinations = {destinations}/>));
@@ -50,7 +53,8 @@ test('Testing newDestination name update.', testUpdateDestinationName);
 
 function testUpdateLatitude() {
   const home = mount((<Home destinations={destinations}
-                            validateCoordinates={() => {return true}}/>));
+                            validateCoordinates={() => {return true}}
+                            validation={validation}/>));
   let newLat = {
     target: {
       name: 'latitude',
@@ -69,7 +73,8 @@ test('Testing newDestination latitude update.', testUpdateLatitude);
 
 function testUpdateLongitude() {
   const home = mount((<Home destinations={destinations}
-                            validateCoordinates={() => {return true}}/>));
+                            validateCoordinates={() => {return true}}
+                            validation={validation}/>));
   let newLon = {
     target: {
       name: 'longitude',
@@ -87,7 +92,8 @@ function testUpdateLongitude() {
 test('Testing newDestination longitude update.', testUpdateLongitude);
 
 function testCreateInputFields() {
-  const home = mount((<Home destinations={destinations}/>));
+  const home = mount((<Home destinations={destinations}
+                            validation={validation}/>));
   let expectedInputs = inputNames;
 
   let numberOfInputs = home.find('Input').length;
