@@ -1,4 +1,4 @@
-# Sprint 2 - *t18* - *Mongoose*
+# Sprint 2 - *T18* - *MONGOOSE*
 
 ## Goal
 
@@ -86,12 +86,13 @@ Client Server Diagram for Short Trip Epic
 | *30/09/2019* | *113, 115, 116, 117, 118* | *#83, #92, #87, #96, #101, #102* | *none* |
 | *1/10/2019* | *71, 92, 121, 126, 128* | *#83, #87, #96, #101, #102* | *none* |
 | *2/10/2019* | *101, 102, 134* | *#83, #87, #96* | *none* |
+| *3/10/2019* | *57, 69, 70, 73, 82, 88, 114, 141, 147, 148* | ** | *none* |
 
 
 
 ## Review (focus on solution and technology)
 
-In this sprint, ...
+In this sprint, we have begun to familiarize our team with the methodology necessary for integrated work, as well as how our team can work in tandem using the various networking options available to us.
 
 #### Completed epics in Sprint Backlog 
 
@@ -107,7 +108,7 @@ These Epics were completed.
 
 These Epics were not completed.
 
-* *#74 short trip: explanation*
+* *#74 short trip: ran out of time*
 
 
 #### What went well
