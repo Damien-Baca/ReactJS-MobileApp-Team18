@@ -116,6 +116,7 @@ export default class Application extends Component {
                      clearDestinations={this.clearDestinations}
                      createErrorBanner={this.createErrorBanner}
                      convertCoordinates={this.convertCoordinates}
+                     validation={this.validation}
                      validateCoordinates={this.validateCoordinates}/>;
     }
   }
