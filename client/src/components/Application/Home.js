@@ -18,6 +18,7 @@ export default class Home extends Component {
     this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
     this.handleClearDestinations = this.handleClearDestinations.bind(this);
+    this.storeUserLocation = this.storeUserLocation.bind(this);
     this.reportGeoError = this.reportGeoError.bind(this);
 
     this.state = {
