@@ -1,6 +1,6 @@
-# T18 MONGOOSE
+# T18 THE FIGHTING MONGOOSES
 
-![alt text](team/images/20190903_165909_HDR.jpg?)
+![alt text](team/images/fightingMongooses.jpeg?)
 Hayden Quintana, James Lounsbury, Christopher Abelein
 
 

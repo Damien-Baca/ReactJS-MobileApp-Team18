@@ -18,7 +18,7 @@ export default class About extends Component {
   render() {
     let team = [[cabeleinPhoto, "Christopher Abelein",
       "Has a psychological dependency on writing out plans "
-      + "for projects. Mongoose. That's a cool team name."],
+      + "for projects. The Fighting Mongooses. That's a cool team name."],
       [dbacaPhoto, "Damien Baca",
         "a CS Senior with a Math Minor"],
       [jamesl84Photo, "James Lounsbury",
