@@ -1,4 +1,4 @@
-# Sprint 2 - *t18* - *Mongoose*
+# Sprint 2 - *T18* - *MONGOOSE*
 
 ## Goal
 
