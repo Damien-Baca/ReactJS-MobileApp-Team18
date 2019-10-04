@@ -32,6 +32,7 @@ public class TestGreatCircleDistance {
     int actual = test.calculateDistance(origin,origin,earthRadiusMiles);
     assertEquals("traveled nowhere",expect,actual);
   }
+
   @Test
   public void testMeetOnTheOtherSide(){
     origin.replace("latitude","0");
@@ -77,5 +78,38 @@ public class TestGreatCircleDistance {
         int minimumDistance = 0;
         assertTrue("All distances should be positive", minimumDistance <= currentDistance);
     }
+  }
+
+  @Test
+  public void testDistance() {
+    int actual,expect;
+    origin.replace("latitude","40.576179");
+    origin.replace("longitude","-105.080773");
+    destination.replace("latitude","35.701182");
+    destination.replace("longitude","139.709557");
+    expect = 5755;
+    actual = test.calculateDistance(origin,destination,earthRadiusMiles);
+    assertEquals("CSU to Shinjuku",expect,actual);
+    origin.replace("latitude","48.858442");
+    origin.replace("longitude","2.294432");
+    destination.replace("latitude","-33.856646");
+    destination.replace("longitude","151.215404");
+    expect = 10542;
+    actual = test.calculateDistance(origin,destination,earthRadiusMiles);
+    assertEquals("Paris to Sydney",expect,actual);
+    origin.replace("latitude","40.5753");
+    origin.replace("longitude","-105.0972");
+    destination.replace("latitude","-12.045407");
+    destination.replace("longitude","-77.022807");
+    expect = 4055;
+    actual = test.calculateDistance(origin,destination,earthRadiusMiles);
+    assertEquals("Krazy Karls to Lima",expect,actual);
+    origin.replace("latitude","-34.654227");
+    origin.replace("longitude","-58.5693034");
+    destination.replace("latitude","-36.844260");
+    destination.replace("longitude","174.770019");
+    expect = 6425;
+    actual = test.calculateDistance(origin,destination,earthRadiusMiles);
+    assertEquals("Buenos Aires to Auckland",expect,actual);
   }
 }
