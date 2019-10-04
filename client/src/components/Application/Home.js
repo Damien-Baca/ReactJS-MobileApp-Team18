@@ -18,7 +18,8 @@ export default class Home extends Component {
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
-    this.storeUserLocation = this.storeUserLocation.bind(this);
+    this.handleClearDestinations = this.handleClearDestinations.bind(this);
+    this.reportGeoError = this.reportGeoError.bind(this);
 
     this.state = {
       errorMessage: null,
@@ -41,27 +42,6 @@ export default class Home extends Component {
      valid: {name: false, latitude: false, longitude: false},
      invalid: {name: false, latitude: false, longitude: false},
     };
-
-    this.getUserLocation();
-  }
-
-  getUserLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((this.storeUserLocation));
-    } else {
-    }
-  }
-
-  storeUserLocation(position) {
-    let newUserLocation = {
-      name: 'You Are Here',
-      latitude: String(position.coords.latitude),
-      longitude: String(position.coords.longitude)
-    };
-
-    this.setState({
-      userLocation: newUserLocation
-    })
   }
 
   render() {
@@ -173,6 +153,9 @@ export default class Home extends Component {
     return (
         <Container>
           <Row>
+            {this.renderWhereAmI()}
+          </Row>
+          <Row>
             {this.renderConditionalCumulativeDistance()}
           </Row>
           <Row>
@@ -185,6 +168,21 @@ export default class Home extends Component {
     );
   }
 
+  renderWhereAmI() {
+    return (
+      <Button
+          className='btn-csu h-5 w-100 text-left'
+          size={'sm'}
+          name='set_user_location'
+          key={"button_set_user_location"}
+          value='Get User Location'
+          active={true}
+          onClick={() => this.handleGetUserLocation()}>
+        Where Am I?
+      </Button>
+    );
+  }
+
   renderConditionalCumulativeDistance() {
     if (this.state.distances !== null) {
       return (
@@ -194,7 +192,7 @@ export default class Home extends Component {
     }
 
     return (
-        <Label>Distance not yet calculated.</Label>
+        <Label>Trip distance not yet calculated.</Label>
     );
   }
 
@@ -310,6 +308,43 @@ export default class Home extends Component {
           </FormGroup>
         </Form>
     );
+  }
+
+  handleGetUserLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((this.storeUserLocation), (this.reportGeoError));
+    } else {
+      this.setState({
+        errorMessage: this.props.createErrorBanner(
+            'GEOLOCATOR ERROR:',
+            "0",
+            `Geolocator not supported by your browser.`
+        )
+      });
+    }
+  }
+
+  storeUserLocation(position) {
+    let newUserLocation = {
+      name: 'You Are Here',
+      latitude: String(position.coords.latitude),
+      longitude: String(position.coords.longitude)
+    };
+
+    this.setState({
+      userLocation: newUserLocation
+    })
+  }
+
+  reportGeoError(error) {
+    console.log(error.message);
+    this.setState({
+      errorMessage: this.props.createErrorBanner(
+          "GEOLOCATOR ERROR:",
+          error.code,
+          error.message
+      )
+    });
   }
 
   fileCallback(string) {
