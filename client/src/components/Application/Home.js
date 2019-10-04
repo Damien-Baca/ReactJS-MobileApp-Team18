@@ -18,8 +18,8 @@ export default class Home extends Component {
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
-    this.storeUserLocation = this.storeUserLocation.bind(this);
-    this.reportGeoError = this.reportGeoError(this);
+    this.handleClearDestinations = this.handleClearDestinations.bind(this);
+    this.reportGeoError = this.reportGeoError.bind(this);
 
     this.state = {
       errorMessage: null,
@@ -173,9 +173,9 @@ export default class Home extends Component {
       <Button
           className='btn-csu h-5 w-100 text-left'
           size={'sm'}
-          name='clear_destinations'
-          key={"button_clear_all_destinations"}
-          value='Clear Destinations'
+          name='set_user_location'
+          key={"button_set_user_location"}
+          value='Get User Location'
           active={true}
           onClick={() => this.handleGetUserLocation()}>
         Where Am I?
@@ -311,12 +311,12 @@ export default class Home extends Component {
   }
 
   handleGetUserLocation() {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(this.storeUserLocation, this.reportGeoError);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((this.storeUserLocation), (this.reportGeoError));
     } else {
       this.setState({
         errorMessage: this.props.createErrorBanner(
-            "GEOLOCATOR ERROR:",
+            'GEOLOCATOR ERROR:',
             "0",
             `Geolocator not supported by your browser.`
         )
