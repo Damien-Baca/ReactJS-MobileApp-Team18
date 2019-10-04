@@ -11,10 +11,12 @@ const inputNames = [
   'json_file'
 ];
 const buttonNamesInitial = [
+  'set_user_location',
   'add_new_destination',
   'add_user_destination',
+  'loadJSON',
   'calculate',
-  'clear_destinations'
+  'clear_destinations',
 ];
 
 function testInitialState() {
@@ -28,7 +30,8 @@ function testInitialState() {
 test('Testing inital state.', testInitialState);
 
 function testUpdateDestinationName() {
-  const home = mount((<Home destinations={destinations}/>));
+  const home = mount((<Home destinations={destinations}
+                            validateCoordinates={() => {return true}}/>));
   let newName = {
     target: {
       name: 'name',
@@ -46,7 +49,8 @@ function testUpdateDestinationName() {
 test('Testing newDestination name update.', testUpdateDestinationName);
 
 function testUpdateLatitude() {
-  const home = mount((<Home destinations={destinations}/>));
+  const home = mount((<Home destinations={destinations}
+                            validateCoordinates={() => {return true}}/>));
   let newLat = {
     target: {
       name: 'latitude',
@@ -64,7 +68,8 @@ function testUpdateLatitude() {
 test('Testing newDestination latitude update.', testUpdateLatitude);
 
 function testUpdateLongitude() {
-  const home = mount((<Home destinations={destinations}/>));
+  const home = mount((<Home destinations={destinations}
+                            validateCoordinates={() => {return true}}/>));
   let newLon = {
     target: {
       name: 'longitude',

@@ -5,16 +5,16 @@ import Application from '../src/components/Application/Application'
 
 const newDestinations = [{
   name: 'Fort Collins',
-  latitude: 40.5853,
-  longitude: -105.0844
+  latitude: '40.5853',
+  longitude: '-105.0844'
 }, {
   name: 'Fish Lake National Park',
-  latitude: 38.6816,
-  longitude: -112.3338
+  latitude: '38.6816',
+  longitude: '-112.3338'
 }, {
   name: 'Disney Land',
-  latitude: 33.812511,
-  longitude: -117.918976
+  latitude: '33.812511',
+  longitude: '-117.918976'
 }];
 
 function testInitialState() {
