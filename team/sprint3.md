@@ -52,9 +52,9 @@ This sprint will complete the following Epics.
 
 | Statistics | Planned | Completed |
 | --- | ---: | ---: |
-| Epics | *value* | *value* |
-| Tasks |  *value*   | *value* | 
-| Story Points |  *value*  | *value* | 
+| Epics | *5* | *value* |
+| Tasks |  *24*   | *value* | 
+| Story Points |  *27*  | *value* | 
 
 
 
