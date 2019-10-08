@@ -42,10 +42,35 @@
 
 This sprint will complete the following Epics.
 
-* *#0 epic title: description*
+
+* *#162 Tip V3: TripCo The server must support the TIP version 3 specification.*
+* *#74 Short trip: User: I would like the tool to rearrange my trip for me to make it short so I have will have less travel time.
+                  Use the nearest-neighbor construction algorithm to build a shorter trip.
+                  Pick the shortest of the possible trips starting from each possible location.
+                  Show the resulting trip starting from the original starting location.*
+* *#75 save trip: User: Let me save the trip to a file in different formats for different purposes.
+                  TIP JSON so I can load it into compatible tools
+                  CSV so I can load it into a spreadsheet*
+* *#76 api validation: TripCo: To ensure interoperability:
+                   servers should validate all Restful API requests they receive. If the request is not valid, the server should respond with the offending request and an HTTP status code of 400 to signify there was an error in the request sent to the server.
+                   clients should validate all Restful API responses they receive. If the response is not valid, the client should notify the user.
+                   use JSON schemas for the validation.*
+* *#78 modify trip: User: Let me modify my trip as I change my mind about my travels. I should be able to:
+                   add new destinations by entering them
+                   select new destinations from data source(s) like a database
+                   remove existing destinations
+                   rearrange the order of the locations
+                   reverse the order of the locations
+                   choose a new starting location*
+  
 *
 
-***(Include a discussion of you plan with key diagrams here and remove this!)***
+***Key planning decisions for this sprint3: 
+    1: We discussed the 5 required epics, which is main goal for this sprint
+    2: We distributed the 5 epics to 24 tasks
+    3: Each teammate chose some epics or tasks
+    4: We also talked about bugs from previous sprint
+    5: We also want to do some tests for many implications***
 
 Modify Trip Diagram
 
@@ -56,9 +81,9 @@ Modify Trip Diagram
 
 | Statistics | Planned | Completed |
 | --- | ---: | ---: |
-| Epics | *value* | *value* |
-| Tasks |  *value*   | *value* | 
-| Story Points |  *value*  | *value* | 
+| Epics | *5* | *value* |
+| Tasks |  *24*   | *value* | 
+| Story Points |  *27*  | *value* | 
 
 
 
