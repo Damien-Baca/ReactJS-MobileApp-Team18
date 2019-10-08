@@ -45,7 +45,12 @@ This sprint will complete the following Epics.
 * *#0 epic title: description*
 *
 
-***(Include a discussion of you plan with key diagrams here and remove this!)***
+***Key planning decisions for this sprint3: 
+    1: We discussed the 5 required epics, which is main goal for this sprint
+    2: We distributed the 5 epics to 24 tasks
+    3: Each teammate chose some epics or tasks
+    4: We also talked about bugs from previous sprint
+    5: We also want to do some tests for many implications***
 
 
 ## Metrics
