@@ -42,6 +42,8 @@ export default class Home extends Component {
      valid: {name: false, latitude: false, longitude: false},
      invalid: {name: false, latitude: false, longitude: false},
     };
+
+    this.handleGetUserLocation();
   }
 
   render() {
@@ -153,9 +155,6 @@ export default class Home extends Component {
     return (
         <Container>
           <Row>
-            {this.renderWhereAmI()}
-          </Row>
-          <Row>
             {this.renderConditionalCumulativeDistance()}
           </Row>
           <Row>
@@ -165,21 +164,6 @@ export default class Home extends Component {
             {this.renderDestinationOptions()}
           </Row>
         </Container>
-    );
-  }
-
-  renderWhereAmI() {
-    return (
-      <Button
-          className='btn-csu h-5 w-100 text-left'
-          size={'sm'}
-          name='set_user_location'
-          key={"button_set_user_location"}
-          value='Get User Location'
-          active={true}
-          onClick={() => this.handleGetUserLocation()}>
-        Where Am I?
-      </Button>
     );
   }
 
