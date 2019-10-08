@@ -43,6 +43,12 @@
 This sprint will complete the following Epics.
 
 * *#0 epic title: description*
+* *#162 Tip V3: TripCo The server must support the TIP version 3 specification.*
+* *#74 Short trip: User: I would like the tool to rearrange my trip for me to make it short so I have will have less travel time.
+                  Use the nearest-neighbor construction algorithm to build a shorter trip.
+                  Pick the shortest of the possible trips starting from each possible location.
+                  Show the resulting trip starting from the original starting location.*
+  
 *
 
 ***Key planning decisions for this sprint3: 
