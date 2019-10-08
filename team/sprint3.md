@@ -75,6 +75,7 @@ This sprint will complete the following Epics.
 Modify Trip Diagram
 
 ![Modify Trip Diagram](images/modifyTripDiaghram.jpg)
+![TIP Obj Diagram](images/TIPObjDia.jpg)
 
 
 ## Metrics
