@@ -48,6 +48,20 @@ This sprint will complete the following Epics.
                   Use the nearest-neighbor construction algorithm to build a shorter trip.
                   Pick the shortest of the possible trips starting from each possible location.
                   Show the resulting trip starting from the original starting location.*
+* *#75 save trip: User: Let me save the trip to a file in different formats for different purposes.
+                  TIP JSON so I can load it into compatible tools
+                  CSV so I can load it into a spreadsheet*
+* *#76 api validation: TripCo: To ensure interoperability:
+                   servers should validate all Restful API requests they receive. If the request is not valid, the server should respond with the offending request and an HTTP status code of 400 to signify there was an error in the request sent to the server.
+                   clients should validate all Restful API responses they receive. If the response is not valid, the client should notify the user.
+                   use JSON schemas for the validation.*
+* *#78 modify trip: User: Let me modify my trip as I change my mind about my travels. I should be able to:
+                   add new destinations by entering them
+                   select new destinations from data source(s) like a database
+                   remove existing destinations
+                   rearrange the order of the locations
+                   reverse the order of the locations
+                   choose a new starting location*
   
 *
 
