@@ -47,6 +47,10 @@ This sprint will complete the following Epics.
 
 ***(Include a discussion of you plan with key diagrams here and remove this!)***
 
+Modify Trip Diagram
+
+![Modify Trip Diagram](images/modifyTripDiaghram.jpg)
+
 
 ## Metrics
 
