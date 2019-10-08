@@ -11,19 +11,22 @@ const inputNames = [
   'json_file'
 ];
 const buttonNamesInitial = [
-  'set_user_location',
   'add_new_destination',
   'add_user_destination',
   'loadJSON',
   'calculate',
   'clear_destinations',
 ];
-const validation = () => {
-  return true
+const validationDummy = () => {
+  return true;
+};
+const createErrorBannerDummy = () => {
+  return null;
 };
 
 function testInitialState() {
-  const home = mount((<Home destinations = {destinations}/>));
+  const home = mount((<Home destinations = {destinations}
+                            createErrorBanner={createErrorBannerDummy}/>));
   let expected = {name: '', latitude: '', longitude: ''};
   let actual = home.state().newDestination;
 
@@ -34,7 +37,8 @@ test('Testing inital state.', testInitialState);
 
 function testUpdateDestinationName() {
   const home = mount((<Home destinations={destinations}
-                            validateCoordinates={() => {return true}}/>));
+                            validateCoordinates={() => {return true}}
+                            createErrorBanner={createErrorBannerDummy}/>));
   let newName = {
     target: {
       name: 'name',
@@ -53,8 +57,9 @@ test('Testing newDestination name update.', testUpdateDestinationName);
 
 function testUpdateLatitude() {
   const home = mount((<Home destinations={destinations}
-                            validateCoordinates={() => {return true}}
-                            validation={validation}/>));
+                            validateCoordinates={validationDummy}
+                            validation={validationDummy}
+                            createErrorBanner={createErrorBannerDummy}/>));
   let newLat = {
     target: {
       name: 'latitude',
@@ -73,8 +78,9 @@ test('Testing newDestination latitude update.', testUpdateLatitude);
 
 function testUpdateLongitude() {
   const home = mount((<Home destinations={destinations}
-                            validateCoordinates={() => {return true}}
-                            validation={validation}/>));
+                            validateCoordinates={validationDummy}
+                            validation={validationDummy}
+                            createErrorBanner={createErrorBannerDummy}/>));
   let newLon = {
     target: {
       name: 'longitude',
@@ -93,7 +99,8 @@ test('Testing newDestination longitude update.', testUpdateLongitude);
 
 function testCreateInputFields() {
   const home = mount((<Home destinations={destinations}
-                            validation={validation}/>));
+                            validation={validationDummy}
+                            createErrorBanner={createErrorBannerDummy}/>));
   let expectedInputs = inputNames;
 
   let numberOfInputs = home.find('Input').length;
@@ -108,7 +115,8 @@ function testCreateInputFields() {
 test('Testing Input rendering.', testCreateInputFields);
 
 function testCreateButtons() {
-  const home = mount((<Home destinations={destinations}/>));
+  const home = mount((<Home destinations={destinations}
+                            createErrorBanner={createErrorBannerDummy}/>));
   let expectedButtons = buttonNamesInitial;
 
   let numberOfButtons = home.find('Button').length;
