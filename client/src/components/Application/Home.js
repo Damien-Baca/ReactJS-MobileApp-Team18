@@ -502,6 +502,10 @@ export default class Home extends Component {
       'distances': []
     };
 
+    this.handleServerTripRequest(tipConfigRequest);
+  }
+
+  handleServerTripRequest(tipConfigRequest) {
     sendServerRequestWithBody('trip', tipConfigRequest,
         this.props.settings.serverPort).then((response) => {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
