@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button} from 'reactstrap';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
-import {Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
 import Pane from './Pane'
+import DestinationMap from "../DestinationMap";
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
 /*
@@ -52,7 +50,7 @@ export default class Home extends Component {
           {this.state.errorMessage}
           <Row>
             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-              {this.renderMap()}
+              {this.renderMapPane()}
             </Col>
             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderIntro()}
@@ -63,79 +61,22 @@ export default class Home extends Component {
     );
   }
 
-  renderMap() {
+  renderMapPane() {
     return (
         <Pane header={'Where Am I?'}
-              bodyJSX={this.renderLeafletMap()}/>
+              bodyJSX={this.renderMap()}/>
     );
   }
 
-  renderLeafletMap() {
-    // initial map placement can use either of these approaches:
-    // 1: bounds={this.coloradoGeographicBoundaries()}
-    // 2: center={this.csuOvalGeographicCoordinates()} zoom={10}
+  renderMap() {
     return (
-        <Map bounds={this.itineraryBounds()}
-             style={{height: 500, maxwidth: 700}}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                     attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-          />
-          {this.renderMarkers()}
-          {this.renderPolyline()}
-        </Map>
-    )
-  }
-
-  renderMarkers() {
-    let markerList = [Object.assign({}, this.state.userLocation)];
-
-    if (this.props.destinations.length > 0) {
-      markerList = Object.assign([], this.props.destinations);
-    }
-
-    return (
-        markerList.map((marker, index) => (
-            <Marker
-                key={`marker_${index}`}
-                position={L.latLng(marker.latitude, marker.longitude)}
-                icon={this.markerIcon()}>
-              < Popup
-                  className="font-weight-extrabold">{marker.name}</Popup>
-            </Marker>
-        ))
+      <DestinationMap
+          userLocation={this.state.userLocation}
+          destinations={this.props.destinations}/>
     );
   }
 
-  renderPolyline() {
-    let polylineList = [];
 
-    if (this.props.destinations.length > 1) {
-      let origin = [];
-      polylineList.splice(0, 1);
-
-      this.props.destinations.map((destination, index) => {
-        if (index === 0) {
-          origin = [parseFloat(destination.latitude),
-            parseFloat(destination.longitude)];
-        }
-        polylineList.splice(polylineList.length, 0,
-            [parseFloat(destination.latitude),
-              parseFloat(destination.longitude)]);
-        //} else {
-        //  previous = [destination.latitude, destination.longitude];
-        //}
-      });
-
-      polylineList.splice(polylineList.length, 0, origin);
-
-      return (
-          <Polyline
-              color={'blue'}
-              positions={polylineList}
-          >Trip</Polyline>
-      );
-    }
-  }
 
   renderIntro() {
     return (
@@ -542,49 +483,6 @@ export default class Home extends Component {
 
   }
 
-  itineraryBounds() {
-    let boundaries = {
-      max: {
-        latitude: parseFloat(this.state.userLocation.latitude),
-        longitude: parseFloat(this.state.userLocation.longitude)
-      },
-      min: {
-        latitude: parseFloat(this.state.userLocation.latitude),
-        longitude: parseFloat(this.state.userLocation.longitude)
-      }
-    };
-
-    if (this.props.destinations.length > 0) {
-      this.destinationsBound(boundaries)
-    }
-
-    let margin = 0.02;
-    return L.latLngBounds(
-        L.latLng(boundaries.max.latitude + margin, boundaries.min.longitude - margin),
-        L.latLng(boundaries.min.latitude - margin, boundaries.max.longitude + margin));
-  }
-
-  destinationsBound(boundaries) {
-    this.props.destinations.forEach((destination) => {
-      Object.keys(boundaries).map((field) => {
-        if (field === 'min') {
-          boundaries[field] = {
-            latitude: Math.max(boundaries[field].latitude,
-                parseFloat(destination.latitude)),
-            longitude: Math.max(boundaries[field].longitude,
-                parseFloat(destination.longitude))};
-        } else {
-          boundaries[field] = {
-            latitude: Math.min(boundaries[field].latitude,
-                parseFloat(destination.latitude)),
-            longitude: Math.min(boundaries[field].longitude,
-                parseFloat(destination.longitude))
-          };
-        }
-      })
-    });
-  }
-
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado
     return L.latLngBounds(L.latLng(41, -109), L.latLng(37, -102));
@@ -592,15 +490,5 @@ export default class Home extends Component {
 
   csuOvalGeographicCoordinates() {
     return L.latLng(40.576179, -105.080773);
-  }
-
-  markerIcon() {
-    // react-leaflet does not currently handle default marker icons correctly,
-    // so we must create our own
-    return L.icon({
-      iconUrl: icon,
-      shadowUrl: iconShadow,
-      iconAnchor: [12, 40]  // for proper placement
-    })
   }
 }
