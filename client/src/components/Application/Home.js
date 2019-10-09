@@ -359,21 +359,24 @@ export default class Home extends Component {
   }
 
   handleRemoveDestination(index) {
-    this.setState({
-      distances: null
-    });
     this.props.removeDestination(index);
+    this.resetDistances();
   }
 
   handleClearDestinations() {
     this.props.clearDestinations();
-    this.setState({
-      distances: null
-    });
+    this.resetDistances();
   }
 
   handleReverseDestinations() {
     this.props.reverseDestinations();
+    this.resetDistances();
+  }
+
+  resetDistances() {
+    this.setState({
+      distances: null
+    });
   }
 
   calculateDistances() {
