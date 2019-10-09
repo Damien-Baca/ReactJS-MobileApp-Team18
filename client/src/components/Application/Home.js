@@ -241,7 +241,8 @@ export default class Home extends Component {
     if (this.state.distances !== null) {
       return (
           <Row>
-            Distance to Next Destination: {this.state.distances[index]}
+            Distance to Next Destination: {this.state.distances[index]},
+            Cumulative Trip Distance: {this.sumDistances(index)}
           </Row>
       );
     }
@@ -258,39 +259,63 @@ export default class Home extends Component {
           <FormGroup>
             <Label for='add_name'>New Destination</Label>
             {this.generateCoordinateInput()}
-            <Button
-                className='btn-csu w-100 text-left'
-                name='add_new_destination'
-                key='button_add_destination'
-                active={true}
-                onClick={() => this.handleNewDestination()}
-                disabled={ !(this.state.valid.latitude && this.state.valid.longitude)
-                          || (this.state.newDestination.name === '')}>
-              Add New Destination
-            </Button>
-            <Button
-                className='btn-csu w-100 text-left'
-                name='add_user_destination'
-                key='button_add_user_destination'
-                active={true}
-                onClick={() => this.handleUserDestination()}>
-              Add User Location
-            </Button>
-            <Input type='file'
-                   id='fileItem'
-                   key='input_json_file'
-                   name='json_file'
-                   onChange={event => this.onFileChange(event)}/>
-            <Button
-                className='btn-csu w-100 text-left'
-                name='loadJSON'
-                key='button_loadJSON'
-                active={true}
-                onClick={() => this.handleLoadJSON()}>
-                Import JSON
-            </Button>
+            {this.renderAddDestinationButton()}
+            {this.renderAddUserDestinationButton()}
+            {this.renderJSONInput()}
+            {this.renderAddJSONButton()}
           </FormGroup>
         </Form>
+    );
+  }
+
+  renderAddDestinationButton() {
+    return (
+        <Button
+            className='btn-csu w-100 text-left'
+            name='add_new_destination'
+            key='button_add_destination'
+            active={true}
+            onClick={() => this.handleNewDestination()}
+            disabled={ !(this.state.valid.latitude && this.state.valid.longitude)
+            || (this.state.newDestination.name === '')}>
+          Add New Destination
+        </Button>
+    );
+  }
+
+  renderAddUserDestinationButton() {
+    return (
+        <Button
+            className='btn-csu w-100 text-left'
+            name='add_user_destination'
+            key='button_add_user_destination'
+            active={true}
+            onClick={() => this.handleUserDestination()}>
+          Add User Location
+        </Button>
+    );
+  }
+
+  renderJSONInput() {
+    return (
+        <Input type='file'
+               id='fileItem'
+               key='input_json_file'
+               name='json_file'
+               onChange={event => this.onFileChange(event)}/>
+    );
+  }
+
+  renderAddJSONButton() {
+    return (
+        <Button
+            className='btn-csu w-100 text-left'
+            name='loadJSON'
+            key='button_loadJSON'
+            active={true}
+            onClick={() => this.handleLoadJSON()}>
+          Import JSON
+        </Button>
     );
   }
 
@@ -496,18 +521,15 @@ export default class Home extends Component {
     });
   }
 
-  sumDistances() {
-    let tripSum = null;
+  sumDistances(index = this.state.distances.length - 1) {
+    const reducer = (sum, current) => {
+      return sum + current;
+    };
 
-    if (this.state.distances != null) {
-      const reducer = (sum, current) => {
-        return sum + current;
-      };
+    let distanceSlice = Object.assign([], this.state.distances).slice(0, index + 1);
 
-      tripSum = Object.assign([], this.state.distances).reduce(reducer);
-    }
+    return distanceSlice.reduce(reducer);
 
-    return tripSum
   }
 
   itineraryBounds() {
