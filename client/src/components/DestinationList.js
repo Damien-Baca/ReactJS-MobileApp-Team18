@@ -14,6 +14,7 @@ export default class DestinationList extends Component {
     return (
         <ListGroup>
           {this.renderClearDestinations()}
+          {this.renderReverseDestinations()}
           {this.generateList()}
         </ListGroup>
     );
@@ -33,6 +34,22 @@ export default class DestinationList extends Component {
         </ListGroupItem>
     );
   }
+
+  renderReverseDestinations() {
+    return (
+      <ListGroupItem>
+        <Button className='btn-csu h-5 w-100 text-left'
+                size={'sm'}
+                name='reverse_destinations'
+                key={"button_reverse_destinations"}
+                value='Reverse Destinations'
+                active={true}
+                onClick={() => this.props.handleReverseDestinations()}
+        >Reverse Destination Order</Button>
+      </ListGroupItem>
+    );
+  }
+
 
   generateList() {
     return (

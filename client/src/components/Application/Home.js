@@ -21,6 +21,7 @@ export default class Home extends Component {
     this.reportGeoError = this.reportGeoError.bind(this);
     this.sumDistances = this.sumDistances.bind(this);
     this.handleRemoveDestination = this.handleRemoveDestination.bind(this);
+    this.handleReverseDestinations = this.handleReverseDestinations.bind(this);
 
     this.state = {
       errorMessage: null,
@@ -94,7 +95,8 @@ export default class Home extends Component {
                 distances={this.state.distances}
                 sumDistances={this.sumDistances}
                 handleRemoveDestination={this.handleRemoveDestination}
-                handleClearDestinations={this.handleClearDestinations}/>
+                handleClearDestinations={this.handleClearDestinations}
+                handleReverseDestinations={this.handleReverseDestinations}/>
               }/>
     );
   }
@@ -368,6 +370,10 @@ export default class Home extends Component {
     this.setState({
       distances: null
     });
+  }
+
+  handleReverseDestinations() {
+    this.props.reverseDestinations();
   }
 
   calculateDistances() {

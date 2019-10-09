@@ -23,6 +23,7 @@ export default class Application extends Component {
     this.addDestination = this.addDestination.bind(this);
     this.removeDestination = this.removeDestination.bind(this);
     this.clearDestinations = this.clearDestinations.bind(this);
+    this.reverseDestinations = this.reverseDestinations.bind(this);
     this.convertCoordinates = this.convertCoordinates.bind(this);
     this.validateCoordinates = this.validateCoordinates.bind(this);
     this.validation = this.validation.bind(this);
@@ -114,6 +115,7 @@ export default class Application extends Component {
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}
                      clearDestinations={this.clearDestinations}
+                     reverseDestinations={this.reverseDestinations}
                      createErrorBanner={this.createErrorBanner}
                      convertCoordinates={this.convertCoordinates}
                      validation={this.validation}
@@ -167,6 +169,15 @@ export default class Application extends Component {
 
     this.setState({
       destinations: clearDestinations
+    });
+  }
+
+  reverseDestinations() {
+    let reverseDestinations = Object.assign([], this.state.destinations);
+    reverseDestinations.reverse();
+
+    this.setState({
+      destinations: reverseDestinations
     });
   }
 
