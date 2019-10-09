@@ -32,15 +32,15 @@ export default class Home extends Component {
       newDestination: {name: '', latitude: '', longitude: ''},
       distances: null,
       optimizations: null,
-      fileContents : null,
+      fileContents: null,
       mapBoundaries: {
         maxLat: '',
         minLat: '',
         maxLon: '',
         minLon: ''
       },
-     valid: {name: false, latitude: false, longitude: false},
-     invalid: {name: false, latitude: false, longitude: false},
+      valid: {name: false, latitude: false, longitude: false},
+      invalid: {name: false, latitude: false, longitude: false},
     };
 
     this.handleGetUserLocation();
@@ -276,7 +276,7 @@ export default class Home extends Component {
             key='button_add_destination'
             active={true}
             onClick={() => this.handleNewDestination()}
-            disabled={ !(this.state.valid.latitude && this.state.valid.longitude)
+            disabled={!(this.state.valid.latitude && this.state.valid.longitude)
             || (this.state.newDestination.name === '')}>
           Add New Destination
         </Button>
@@ -321,7 +321,8 @@ export default class Home extends Component {
 
   handleGetUserLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((this.storeUserLocation), (this.reportGeoError));
+      navigator.geolocation.getCurrentPosition((this.storeUserLocation),
+          (this.reportGeoError));
     } else {
       this.setState({
         errorMessage: this.props.createErrorBanner(
@@ -357,7 +358,7 @@ export default class Home extends Component {
   }
 
   fileCallback(string) {
-      this.setState({fileContents : string});
+    this.setState({fileContents: string});
   }
 
   onFileChange(event) {
@@ -375,42 +376,46 @@ export default class Home extends Component {
     }
   }
 
-    handleLoadJSON() {
-      if(this.state.fileContents) {
-        try {
-          let newTrip = JSON.parse(this.state.fileContents);
-          this.setState({errorMessage: null});
+  handleLoadJSON() {
+    if (this.state.fileContents) {
+      try {
+        let newTrip = JSON.parse(this.state.fileContents);
+        this.setState({errorMessage: null});
 
-          newTrip.places.forEach((destination) => (
-              this.props.addDestination(Object.assign({}, destination))
+        newTrip.places.forEach((destination) => (
+            this.props.addDestination(Object.assign({}, destination))
+        ));
+
+        if (newTrip.hasOwnProperty('distances')) {
+          let newDist = [];
+          Object.assign(newDist, this.state.distances);
+          newTrip.distances.forEach((distance) => (
+              newDist.push(distance)
           ));
-
-          if (newTrip.hasOwnProperty('distances')) {
-            let newDist = [];
-            Object.assign(newDist, this.state.distances);
-            newTrip.distances.forEach((distance) => (
-                newDist.push(distance)
-            ));
-            this.setState({distances: newDist});
-          }
-
-          this.setState({optimizations : newTrip.options["optimization"]});
-
-        } catch (e) {
-            this.setState({errorMessage: this.props.createErrorBanner(
-                "File Error",
-                0,
-                "File has invalid JSON TIP Trip format."
-            )});
+          this.setState({distances: newDist});
         }
-      } else {
-          this.setState({errorMessage: this.props.createErrorBanner(
+
+        this.setState({optimizations: newTrip.options["optimization"]});
+
+      } catch (e) {
+        this.setState({
+          errorMessage: this.props.createErrorBanner(
               "File Error",
               0,
-              "No file has been selected."
-          )});
+              "File has invalid JSON TIP Trip format."
+          )
+        });
       }
+    } else {
+      this.setState({
+        errorMessage: this.props.createErrorBanner(
+            "File Error",
+            0,
+            "No file has been selected."
+        )
+      });
     }
+  }
 
   generateCoordinateInput() {
     return (Object.keys(this.state.newDestination).map((field) => (
@@ -421,15 +426,15 @@ export default class Home extends Component {
                placeholder={field.charAt(0).toUpperCase() + field.substring(1,
                    field.length)}
                value={this.state.newDestination[field]}
-               valid={ this.state.valid[field] } //THIS.STATE.VALID[FIELD]
-               invalid={ this.state.invalid[field] }
+               valid={this.state.valid[field]} //THIS.STATE.VALID[FIELD]
+               invalid={this.state.invalid[field]}
                onChange={(event) => this.updateNewDestinationOnChange(event)}/>
     )));
   }
 
   handleNewDestination() {
     this.props.addDestination(Object.assign({}, this.state.newDestination));
-    let superFalse = {latitude:false, longitude: false};
+    let superFalse = {latitude: false, longitude: false};
     this.setState({
       newDestination: {name: '', latitude: '', longitude: ''},
       valid: superFalse,
@@ -443,16 +448,14 @@ export default class Home extends Component {
 
   updateNewDestinationOnChange(event) {
 
-    if (event.target.value === '' || event.target.name === 'name' ) { //empty or field is name
+    if (event.target.value === '' || event.target.name === 'name') { //empty or field is name
       this.setValidState(event.target.name, event.target.value, false, false);
-    } else if (this.props.validation(event.target.name, event.target.value) ) { //if coord is good
+    } else if (this.props.validation(event.target.name, event.target.value)) { //if coord is good
       this.setValidState(event.target.name, event.target.value, true, false);
     } else { //bad coord
       this.setValidState(event.target.name, event.target.value, false, true);
     }
   }
-
-
 
   setValidState(name, value, valid, invalid) {
     let update = Object.assign({}, this.state.newDestination);
@@ -484,9 +487,11 @@ export default class Home extends Component {
 
   calculateDistances() {
     let convertedDestinations = [];
-    this.props.destinations.forEach((destination) =>{
+    this.props.destinations.forEach((destination) => {
       let convertedDestination = {name: destination.name};
-      Object.assign(convertedDestination, this.props.convertCoordinates(destination.latitude,destination.longitude));
+      Object.assign(convertedDestination,
+          this.props.convertCoordinates(destination.latitude,
+              destination.longitude));
       convertedDestinations.push(convertedDestination);
     });
     const tipConfigRequest = {
@@ -530,7 +535,8 @@ export default class Home extends Component {
       return sum + current;
     };
 
-    let distanceSlice = Object.assign([], this.state.distances).slice(0, index + 1);
+    let distanceSlice = Object.assign([], this.state.distances).slice(0,
+        index + 1);
 
     return distanceSlice.reduce(reducer);
 
@@ -538,41 +544,45 @@ export default class Home extends Component {
 
   itineraryBounds() {
     let boundaries = {
-      maxLat: parseFloat(this.state.userLocation.latitude) + 0.02,
-      minLat: parseFloat(this.state.userLocation.latitude) - 0.02,
-      maxLng: parseFloat(this.state.userLocation.longitude) + 0.02,
-      minLng: parseFloat(this.state.userLocation.longitude) - 0.02
+      max: {
+        latitude: parseFloat(this.state.userLocation.latitude),
+        longitude: parseFloat(this.state.userLocation.longitude)
+      },
+      min: {
+        latitude: parseFloat(this.state.userLocation.latitude),
+        longitude: parseFloat(this.state.userLocation.longitude)
+      }
     };
 
     if (this.props.destinations.length > 0) {
-      Object.keys(boundaries).map((field) => {
-        if (field === 'maxLat' || field === 'maxLng') {
-          boundaries[field] = -181;
-        } else {
-          boundaries[field] = 181;
-        }
-      });
-
-      this.props.destinations.forEach((destination) => {
-        if (destination.latitude > boundaries.maxLat) {
-          boundaries.maxLat =  parseFloat(destination.latitude) + 0.02;
-        }
-        if (destination.latitude < boundaries.minLat) {
-          boundaries.minLat = parseFloat(destination.latitude) - 0.02;
-        }
-        if (destination.longitude > boundaries.maxLng) {
-          boundaries.maxLng = parseFloat(destination.longitude) + 0.02;
-        }
-        if (destination.longitude < boundaries.minLng) {
-          boundaries.minLng = parseFloat(destination.longitude) - 0.02;
-        }
-      });
+      this.destinationsBound(boundaries)
     }
 
-    const topLeftBound = L.latLng(boundaries.maxLat, boundaries.minLng);
-    const bottomRightBound = L.latLng(boundaries.minLat, boundaries.maxLng);
+    let margin = 0.02;
+    return L.latLngBounds(
+        L.latLng(boundaries.max.latitude + margin, boundaries.min.longitude - margin),
+        L.latLng(boundaries.min.latitude - margin, boundaries.max.longitude + margin));
+  }
 
-    return L.latLngBounds(topLeftBound, bottomRightBound);
+  destinationsBound(boundaries) {
+    this.props.destinations.forEach((destination) => {
+      Object.keys(boundaries).map((field) => {
+        if (field === 'min') {
+          boundaries[field] = {
+            latitude: Math.max(boundaries[field].latitude,
+                parseFloat(destination.latitude)),
+            longitude: Math.max(boundaries[field].longitude,
+                parseFloat(destination.longitude))};
+        } else {
+          boundaries[field] = {
+            latitude: Math.min(boundaries[field].latitude,
+                parseFloat(destination.latitude)),
+            longitude: Math.min(boundaries[field].longitude,
+                parseFloat(destination.longitude))
+          };
+        }
+      })
+    });
   }
 
   coloradoGeographicBoundaries() {
