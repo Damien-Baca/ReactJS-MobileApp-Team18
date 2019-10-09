@@ -13,9 +13,7 @@ export default class DestinationMap extends Component {
   }
 
   render() {
-    return (
-        this.renderLeafletMap()
-    );
+    return (this.renderLeafletMap());
   }
 
   renderLeafletMap() {
