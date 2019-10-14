@@ -92,7 +92,12 @@ Modify Trip Diagram
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *date* | *#task, ...* | *#task, ...* | *none* | 
+| *10/08/2019* | *#159,#181,#179,#189,#182* | *#186,#177,#188,#158* | *none* | 
+| *10/09/2019* | *#195* | *#186,#158, #171,#188,#196,#177* | *none* | 
+| *10/10/2019* | *#195* | *#186,#158, #171,#188,#196,#177* | *none* |
+
+
+
 
 
 ## Review (focus on solution and technology)
