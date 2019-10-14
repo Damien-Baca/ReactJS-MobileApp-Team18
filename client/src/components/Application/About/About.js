@@ -1,13 +1,5 @@
 import React, {Component} from 'react'
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardImg,
-  CardTitle,
-  CardText,
-  Row, Col, Container
-} from 'reactstrap';
+import {Card, CardHeader, CardBody, CardImg, CardTitle, CardText, Row, Col, Container} from 'reactstrap';
 import cabeleinPhoto from './images/crabeleinMongoose.jpg'
 import dbacaPhoto from './images/dbaca.jpg'
 import jamesl84Photo from './images/Jamesl84.jpg'
@@ -15,7 +7,9 @@ import longChenPhoto from './images/LongChen.jpg'
 import hgqPhoto from './images/hqMongoose.jpg'
 
 export default class About extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+
     this.state = {
       team: {
         "Christopher Ablein": {
@@ -42,10 +36,13 @@ export default class About extends Component {
         }
       }
     };
+  }
 
-
+  render() {
     return (
-        this.generateCardGroups()
+        <Container>
+          {this.generateCardGroups()}
+        </Container>
     );
   }
 
@@ -65,32 +62,31 @@ export default class About extends Component {
       }));
     }
 
-    console.log(showTeam);
-    console.log(showTeam.length);
-
     return (
-        <Container>
-            {showTeam.forEach((threeMembers) => {
-              this.showThreeCards(threeMembers)
-            })}
-        </Container>
+        showTeam.map((threeMembers) => {
+          return (
+              <Row>
+                {this.generateThreeCards(threeMembers)}
+              </Row>
+          );
+        })
     );
   }
 
-  showThreeCards(threeMembers) {
+  generateThreeCards(threeMembers) {
     return (
-        <Row>
-          {threeMembers.forEach((member) => {
-            this.showCard(member);
-          })}
-        </Row>
+        threeMembers.map((member) => {
+          return (
+              <Col xs="12" sm="12" md="6" lg="4" xl="3">
+                {this.generateCard(member)}
+              </Col>
+          );
+        })
     );
   }
 
-  showCard(member) {
-    console.log(member);
+  generateCard(member) {
     return (
-        <Col xs="12" sm="12" md="6" lg="4" xl="3">
           <Card style={{minWidth: '8rem'}}>
             <CardHeader>
               <CardImg top src={this.state.team[member].img}/>
@@ -100,7 +96,6 @@ export default class About extends Component {
               <CardText>{this.state.team[member].text}</CardText>
             </CardBody>
           </Card>
-        </Col>
     );
   }
 }
