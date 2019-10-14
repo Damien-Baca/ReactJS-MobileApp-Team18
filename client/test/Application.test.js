@@ -116,8 +116,8 @@ function testClearDestinationList() {
 test('Testing clearDestination.', testClearDestinationList);
 
 function testReverseDestinations() {
-  const app = mount((<Application
-                      destinations = {newDestinations}/>));
+  const app = mount((<Application/>));
+  app.state().destinations = Object.assign([], newDestinations);
   let expected = Object.assign([], newDestinations).reverse();
 
   app.instance().reverseDestinations();
