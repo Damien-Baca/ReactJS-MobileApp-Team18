@@ -111,15 +111,16 @@ export default class Calculator extends Component {
         />
     );
   }
-
   calculateDistance() {
     const tipConfigRequest = {
       'type': 'distance',
-      'version': 2,
+      'version': 3,
       'origin': this.props.convertCoordinates(this.state.origin.latitude,this.state.origin.longitude),
       'destination': this.props.convertCoordinates(this.state.destination.latitude,this.state.destination.longitude),
       'earthRadius': this.props.options.units[this.props.options.activeUnit]
     };
+
+
 
     sendServerRequestWithBody('distance', tipConfigRequest,
         this.props.settings.serverPort)
