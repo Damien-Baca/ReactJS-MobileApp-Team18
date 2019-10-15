@@ -19,8 +19,12 @@ export default class Home extends Component {
     this.handleClearDestinations = this.handleClearDestinations.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
     this.reportGeoError = this.reportGeoError.bind(this);
+    this.handleUserDestination = this.handleUserDestination.bind(this);
     this.handleRemoveDestination = this.handleRemoveDestination.bind(this);
     this.handleReverseDestinations = this.handleReverseDestinations.bind(this);
+    this.calculateDistances = this.calculateDistances.bind(this);
+    this.sumDistances = this.sumDistances.bind(this);
+
 
     this.state = {
       errorMessage: null,
@@ -29,7 +33,6 @@ export default class Home extends Component {
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
       },
-      newDestination: {name: '', latitude: '', longitude: ''},
       distances: null,
       optimizations: null,
       fileContents: null,
@@ -70,12 +73,12 @@ export default class Home extends Component {
               bodyJSX={<DestinationControls
                   distances={this.state.distances}
                   destinations={this.props.destinations}
-                  newDestination={this.state.newDestination}
+                  addDestination={this.props.addDestination}
+                  validation={this.props.validation}
                   sumDistances={this.sumDistances}
                   fileCallback={this.fileCallback}
                   handleLoadJSON={this.handleLoadJSON}
                   handleUserDestination={this.handleUserDestination}
-                  updateNewDestinationOnChange={this.updateNewDestinationOnChange}
                   calculateDistances={this.calculateDistances}/>}/>
     );
   }
@@ -173,45 +176,6 @@ export default class Home extends Component {
     }
   }
 
-  handleNewDestination() {
-    this.props.addDestination(Object.assign({}, this.state.newDestination));
-    let superFalse = {latitude: false, longitude: false};
-    this.setState({
-      newDestination: {name: '', latitude: '', longitude: ''},
-      valid: superFalse,
-      invalid: superFalse
-    });
-  }
-
-  handleUserDestination() {
-    this.props.addDestination(Object.assign({}, this.state.userLocation));
-  }
-
-  updateNewDestinationOnChange(event) {
-
-    if (event.target.value === '' || event.target.name === 'name') { //empty or field is name
-      this.setValidState(event.target.name, event.target.value, false, false);
-    } else if (this.props.validation(event.target.name, event.target.value)) { //if coord is good
-      this.setValidState(event.target.name, event.target.value, true, false);
-    } else { //bad coord
-      this.setValidState(event.target.name, event.target.value, false, true);
-    }
-  }
-
-  setValidState(name, value, valid, invalid) {
-    let update = Object.assign({}, this.state.newDestination);
-    update[name] = value;
-    let cloneValid = Object.assign({}, this.state.valid);
-    cloneValid[name] = valid;
-    let cloneInvalid = Object.assign({}, this.state.invalid);
-    cloneInvalid[name] = invalid;
-    this.setState({
-      newDestination: update,
-      valid: cloneValid,
-      invalid: cloneInvalid
-    });
-  }
-
   handleRemoveDestination(index) {
     this.props.removeDestination(index);
     this.resetDistances();
@@ -225,6 +189,10 @@ export default class Home extends Component {
   handleReverseDestinations() {
     this.props.reverseDestinations();
     this.resetDistances();
+  }
+
+  handleUserDestination() {
+    this.props.addDestination(Object.assign({}, this.state.userLocation));
   }
 
   fileCallback(string) {

@@ -6,6 +6,7 @@ export default class DestinationControls extends Component {
       super(props);
 
       this.state = {
+        newDestination: {name: '', latitude: '', longitude: ''},
         valid: {name: false, latitude: false, longitude: false},
         invalid: {name: false, latitude: false, longitude: false},
       }
@@ -72,9 +73,9 @@ export default class DestinationControls extends Component {
             name='add_new_destination'
             key='button_add_destination'
             active={true}
-            onClick={() => this.props.handleNewDestination()}
+            onClick={() => this.handleNewDestination()}
             disabled={!(this.state.valid.latitude && this.state.valid.longitude)
-            || (this.props.newDestination.name === '')}>
+            || (this.state.newDestination.name === '')}>
           Add New Destination
         </Button>
     );
@@ -117,18 +118,52 @@ export default class DestinationControls extends Component {
   }
 
   generateCoordinateInput() {
-    return (Object.keys(this.props.newDestination).map((field) => (
+    return (Object.keys(this.state.newDestination).map((field) => (
         <Input type='text'
                key={'input_' + field}
                name={field}
                id={`add_${field}`}
                placeholder={field.charAt(0).toUpperCase() + field.substring(1,
                    field.length)}
-               value={this.props.newDestination[field]}
+               value={this.state.newDestination[field]}
                valid={this.state.valid[field]} //THIS.STATE.VALID[FIELD]
                invalid={this.state.invalid[field]}
-               onChange={(event) => this.props.updateNewDestinationOnChange(event)}/>
+               onChange={(event) => this.updateNewDestinationOnChange(event)}/>
     )));
+  }
+
+  updateNewDestinationOnChange(event) {
+    if (event.target.value === '' || event.target.name === 'name') { //empty or field is name
+      this.setValidState(event.target.name, event.target.value, false, false);
+    } else if (this.props.validation(event.target.name, event.target.value)) { //if coord is good
+      this.setValidState(event.target.name, event.target.value, true, false);
+    } else { //bad coord
+      this.setValidState(event.target.name, event.target.value, false, true);
+    }
+  }
+
+  handleNewDestination() {
+    this.props.addDestination(Object.assign({}, this.state.newDestination));
+    let superFalse = {latitude: false, longitude: false};
+    this.setState({
+      newDestination: {name: '', latitude: '', longitude: ''},
+      valid: superFalse,
+      invalid: superFalse
+    });
+  }
+
+  setValidState(name, value, valid, invalid) {
+    let update = Object.assign({}, this.state.newDestination);
+    update[name] = value;
+    let cloneValid = Object.assign({}, this.state.valid);
+    cloneValid[name] = valid;
+    let cloneInvalid = Object.assign({}, this.state.invalid);
+    cloneInvalid[name] = invalid;
+    this.setState({
+      newDestination: update,
+      valid: cloneValid,
+      invalid: cloneInvalid
+    });
   }
 
   onFileChange(event) {
