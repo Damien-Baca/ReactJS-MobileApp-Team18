@@ -75,7 +75,7 @@ export default class DestinationList extends Component {
               <Row>
                 {destination.name}, {destination.latitude}, {destination.longitude}
               </Row>
-              {this.renderConditionalDistance(index)}
+                {this.renderConditionalDistance(index)}
               <Row>
                 {this.generateRemoveButton(index, destination.name)}
                 {this.generateNewOriginButton(index, destination.name)}

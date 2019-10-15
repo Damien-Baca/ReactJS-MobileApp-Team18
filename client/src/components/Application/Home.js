@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import 'leaflet/dist/leaflet.css';
 import Pane from './Pane'
-import DestinationMap from "../DestinationMap";
-import DestinationControls from "../DestinationControls";
-import DestinationList from "../DestinationList";
+import DestinationMap from "./DestinationMap";
+import DestinationControls from "./DestinationControls";
+import DestinationList from "./DestinationList";
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
 /*
