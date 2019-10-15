@@ -9,7 +9,8 @@ export default class DestinationControls extends Component {
         newDestination: {name: '', latitude: '', longitude: ''},
         valid: {name: false, latitude: false, longitude: false},
         invalid: {name: false, latitude: false, longitude: false},
-      }
+        fileContents: null
+      };
   }
 
   render() {
@@ -111,7 +112,7 @@ export default class DestinationControls extends Component {
             name='loadJSON'
             key='button_loadJSON'
             active={true}
-            onClick={() => this.props.handleLoadJSON()}>
+            onClick={() => this.props.handleLoadJSON(this.state.fileContents)}>
           Import JSON
         </Button>
     );
@@ -150,6 +151,7 @@ export default class DestinationControls extends Component {
       valid: superFalse,
       invalid: superFalse
     });
+    this.props.resetDistances();
   }
 
   setValidState(name, value, valid, invalid) {
@@ -167,7 +169,9 @@ export default class DestinationControls extends Component {
   }
 
   onFileChange(event) {
-    let callback = this.props.fileCallback;
+    let callback = (string) => {
+      this.setState({fileContents: string});
+    };
     let fileIn = event.target;
     if (fileIn) {
       let file = fileIn.files[0];

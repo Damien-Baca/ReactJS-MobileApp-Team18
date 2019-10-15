@@ -30,7 +30,7 @@ export default class DestinationList extends Component {
                   value='Clear Destinations'
                   active={false}
                   disabled={this.props.destinations.length < 1}
-                  onClick={() => this.props.handleClearDestinations()}
+                  onClick={() => this.handleClearDestinations()}
           >Clear Destinations</Button>
         </ListGroupItem>
     );
@@ -46,33 +46,9 @@ export default class DestinationList extends Component {
                 value='Reverse Destinations'
                 active={this.props.destinations.length > 0}
                 disabled={this.props.destinations.length < 1}
-                onClick={() => this.props.handleReverseDestinations()}
+                onClick={() => this.handleReverseDestinations()}
         >Reverse Destination Order</Button>
       </ListGroupItem>
-    );
-  }
-
-
-  generateList() {
-    return (
-        this.props.destinations.map((destination, index) => (
-            <ListGroupItem key={'destination_' + index}>
-              <Row>
-                {destination.name}, {destination.latitude}, {destination.longitude}
-              </Row>
-              {this.renderConditionalDistance(index)}
-              <Row>
-                <Button className='btn-csu h-5 w-50 text-left'
-                        size={'sm'}
-                        name={'remove_' + index}
-                        key={"button_" + destination.name}
-                        value='Remove Destination'
-                        active={false}
-                        onClick={() => this.props.handleRemoveDestination(index)}
-                >Remove</Button>
-              </Row>
-            </ListGroupItem>
-        ))
     );
   }
 
@@ -90,5 +66,69 @@ export default class DestinationList extends Component {
           Distances not yet calculated.
         </Row>
     )
+  }
+
+  generateList() {
+    return (
+        this.props.destinations.map((destination, index) => (
+            <ListGroupItem key={'destination_' + index}>
+              <Row>
+                {destination.name}, {destination.latitude}, {destination.longitude}
+              </Row>
+              {this.renderConditionalDistance(index)}
+              <Row>
+                {this.generateRemoveButton(index, destination.name)}
+                {this.generateNewOriginButton(index, destination.name)}
+              </Row>
+            </ListGroupItem>
+        ))
+    );
+  }
+
+  generateRemoveButton(index, name) {
+    return (
+        <Button className='btn-csu h-5 w-25 text-left'
+                size={'sm'}
+                name={'remove_' + index}
+                key={"button_remove_" + name}
+                value='Remove Destination'
+                active={false}
+                onClick={() => this.handleRemoveDestination(index)}
+        >Remove</Button>
+    );
+  }
+
+  generateNewOriginButton(index, name) {
+    return (
+        <Button className='btn-csu h-5 w-25 text-left'
+                size={'sm'}
+                name={'set_origin_' + index}
+                key={"button_set_origin_" + name}
+                value='Set As Origin'
+                active={true}
+                disabled={index === 0}
+                onClick={() => this.handleSetNewOrigin(index)}
+        >Set As Origin</Button>
+    );
+  }
+
+  handleClearDestinations() {
+    this.props.clearDestinations();
+    this.props.resetDistances();
+  }
+
+  handleReverseDestinations() {
+    this.props.reverseDestinations();
+    this.props.resetDistances();
+  }
+
+  handleRemoveDestination(index) {
+    this.props.removeDestination(index);
+    this.props.resetDistances();
+  }
+
+  handleSetNewOrigin(index) {
+    this.props.setNewOrigin(index);
+    this.props.resetDistances();
   }
 }

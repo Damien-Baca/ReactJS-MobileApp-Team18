@@ -15,15 +15,12 @@ export default class Home extends Component {
     super(props);
 
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
-    this.fileCallback = this.fileCallback.bind(this);
-    this.handleClearDestinations = this.handleClearDestinations.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
     this.reportGeoError = this.reportGeoError.bind(this);
-    this.handleUserDestination = this.handleUserDestination.bind(this);
-    this.handleRemoveDestination = this.handleRemoveDestination.bind(this);
-    this.handleReverseDestinations = this.handleReverseDestinations.bind(this);
+    this.resetDistances = this.resetDistances.bind(this);
     this.calculateDistances = this.calculateDistances.bind(this);
     this.sumDistances = this.sumDistances.bind(this);
+    this.handleUserDestination = this.handleUserDestination.bind(this);
 
 
     this.state = {
@@ -34,8 +31,7 @@ export default class Home extends Component {
         longitude: this.csuOvalGeographicCoordinates().lng
       },
       distances: null,
-      optimizations: null,
-      fileContents: null,
+      optimizations: null
     };
 
     this.handleGetUserLocation();
@@ -50,7 +46,7 @@ export default class Home extends Component {
               {this.renderMapPane()}
             </Col>
             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-              {this.renderIntro()}
+              {this.renderDestinationControls()}
               {this.renderDestinations()}
             </Col>
           </Row>
@@ -67,7 +63,7 @@ export default class Home extends Component {
     );
   }
 
-  renderIntro() {
+  renderDestinationControls() {
     return (
         <Pane header={'Bon Voyage!'}
               bodyJSX={<DestinationControls
@@ -76,7 +72,7 @@ export default class Home extends Component {
                   addDestination={this.props.addDestination}
                   validation={this.props.validation}
                   sumDistances={this.sumDistances}
-                  fileCallback={this.fileCallback}
+                  resetDistances={this.resetDistances}
                   handleLoadJSON={this.handleLoadJSON}
                   handleUserDestination={this.handleUserDestination}
                   calculateDistances={this.calculateDistances}/>}/>
@@ -88,11 +84,13 @@ export default class Home extends Component {
         <Pane header={'Destinations:'}
               bodyJSX={<DestinationList
                 destinations={this.props.destinations}
+                removeDestination={this.props.removeDestination}
+                reverseDestinations={this.props.reverseDestinations}
+                clearDestinations={this.props.clearDestinations}
+                setNewOrigin={this.props.setNewOrigin}
                 distances={this.state.distances}
-                sumDistances={this.sumDistances}
-                handleRemoveDestination={this.handleRemoveDestination}
-                handleClearDestinations={this.handleClearDestinations}
-                handleReverseDestinations={this.handleReverseDestinations}/>
+                resetDistances={this.resetDistances}
+                sumDistances={this.sumDistances}/>
               }/>
     );
   }
@@ -110,6 +108,11 @@ export default class Home extends Component {
         )
       });
     }
+  }
+
+  handleUserDestination() {
+    this.props.addDestination(Object.assign({}, this.state.userLocation));
+    this.resetDistances();
   }
 
   storeUserLocation(position) {
@@ -135,10 +138,10 @@ export default class Home extends Component {
     });
   }
 
-  handleLoadJSON() {
-    if (this.state.fileContents) {
+  handleLoadJSON(fileContents) {
+    if (fileContents) {
       try {
-        let newTrip = JSON.parse(this.state.fileContents);
+        let newTrip = JSON.parse(fileContents);
         this.setState({errorMessage: null});
 
         newTrip.places.forEach((destination) => (
@@ -176,29 +179,6 @@ export default class Home extends Component {
     }
   }
 
-  handleRemoveDestination(index) {
-    this.props.removeDestination(index);
-    this.resetDistances();
-  }
-
-  handleClearDestinations() {
-    this.props.clearDestinations();
-    this.resetDistances();
-  }
-
-  handleReverseDestinations() {
-    this.props.reverseDestinations();
-    this.resetDistances();
-  }
-
-  handleUserDestination() {
-    this.props.addDestination(Object.assign({}, this.state.userLocation));
-  }
-
-  fileCallback(string) {
-    this.setState({fileContents: string});
-  }
-
   resetDistances() {
     this.setState({
       distances: null
@@ -228,10 +208,10 @@ export default class Home extends Component {
       'distances': []
     };
 
-    this.handleServerTripRequest(tipConfigRequest);
+    this.sendServerTripRequest(tipConfigRequest);
   }
 
-  handleServerTripRequest(tipConfigRequest) {
+  sendServerTripRequest(tipConfigRequest) {
     sendServerRequestWithBody('trip', tipConfigRequest,
         this.props.settings.serverPort).then((response) => {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
