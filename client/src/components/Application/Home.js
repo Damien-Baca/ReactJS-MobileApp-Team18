@@ -494,13 +494,14 @@ export default class Home extends Component {
               destination.longitude));
       convertedDestinations.push(convertedDestination);
     });
+
     const tipConfigRequest = {
       'type': 'trip',
-      'version': 2,
+      'version': 3,
       'options': {
         'title': 'My Trip',
         'earthRadius': String(
-            this.props.options.units[this.props.options.activeUnit]),
+          this.props.options.units[this.props.options.activeUnit]),
         'optimization': 'none'
       },
       'places': convertedDestinations,
