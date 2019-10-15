@@ -29,6 +29,7 @@ export default class DestinationList extends Component {
                   key={"button_clear_all_destinations"}
                   value='Clear Destinations'
                   active={false}
+                  disabled={this.props.destinations.length < 1}
                   onClick={() => this.props.handleClearDestinations()}
           >Clear Destinations</Button>
         </ListGroupItem>
@@ -43,7 +44,8 @@ export default class DestinationList extends Component {
                 name='reverse_destinations'
                 key={"button_reverse_destinations"}
                 value='Reverse Destinations'
-                active={true}
+                active={this.props.destinations.length > 0}
+                disabled={this.props.destinations.length < 1}
                 onClick={() => this.props.handleReverseDestinations()}
         >Reverse Destination Order</Button>
       </ListGroupItem>
