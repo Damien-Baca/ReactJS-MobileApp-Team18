@@ -21,16 +21,22 @@ import java.util.ArrayList;
  */
 public class TIPTrip extends TIPHeader {
   private Map options;
-  private ArrayList<Map> places;
+  private Map[] places;
   private ArrayList<Integer> distances;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPDistance.class);
 
 
-  TIPTrip(int version, Map options, ArrayList<Map> places, ArrayList<Integer> distances) {
+  TIPTrip(Integer version, Map options, Map[] places) {
     this();
     this.requestVersion = version;
     this.options = options;
+    // change this when optimizations are implemented
+    if (this.options.get("optimization") == "shorter" ||
+        this.options.get("optimization") == "short") {
+      this.options.put("optimization", "none");
+    }
+
     this.places = places;
     this.distances = new ArrayList<>();
   }
@@ -41,13 +47,13 @@ public class TIPTrip extends TIPHeader {
   @Override
   public void buildResponse() {
     GreatCircleDistance calculate = new GreatCircleDistance();
-    float earthRadius = Float.parseFloat((String) options.get("earthRadius"));
+    Double earthRadius = Double.parseDouble((String) options.get("earthRadius"));
 
-    for (int i = 0; i < this.places.size(); ++i) {
-      Map origin = places.get(i);
-      Map destination = places.get(0);
-      if (i < (places.size() - 1)) {
-        destination = places.get(i + 1);
+    for (int i = 0; i < this.places.length; ++i) {
+      Map origin = places[i];
+      Map destination = places[0];
+      if (i < (places.length - 1)) {
+        destination = places[i + 1];
       }
 
       this.distances.add(calculate.calculateDistance(origin, destination, earthRadius));
@@ -61,5 +67,5 @@ public class TIPTrip extends TIPHeader {
 
   public ArrayList<Integer> getDistances() { return distances; }
 
-  public ArrayList<Map> getPlaces() { return places; }
+  public Map[] getPlaces() { return places; }
 }
