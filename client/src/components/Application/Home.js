@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+import {Container, Row, Col, Input} from 'reactstrap';
 import 'leaflet/dist/leaflet.css';
 import Pane from './Pane'
 import DestinationMap from "../DestinationMap";
+import DestinationControls from "../DestinationControls";
 import DestinationList from "../DestinationList";
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
@@ -14,12 +15,10 @@ export default class Home extends Component {
     super(props);
 
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
-    this.onFileChange = this.onFileChange.bind(this);
     this.fileCallback = this.fileCallback.bind(this);
     this.handleClearDestinations = this.handleClearDestinations.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
     this.reportGeoError = this.reportGeoError.bind(this);
-    this.sumDistances = this.sumDistances.bind(this);
     this.handleRemoveDestination = this.handleRemoveDestination.bind(this);
     this.handleReverseDestinations = this.handleReverseDestinations.bind(this);
 
@@ -30,19 +29,10 @@ export default class Home extends Component {
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
       },
-
       newDestination: {name: '', latitude: '', longitude: ''},
       distances: null,
       optimizations: null,
       fileContents: null,
-      mapBoundaries: {
-        maxLat: '',
-        minLat: '',
-        maxLon: '',
-        minLon: ''
-      },
-      valid: {name: false, latitude: false, longitude: false},
-      invalid: {name: false, latitude: false, longitude: false},
     };
 
     this.handleGetUserLocation();
@@ -68,22 +58,23 @@ export default class Home extends Component {
   renderMapPane() {
     return (
         <Pane header={'Where Am I?'}
-              bodyJSX={this.renderMap()}/>
-    );
-  }
-
-  renderMap() {
-    return (
-      <DestinationMap
-          userLocation={this.state.userLocation}
-          destinations={this.props.destinations}/>
+              bodyJSX={<DestinationMap
+                  userLocation={this.state.userLocation}
+                  destinations={this.props.destinations}/>}/>
     );
   }
 
   renderIntro() {
     return (
         <Pane header={'Bon Voyage!'}
-              bodyJSX={this.renderDestinationControls()}/>
+              bodyJSX={<DestinationControls
+                  distances={this.state.distances}
+                  destinations={this.props.destinations}
+                  newDestinations={this.state.newDestination}
+                  fileCallback={this.fileCallback}
+                  handleLoadJSON={this.handleLoadJSON}
+                  handleUserDestination={this.handleUserDestination}
+                  calculateDistances={this.calculateDistances}/>}/>
     );
   }
 
@@ -98,111 +89,6 @@ export default class Home extends Component {
                 handleClearDestinations={this.handleClearDestinations}
                 handleReverseDestinations={this.handleReverseDestinations}/>
               }/>
-    );
-  }
-
-  renderDestinationControls() {
-    return (
-        <Container>
-          <Row>
-            {this.renderConditionalCumulativeDistance()}
-          </Row>
-          <Row>
-            {this.renderAddDestination()}
-          </Row>
-          <Row>
-            {this.renderDestinationOptions()}
-          </Row>
-        </Container>
-    );
-  }
-
-  renderConditionalCumulativeDistance() {
-    if (this.state.distances !== null) {
-      return (
-          <Label>Cumulative Trip
-            Distance: {this.sumDistances()}</Label>
-      );
-    }
-
-    return (
-        <Label>Trip distance not yet calculated.</Label>
-    );
-  }
-
-  renderDestinationOptions() {
-    return (
-        <Button
-            name='calculate'
-            onClick={() => this.calculateDistances()}
-            disabled={this.props.destinations.length === 0}
-        >Calculate Trip Distances</Button>
-    );
-  }
-
-  renderAddDestination() {
-    return (
-        <Form>
-          <FormGroup>
-            <Label for='add_name'>New Destination</Label>
-            {this.generateCoordinateInput()}
-            {this.renderAddDestinationButton()}
-            {this.renderAddUserDestinationButton()}
-            {this.renderJSONInput()}
-            {this.renderAddJSONButton()}
-          </FormGroup>
-        </Form>
-    );
-  }
-
-  renderAddDestinationButton() {
-    return (
-        <Button
-            className='btn-csu w-100 text-left'
-            name='add_new_destination'
-            key='button_add_destination'
-            active={true}
-            onClick={() => this.handleNewDestination()}
-            disabled={!(this.state.valid.latitude && this.state.valid.longitude)
-            || (this.state.newDestination.name === '')}>
-          Add New Destination
-        </Button>
-    );
-  }
-
-  renderAddUserDestinationButton() {
-    return (
-        <Button
-            className='btn-csu w-100 text-left'
-            name='add_user_destination'
-            key='button_add_user_destination'
-            active={true}
-            onClick={() => this.handleUserDestination()}>
-          Add User Location
-        </Button>
-    );
-  }
-
-  renderJSONInput() {
-    return (
-        <Input type='file'
-               id='fileItem'
-               key='input_json_file'
-               name='json_file'
-               onChange={event => this.onFileChange(event)}/>
-    );
-  }
-
-  renderAddJSONButton() {
-    return (
-        <Button
-            className='btn-csu w-100 text-left'
-            name='loadJSON'
-            key='button_loadJSON'
-            active={true}
-            onClick={() => this.handleLoadJSON()}>
-          Import JSON
-        </Button>
     );
   }
 
@@ -242,25 +128,6 @@ export default class Home extends Component {
           error.message
       )
     });
-  }
-
-  fileCallback(string) {
-    this.setState({fileContents: string});
-  }
-
-  onFileChange(event) {
-    let callback = this.fileCallback;
-    let fileIn = event.target;
-    if (fileIn) {
-      let file = fileIn.files[0];
-      let reader = new FileReader();
-
-      reader.onloadend = function () {
-        callback(this.result);
-      };
-
-      reader.readAsText(file);
-    }
   }
 
   handleLoadJSON() {
@@ -373,6 +240,10 @@ export default class Home extends Component {
     this.resetDistances();
   }
 
+  fileCallback(string) {
+    this.setState({fileContents: string});
+  }
+
   resetDistances() {
     this.setState({
       distances: null
@@ -425,22 +296,12 @@ export default class Home extends Component {
     });
   }
 
-  sumDistances(index = this.state.distances.length - 1) {
-    const reducer = (sum, current) => {
-      return sum + current;
-    };
 
-    let distanceSlice = Object.assign([], this.state.distances).slice(0,
-        index + 1);
-
-    return distanceSlice.reduce(reducer);
-
-  }
-
+/* not currently used, may be used in future sprints.
   coloradoGeographicBoundaries() {
     // northwest and southeast corners of the state of Colorado
     return L.latLngBounds(L.latLng(41, -109), L.latLng(37, -102));
-  }
+  }*/
 
   csuOvalGeographicCoordinates() {
     return L.latLng(40.576179, -105.080773);
