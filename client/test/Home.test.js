@@ -16,6 +16,7 @@ const buttonNamesInitial = [
   'loadJSON',
   'calculate',
   'clear_destinations',
+  'reverse_destinations'
 ];
 const validationDummy = () => {
   return true;

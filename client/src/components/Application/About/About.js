@@ -1,13 +1,5 @@
 import React, {Component} from 'react'
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardImg,
-  CardTitle,
-  CardText,
-  Row, Col, Container
-} from 'reactstrap';
+import {Card, CardHeader, CardBody, CardImg, CardTitle, CardText, Row, Col, Container} from 'reactstrap';
 import cabeleinPhoto from './images/crabeleinMongoose.jpg'
 import dbacaPhoto from './images/dbaca.jpg'
 import jamesl84Photo from './images/Jamesl84.jpg'
@@ -15,65 +7,95 @@ import longChenPhoto from './images/LongChen.jpg'
 import hgqPhoto from './images/hqMongoose.jpg'
 
 export default class About extends Component {
-  render() {
-    let team = [[cabeleinPhoto, "Christopher Abelein",
-      "Has a psychological dependency on writing out plans "
-      + "for projects. The Fighting Mongooses. That's a cool team name."],
-      [dbacaPhoto, "Damien Baca",
-        "a CS Senior with a Math Minor"],
-      [jamesl84Photo, "James Lounsbury",
-        "A CS and Physics major"],
-      [longChenPhoto, "Long Chen",
-        "a ME major."],
-      [hgqPhoto, "Hayden Quintana",
-        "likes long walks on the beach and poking dead things "
-        + "with a stick"]
-    ];
+  constructor(props) {
+    super(props);
 
-    return (
-        this.generateCardGroups(team)
-    );
+    this.state = {
+      team: {
+        "Christopher Ablein": {
+          img: cabeleinPhoto,
+          text: "Has a psychological dependency on writing out plans "
+              + "for projects. The Fighting Mongooses. That's a cool team name."
+        },
+        "Damien Baca": {
+          img: dbacaPhoto,
+          text: "a CS Senior with a Math Minor"
+        },
+        "James Lounsbury": {
+          img: jamesl84Photo,
+          text: "A CS and Physics major"
+        },
+        "Long Chen": {
+          img: longChenPhoto,
+          text: "a ME major."
+        },
+        "Hayden Quintana": {
+          img: hgqPhoto,
+          text: "likes long walks on the beach and poking dead things "
+              + "with a stick"
+        }
+      }
+    };
   }
 
-  generateCardGroups(team) {
+  render() {
     return (
         <Container>
-          <Row>
-            <Col xs="12" sm="12" md="6" lg="4" xl="3">
-              {this.showCard(team[0][0], team[0][1], team[0][2])}
-            </Col>
-            <Col xs="12" sm="12" md="6" lg="4" xl="3">
-              {this.showCard(team[1][0], team[1][1], team[1][2])}
-            </Col>
-            <Col xs="12" sm="12" md="6" lg="4" xl="3">
-              {this.showCard(team[2][0], team[2][1], team[2][2])}
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="12" sm="12" md="6" lg="4" xl="3">
-              {this.showCard(team[3][0], team[3][1], team[3][2])}
-            </Col>
-            <Col xs="12" sm="12" md="6" lg="4" xl="3">
-              {this.showCard(team[4][0], team[4][1], team[4][2])}
-            </Col>
-            <Col xs="12" sm="12" md="6" lg="4" xl="3">
-            </Col>
-          </Row>
+          {this.generateCardGroups()}
         </Container>
     );
   }
 
-  showCard(img, title, text) {
+  generateCardGroups() {
+    let showTeam = [Object.assign([], Object.keys(this.state.team))];
+    if (showTeam[0].length > 3) {
+      showTeam.pop();
+      let currentIndex = -1;
+
+      Object.assign([], Object.keys(this.state.team).forEach((member, index) => {
+        if (index % 3 === 0) {
+          showTeam.push([]);
+          currentIndex += 1;
+        }
+
+        showTeam[currentIndex].push(member);
+      }));
+    }
+
     return (
-        <Card style={{minWidth: '8rem'}}>
-          <CardHeader>
-            <CardImg top src={img}/>
-          </CardHeader>
-          <CardBody>
-            <CardTitle><b>{title}</b></CardTitle>
-            <CardText>{text}</CardText>
-          </CardBody>
-        </Card>
+        showTeam.map((threeMembers) => {
+          return (
+              <Row>
+                {this.generateThreeCards(threeMembers)}
+              </Row>
+          );
+        })
+    );
+  }
+
+  generateThreeCards(threeMembers) {
+    return (
+        threeMembers.map((member) => {
+          return (
+              <Col xs="12" sm="12" md="6" lg="4" xl="3">
+                {this.generateCard(member)}
+              </Col>
+          );
+        })
+    );
+  }
+
+  generateCard(member) {
+    return (
+          <Card style={{minWidth: '8rem'}}>
+            <CardHeader>
+              <CardImg top src={this.state.team[member].img}/>
+            </CardHeader>
+            <CardBody>
+              <CardTitle><b>{member}</b></CardTitle>
+              <CardText>{this.state.team[member].text}</CardText>
+            </CardBody>
+          </Card>
     );
   }
 }

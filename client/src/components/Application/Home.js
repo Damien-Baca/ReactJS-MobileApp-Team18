@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 import 'leaflet/dist/leaflet.css';
 import Pane from './Pane'
 import DestinationMap from "../DestinationMap";
+import DestinationList from "../DestinationList";
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
 
 /*
@@ -18,6 +19,9 @@ export default class Home extends Component {
     this.handleClearDestinations = this.handleClearDestinations.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
     this.reportGeoError = this.reportGeoError.bind(this);
+    this.sumDistances = this.sumDistances.bind(this);
+    this.handleRemoveDestination = this.handleRemoveDestination.bind(this);
+    this.handleReverseDestinations = this.handleReverseDestinations.bind(this);
 
     this.state = {
       errorMessage: null,
@@ -76,8 +80,6 @@ export default class Home extends Component {
     );
   }
 
-
-
   renderIntro() {
     return (
         <Pane header={'Bon Voyage!'}
@@ -88,7 +90,14 @@ export default class Home extends Component {
   renderDestinations() {
     return (
         <Pane header={'Destinations:'}
-              bodyJSX={this.renderDestinationList()}/>
+              bodyJSX={<DestinationList
+                destinations={this.props.destinations}
+                distances={this.state.distances}
+                sumDistances={this.sumDistances}
+                handleRemoveDestination={this.handleRemoveDestination}
+                handleClearDestinations={this.handleClearDestinations}
+                handleReverseDestinations={this.handleReverseDestinations}/>
+              }/>
     );
   }
 
@@ -121,15 +130,6 @@ export default class Home extends Component {
     );
   }
 
-  renderDestinationList() {
-    return (
-        <ListGroup>
-          {this.renderClearDestinations()}
-          {this.generateList()}
-        </ListGroup>
-    );
-  }
-
   renderDestinationOptions() {
     return (
         <Button
@@ -138,60 +138,6 @@ export default class Home extends Component {
             disabled={this.props.destinations.length === 0}
         >Calculate Trip Distances</Button>
     );
-  }
-
-  renderClearDestinations() {
-    return (
-        <ListGroupItem>
-          <Button className='btn-csu h-5 w-100 text-left'
-                  size={'sm'}
-                  name='clear_destinations'
-                  key={"button_clear_all_destinations"}
-                  value='Clear Destinations'
-                  active={false}
-                  onClick={() => this.handleClearDestinations()}
-          >Clear Destinations</Button>
-        </ListGroupItem>
-    );
-  }
-
-  generateList() {
-    return (
-        this.props.destinations.map((destination, index) => (
-            <ListGroupItem key={'destination_' + index}>
-              <Row>
-                {destination.name}, {destination.latitude}, {destination.longitude}
-              </Row>
-              {this.renderConditionalDistance(index)}
-              <Row>
-                <Button className='btn-csu h-5 w-50 text-left'
-                        size={'sm'}
-                        name={'remove_' + index}
-                        key={"button_" + destination.name}
-                        value='Remove Destination'
-                        active={false}
-                        onClick={() => this.handleRemoveDestination(index)}
-                >Remove</Button>
-              </Row>
-            </ListGroupItem>
-        ))
-    );
-  }
-
-  renderConditionalDistance(index) {
-    if (this.state.distances !== null) {
-      return (
-          <Row>
-            Distance to Next Destination: {this.state.distances[index]},
-            Cumulative Trip Distance: {this.sumDistances(index)}
-          </Row>
-      );
-    }
-    return (
-        <Row>
-          Distances not yet calculated.
-        </Row>
-    )
   }
 
   renderAddDestination() {
@@ -413,14 +359,21 @@ export default class Home extends Component {
   }
 
   handleRemoveDestination(index) {
-    this.setState({
-      distances: null
-    });
     this.props.removeDestination(index);
+    this.resetDistances();
   }
 
   handleClearDestinations() {
     this.props.clearDestinations();
+    this.resetDistances();
+  }
+
+  handleReverseDestinations() {
+    this.props.reverseDestinations();
+    this.resetDistances();
+  }
+
+  resetDistances() {
     this.setState({
       distances: null
     });
