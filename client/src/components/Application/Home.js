@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Input} from 'reactstrap';
+import {Container, Row, Col} from 'reactstrap';
 import 'leaflet/dist/leaflet.css';
 import Pane from './Pane'
 import DestinationMap from "../DestinationMap";
@@ -70,10 +70,12 @@ export default class Home extends Component {
               bodyJSX={<DestinationControls
                   distances={this.state.distances}
                   destinations={this.props.destinations}
-                  newDestinations={this.state.newDestination}
+                  newDestination={this.state.newDestination}
+                  sumDistances={this.sumDistances}
                   fileCallback={this.fileCallback}
                   handleLoadJSON={this.handleLoadJSON}
                   handleUserDestination={this.handleUserDestination}
+                  updateNewDestinationOnChange={this.updateNewDestinationOnChange}
                   calculateDistances={this.calculateDistances}/>}/>
     );
   }
@@ -169,21 +171,6 @@ export default class Home extends Component {
         )
       });
     }
-  }
-
-  generateCoordinateInput() {
-    return (Object.keys(this.state.newDestination).map((field) => (
-        <Input type='text'
-               key={'input_' + field}
-               name={field}
-               id={`add_${field}`}
-               placeholder={field.charAt(0).toUpperCase() + field.substring(1,
-                   field.length)}
-               value={this.state.newDestination[field]}
-               valid={this.state.valid[field]} //THIS.STATE.VALID[FIELD]
-               invalid={this.state.invalid[field]}
-               onChange={(event) => this.updateNewDestinationOnChange(event)}/>
-    )));
   }
 
   handleNewDestination() {
@@ -294,6 +281,17 @@ export default class Home extends Component {
         });
       }
     });
+  }
+
+  sumDistances(index = this.state.distances.length - 1) {
+    const reducer = (sum, current) => {
+      return sum + current;
+    };
+
+    let distanceSlice = Object.assign([], this.state.distances).slice(0,
+        index + 1);
+
+    return distanceSlice.reduce(reducer);
   }
 
 

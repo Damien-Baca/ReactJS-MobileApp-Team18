@@ -28,10 +28,10 @@ export default class DestinationControls extends Component {
   }
 
   renderConditionalCumulativeDistance() {
-    if (this.state.distances !== null) {
+    if (this.props.distances !== null) {
       return (
           <Label>Cumulative Trip
-            Distance: {this.sumDistances()}</Label>
+            Distance: {this.props.sumDistances()}</Label>
       );
     }
 
@@ -116,6 +116,21 @@ export default class DestinationControls extends Component {
     );
   }
 
+  generateCoordinateInput() {
+    return (Object.keys(this.props.newDestination).map((field) => (
+        <Input type='text'
+               key={'input_' + field}
+               name={field}
+               id={`add_${field}`}
+               placeholder={field.charAt(0).toUpperCase() + field.substring(1,
+                   field.length)}
+               value={this.props.newDestination[field]}
+               valid={this.state.valid[field]} //THIS.STATE.VALID[FIELD]
+               invalid={this.state.invalid[field]}
+               onChange={(event) => this.props.updateNewDestinationOnChange(event)}/>
+    )));
+  }
+
   onFileChange(event) {
     let callback = this.props.fileCallback;
     let fileIn = event.target;
@@ -129,16 +144,5 @@ export default class DestinationControls extends Component {
 
       reader.readAsText(file);
     }
-  }
-
-  sumDistances(index = this.props.distances.length - 1) {
-    const reducer = (sum, current) => {
-      return sum + current;
-    };
-
-    let distanceSlice = Object.assign([], this.props.distances).slice(0,
-        index + 1);
-
-    return distanceSlice.reduce(reducer);
   }
 }
