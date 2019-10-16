@@ -165,6 +165,5 @@ export default class Calculator extends Component {
       valid: validClone,
       invalid: invalidClone
     });
-
   }
 }
