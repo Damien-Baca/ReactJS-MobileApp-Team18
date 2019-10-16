@@ -73,25 +73,25 @@ export default class DestinationList extends Component {
         this.props.destinations.map((destination, index) => (
             <ListGroupItem key={'destination_' + index}>
               <Row style={{display:"flex"}}>
-                {destination.name}, {destination.latitude}, {destination.longitude} {this.generateMoveUpButton()}
+                {destination.name}, {destination.latitude}, {destination.longitude} {this.generateMoveUpButton(index)}
               </Row>
                 {this.renderConditionalDistance(index)}
               <Row>
-                {this.generateRemoveButton(index, destination.name)}
-                {this.generateNewOriginButton(index, destination.name)}
-                {this.generateMoveDownButton()}
+                {this.generateRemoveButton(index)}
+                {this.generateNewOriginButton(index)}
+                {this.generateMoveDownButton(index)}
               </Row>
             </ListGroupItem>
         ))
     );
   }
 
-  generateRemoveButton(index, name) {
+  generateRemoveButton(index) {
     return (
         <Button className='btn-csu h-5 w-25 text-left'
                 size={'sm'}
                 name={'remove_' + index}
-                key={"button_remove_" + name}
+                key={"button_remove_" + index}
                 value='Remove Destination'
                 active={false}
                 onClick={() => this.handleRemoveDestination(index)}
@@ -99,12 +99,12 @@ export default class DestinationList extends Component {
     );
   }
 
-  generateNewOriginButton(index, name) {
+  generateNewOriginButton(index) {
     return (
         <Button className='btn-csu h-5 w-25 text-left'
                 size={'sm'}
                 name={'set_origin_' + index}
-                key={"button_set_origin_" + name}
+                key={"button_set_origin_" + index}
                 value='Set As Origin'
                 active={true}
                 disabled={index === 0}
