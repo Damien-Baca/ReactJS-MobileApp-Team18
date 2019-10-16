@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /** This class defines the Config response that provides the client
  * with server specific configuration information.
@@ -22,22 +23,28 @@ import java.util.List;
 public class TIPConfig extends TIPHeader {
   private String serverName;
   private List<String> placeAttributes;
+  private List<String> optiizations;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPConfig.class);
 
-
   public TIPConfig() {
     this.requestType = "config";
-    this.requestVersion = 2;
+    this.requestVersion = 3;
   }
-
 
   @Override
   public void buildResponse() {
     this.serverName = "T18 THE FIGHTING MONGOOSES";
-    this.placeAttributes = Arrays.asList("latitude", "longitude", "name");
+    this.placeAttributes = Arrays.asList("name","latitude","longitude","id","altitude","municipality","type");
+    this.optiizations=Arrays.asList("none","short","shorter");
     log.trace("buildResponse -> {}", this);
   }
+
+
+
+
+
+
 
 
   String getServerName() {
