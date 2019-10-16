@@ -143,19 +143,12 @@ export default class Calculator extends Component {
   }
 
   updateLocationOnChange(stateVar, field, value){ //origindest, target.name, target.value
-    console.log('update');
     if (value === '') { //empty
-      console.log('empty');
       this.setValidState(stateVar, field, value, false, false);
-
     } else if (this.props.validation(field, value) ) { //if coord is good
-      console.log('valid');
       this.setValidState(stateVar, field, value, true, false);
-
     } else { //bad coord
-      console.log('invalid');
       this.setValidState(stateVar, field, value, false, true);
-
     }
   }
 
@@ -163,22 +156,15 @@ export default class Calculator extends Component {
   setValidState(stateVar, field, value, valid, invalid) {
     let location = Object.assign({}, this.state[stateVar]);
     location[field] = value;
-    //console.log(location);
     let validClone = Object.assign({}, this.state.valid);
     validClone[stateVar+field] = valid;
-
     let invalidClone = Object.assign({}, this.state.invalid);
     invalidClone[stateVar+field] = invalid;
-
-    console.log(validClone, invalidClone);
-
     this.setState({
       [stateVar]: location,
       valid: validClone,
       invalid: invalidClone
     });
-    console.log(this.state.valid);
-    console.log(this.state.invalid);
 
   }
 }
