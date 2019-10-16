@@ -72,13 +72,14 @@ export default class DestinationList extends Component {
     return (
         this.props.destinations.map((destination, index) => (
             <ListGroupItem key={'destination_' + index}>
-              <Row>
-                {destination.name}, {destination.latitude}, {destination.longitude}
+              <Row style={{display:"flex"}}>
+                {destination.name}, {destination.latitude}, {destination.longitude} {this.generateMoveUpButton()}
               </Row>
                 {this.renderConditionalDistance(index)}
               <Row>
                 {this.generateRemoveButton(index, destination.name)}
                 {this.generateNewOriginButton(index, destination.name)}
+                {this.generateMoveDownButton()}
               </Row>
             </ListGroupItem>
         ))
