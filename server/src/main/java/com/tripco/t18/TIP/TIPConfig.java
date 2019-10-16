@@ -23,7 +23,7 @@ import java.util.Optional;
 public class TIPConfig extends TIPHeader {
   private String serverName;
   private List<String> placeAttributes;
-  private List<String> optiizations;
+  private List<String> optimizations;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPConfig.class);
 
@@ -36,21 +36,13 @@ public class TIPConfig extends TIPHeader {
   public void buildResponse() {
     this.serverName = "T18 THE FIGHTING MONGOOSES";
     this.placeAttributes = Arrays.asList("name","latitude","longitude","id","altitude","municipality","type");
-    this.optiizations=Arrays.asList("none","short","shorter");
+    this.optimizations=Arrays.asList("none");
     log.trace("buildResponse -> {}", this);
   }
-
-
-
-
-
-
-
 
   String getServerName() {
     return this.serverName;
   }
-
 
   List<String> getPlaceAttributes() {
     return this.placeAttributes;
