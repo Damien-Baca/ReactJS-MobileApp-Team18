@@ -2,7 +2,6 @@ import './enzyme.config.js'
 import React from 'react'
 import {shallow} from 'enzyme'
 import Application from '../src/components/Application/Application'
-import {mount} from 'enzyme'
 
 const newDestinations = [{
   name: 'Fort Collins',
@@ -116,7 +115,7 @@ function testClearDestinationList() {
 test('Testing clearDestination.', testClearDestinationList);
 
 function testReverseDestinations() {
-  const app = mount((<Application/>));
+  const app = shallow(<Application/>);
   app.state().destinations = Object.assign([], newDestinations);
   let expected = Object.assign([], newDestinations).reverse();
 

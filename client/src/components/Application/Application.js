@@ -27,6 +27,7 @@ export default class Application extends Component {
     this.convertCoordinates = this.convertCoordinates.bind(this);
     this.validateCoordinates = this.validateCoordinates.bind(this);
     this.validation = this.validation.bind(this);
+    this.setNewOrigin = this.setNewOrigin.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -112,6 +113,7 @@ export default class Application extends Component {
         return <Home options={this.state.planOptions}
                      destinations={this.state.destinations}
                      settings={this.state.clientSettings}
+                     setNewOrigin={this.setNewOrigin}
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}
                      clearDestinations={this.clearDestinations}
@@ -178,6 +180,17 @@ export default class Application extends Component {
 
     this.setState({
       destinations: reverseDestinations
+    });
+  }
+
+  setNewOrigin(index) {
+    let newDestinationList = Object.assign([], this.state.destinations);
+    let newOrigin = newDestinationList.splice(index, 1)[0];
+    console.log(newOrigin);
+    newDestinationList.splice(0, 0, newOrigin);
+
+    this.setState({
+      destinations: newDestinationList
     });
   }
 
