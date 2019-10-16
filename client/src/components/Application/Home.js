@@ -87,7 +87,7 @@ export default class Home extends Component {
                 removeDestination={this.props.removeDestination}
                 reverseDestinations={this.props.reverseDestinations}
                 clearDestinations={this.props.clearDestinations}
-                setNewOrigin={this.props.setNewOrigin}
+                swapDestinations={this.props.swapDestinations}
                 distances={this.state.distances}
                 resetDistances={this.resetDistances}
                 sumDistances={this.sumDistances}/>
