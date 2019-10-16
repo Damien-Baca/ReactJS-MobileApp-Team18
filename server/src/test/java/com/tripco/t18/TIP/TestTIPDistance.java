@@ -1,3 +1,4 @@
+
 package com.tripco.t18.TIP;
 
 import org.junit.Before;
@@ -8,11 +9,15 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+
 /** Verifies the operation of the TIP distance class and its buildResponse method.
  */
+
 public class TestTIPDistance {
 
-  /* Radius and location values shared by test cases */
+
+// Radius and location values shared by test cases *//*
+
   private final float radiusMiles = 3958;
   private Map<String, Object> csu;
   private final int version = 1;
@@ -34,3 +39,4 @@ public class TestTIPDistance {
     assertEquals("origin and destination are the same", expect, actual);
   }
 }
+
