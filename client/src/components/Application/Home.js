@@ -22,6 +22,8 @@ export default class Home extends Component {
     this.calculateDistances = this.calculateDistances.bind(this);
     this.sumDistances = this.sumDistances.bind(this);
     this.handleUserDestination = this.handleUserDestination.bind(this);
+    this.sendServerRequest = this.sendServerRequest.bind(this);
+    this.setDistances = this.setDistances.bind(this)
 
 
     this.state = {
@@ -77,14 +79,18 @@ export default class Home extends Component {
                   resetDistances={this.resetDistances}
                   handleLoadJSON={this.handleLoadJSON}
                   handleUserDestination={this.handleUserDestination}
-                  calculateDistances={this.calculateDistances}/>}/>
+                  calculateDistances={this.calculateDistances}/>
+              }/>
     );
   }
 
   renderDestinationQuery() {
     return (
       <Pane header={'Database Query'}
-            bodyJSX={<DestinationQuery/>}/>
+            bodyJSX={<DestinationQuery
+            addDestination={this.props.addDestination}
+            sendServerRequest={this.sendServerRequest}/>
+            }/>
     );
   }
 
@@ -194,7 +200,7 @@ export default class Home extends Component {
     });
   }
 
-  calculateDistances() {
+  async calculateDistances() {
     let convertedDestinations = [];
     this.props.destinations.forEach((destination) => {
       let convertedDestination = {name: destination.name};
@@ -204,30 +210,51 @@ export default class Home extends Component {
       convertedDestinations.push(convertedDestination);
     });
 
-    const tipConfigRequest = {
-      'type': 'trip',
-      'version': 3,
+    const tipRequest = {
       'options': {
         'title': 'My Trip',
         'earthRadius': String(
-          this.props.options.units[this.props.options.activeUnit]),
+            this.props.options.units[this.props.options.activeUnit]),
         'optimization': 'none'
       },
       'places': convertedDestinations,
       'distances': []
     };
 
-    this.sendServerTripRequest(tipConfigRequest);
+    this.sendServerRequest('trip', tipRequest, this.setDistances);
   }
 
-  sendServerTripRequest(tipConfigRequest) {
-    sendServerRequestWithBody('trip', tipConfigRequest,
+  setDistances(newDistances) {
+    if (newDistances !== null) {
+      this.setState({
+        errorMessage: newDistances.errorMessage,
+        distances: newDistances.distances
+      })
+    }
+  }
+
+  sendServerRequest(type, tipRequest, callback) {
+    let returnState = null;
+    let tipConfigRequest = {
+      requestType: type,
+      requestVersion: 3,
+    };
+
+    Object.entries(tipRequest).forEach((entry) => {
+      tipConfigRequest[entry[0]] = entry[1];
+    });
+
+    sendServerRequestWithBody(type, tipConfigRequest,
         this.props.settings.serverPort).then((response) => {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        this.setState({
-          distances: Object.assign([], response.body.distances),
+        returnState =  Object.assign({}, {
           errorMessage: null
         });
+        Object.entries(response.body).forEach((entry) => {
+          returnState[entry[0]] = entry[1];
+        });
+
+        callback(returnState);
       } else {
         this.setState({
           errorMessage: this.props.createErrorBanner(
