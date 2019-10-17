@@ -36,7 +36,7 @@ public class TIPConfig extends TIPHeader {
   public void buildResponse() {
     this.serverName = "T18 THE FIGHTING MONGOOSES";
     this.placeAttributes = Arrays.asList("name","latitude","longitude","id","altitude","municipality","type");
-    this.optimizations=Arrays.asList("none");
+    this.optimizations = Arrays.asList("none");
     log.trace("buildResponse -> {}", this);
   }
 
