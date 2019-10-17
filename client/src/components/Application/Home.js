@@ -6,6 +6,7 @@ import DestinationMap from "./DestinationMap";
 import DestinationControls from "./DestinationControls";
 import DestinationList from "./DestinationList";
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
+import DestinationQuery from "./DestinationQuery";
 
 /*
  * Renders the home page.
@@ -44,9 +45,10 @@ export default class Home extends Component {
           <Row>
             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               {this.renderMapPane()}
+              {this.renderDestinationControls()}
             </Col>
             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-              {this.renderDestinationControls()}
+              {this.renderDestinationQuery()}
               {this.renderDestinations()}
             </Col>
           </Row>
@@ -76,6 +78,13 @@ export default class Home extends Component {
                   handleLoadJSON={this.handleLoadJSON}
                   handleUserDestination={this.handleUserDestination}
                   calculateDistances={this.calculateDistances}/>}/>
+    );
+  }
+
+  renderDestinationQuery() {
+    return (
+      <Pane header={'Database Query'}
+            bodyJSX={<DestinationQuery/>}/>
     );
   }
 
