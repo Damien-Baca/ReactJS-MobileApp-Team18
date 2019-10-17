@@ -4,27 +4,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
 
-public class TIPLocation extends TIPHeader {
+public class TIPLocations extends TIPHeader {
   private Integer requestVersion;
   private String match;
   private Integer limit;
   private Integer found;
   private Map[] places;
 
-  private final transient Logger log = LoggerFactory.getLogger(TIPLocation.class);
+  private final transient Logger log = LoggerFactory.getLogger(TIPLocations.class);
 
-  TIPLocation(Integer version, String match, Integer limit) {
+  TIPLocations(Integer version, String match, Integer limit) {
     this();
     this.requestVersion = version;
     this.match = match;
     this.limit = limit;
   }
 
-  TIPLocation(Integer version, String match) {
-    this(version, match, Integer.MAX_VALUE);
+  TIPLocations(Integer version, String match) {
+    this(version, match, 100);
   }
 
-  TIPLocation() { this.requestType = "location"; }
+  TIPLocations() { this.requestType = "location"; }
 
   /*
    * This is where the SQL querying takes place. I'll probably create a class to

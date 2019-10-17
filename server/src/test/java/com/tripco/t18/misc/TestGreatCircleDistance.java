@@ -110,6 +110,9 @@ public class TestGreatCircleDistance {
     destination.replace("longitude","174.770019");
     expect = 6425;
     actual = test.calculateDistance(origin,destination,earthRadiusMiles);
+
+
+
     assertEquals("Buenos Aires to Auckland",expect,actual);
   }
 }
