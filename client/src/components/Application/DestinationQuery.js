@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Button, Container, Row} from 'reactstrap'
-import {sendServerRequestWithBody} from "../../api/restfulAPI";
 
 export default class DestinationQuery extends Component {
   constructor(props) {
@@ -9,7 +8,7 @@ export default class DestinationQuery extends Component {
     this.setPlaces = this.setPlaces.bind(this);
 
     this.state = {
-      match: '',
+      match: 'dave',
       limit: 100,
       found: 0,
       places: []

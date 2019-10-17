@@ -1,7 +1,10 @@
 package com.tripco.t18.TIP;
 
+import com.tripco.t18.misc.SQLQuery;
+import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class TIPLocations extends TIPHeader {
@@ -33,6 +36,15 @@ public class TIPLocations extends TIPHeader {
   @Override
   public void buildResponse() {
     // stub
+    SQLQuery query = new SQLQuery();
+    Map<String, String>[] result = query.sendQuery(match, limit);
+    found = Integer.parseInt(result[0].get("found"));
+
+    ArrayList<Map<String, String>> workingPlaces = new ArrayList<>(
+        Arrays.asList(result).subList(1, result.length));
+
+    places = (Map<String, String>[]) workingPlaces.toArray();
+
     log.trace("buildResponse -> {}", this);
   }
 }
