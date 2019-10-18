@@ -31,7 +31,7 @@ public class SQLQuery {
 
     // If we're running on Travis, use the proper url + credentials
     if (isTravis != null && isTravis.equals("true")) {
-      myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
+      myUrl = "jdbc:mysql://127.0.0.1/cs314";
       user = "root";
       pass = null;
     }
@@ -55,14 +55,6 @@ public class SQLQuery {
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseGuide.md
   public Map[] sendQuery(String query, Integer limit) {
-    String isDevelopment = System.getenv("CS314_ENV");
-    if(isDevelopment != null && isDevelopment.equals("development")) {
-      this.myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
-    }
-    else {
-      this.myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314";
-    }
-
     String cleanQuery = "'%" +query.replaceAll("[^A-Za-z0-9]","_") +"%'";
     count = addLimit(constructSearch(cleanQuery, true), limit);
     search = addLimit(constructSearch(cleanQuery, false), limit);
@@ -134,6 +126,6 @@ public class SQLQuery {
   }
 
   public boolean localDatabase() {
-    return (user.equals("root"));
+    return (myUrl.equals("root"));
   }
 }

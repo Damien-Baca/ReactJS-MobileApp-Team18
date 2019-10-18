@@ -13,7 +13,7 @@ public class TestSQLQuery {
     Map<String, String>[] queryResult = testQuery.sendQuery("airport", 10);
     int actualCount = Integer.parseInt(queryResult[0].get("found"));
 
-    assertEquals("Received 5 results.", expectedCount, actualCount);
+    assertEquals("Expect 5 results.", expectedCount, actualCount);
   }
 
   @Test
@@ -24,6 +24,6 @@ public class TestSQLQuery {
     Map<String, String>[] queryResult = testQuery.sendQuery("40", 10);
     int actualCount = Integer.parseInt(queryResult[0].get("found"));
 
-    assertEquals("Received 4 results.", expectedCount, actualCount);
+    assertEquals("Expect 4 results.", expectedCount, actualCount);
   }
 }
