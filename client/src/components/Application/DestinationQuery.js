@@ -102,7 +102,7 @@ export default class DestinationQuery extends Component {
     return (
         <Button className='btn-csu h-5 w-10'
                 size={'sm'}
-                name={'add_' + index}
+                name={'add_query_' + index}
                 key={"button_add_" + index}
                 value='Add Destination'
                 active={true}
