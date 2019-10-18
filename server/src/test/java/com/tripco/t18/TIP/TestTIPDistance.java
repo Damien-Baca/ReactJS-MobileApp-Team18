@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+
 
 
 /** Verifies the operation of the TIP distance class and its buildResponse method.
@@ -39,5 +39,5 @@ public class TestTIPDistance {
     int actual = trip.getDistance();
     assertEquals("origin and destination are the same", expect, actual);
   }
-  }
+}
 
