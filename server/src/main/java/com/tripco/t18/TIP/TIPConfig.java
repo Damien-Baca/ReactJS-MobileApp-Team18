@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+
 /** This class defines the Config response that provides the client
  * with server specific configuration information.
  *  
