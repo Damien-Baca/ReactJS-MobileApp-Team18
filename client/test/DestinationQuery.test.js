@@ -16,11 +16,13 @@ const newPlaces = [{
   latitude: '33.812511',
   longitude: '-117.918976'
 }];
-const testUserLocation = {
-  name: 'Colorado State University',
-  latitude: 40.576179,
-  longitude: -105.080773
-};
+const generateButtons = [
+    "submit_query",
+    "clear_results",
+    "add_query_0",
+    "add_query_1",
+    "add_query_2",
+];
 
 function testSetPlaces() {
   let dQuery = shallow(<DestinationQuery/>);
@@ -43,3 +45,43 @@ function testSetPlaces() {
 }
 
 test('Testing found and place setting.', testSetPlaces);
+
+function testUpdateMatch() {
+  let dQuery = shallow(<DestinationQuery/>);
+  let expectedMatch = "dave";
+  let testEvent = {
+    target: {
+      value: "dave"
+    }
+  };
+
+  dQuery.instance().updateMatch(testEvent);
+
+  let actualMatch = dQuery.state().match;
+
+  expect(actualMatch).toEqual(expectedMatch);
+}
+
+test('Testing input update for match', testUpdateMatch);
+
+function testGeneratedButtons() {
+  let dQuery = shallow(<DestinationQuery/>);
+  let expectedButtons = Object.assign([], generateButtons);
+
+  let testPlaces = {
+    found: newPlaces.length,
+    places: Object.assign([], newPlaces)
+  };
+
+  dQuery.instance().setPlaces(testPlaces);
+
+  let numberOfButtons = dQuery.find('Button').length;
+  expect(numberOfButtons).toEqual(expectedButtons.length);
+
+  let actualButtons = [];
+  dQuery.find('Button').map((input) => actualButtons.push(input.prop('name')));
+
+  expect(actualButtons).toEqual(expectedButtons);
+}
+
+test('Testing button generation', testGeneratedButtons);
