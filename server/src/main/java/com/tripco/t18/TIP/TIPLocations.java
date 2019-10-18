@@ -22,7 +22,11 @@ public class TIPLocations extends TIPHeader {
     this.limit = limit;
   }
 
-  TIPLocations() { this.requestType = "locations"; }
+  TIPLocations(Integer version, String match) {
+    this(version, match, 100);
+  }
+
+  TIPLocations() { this.requestType = "location"; }
 
   /*
    * This is where the SQL querying takes place. I'll probably create a class to
@@ -35,11 +39,9 @@ public class TIPLocations extends TIPHeader {
 
   @Override
   public void buildResponse() {
-    // stub
     SQLQuery query = new SQLQuery();
     Map<String, String>[] result = query.sendQuery(match, limit);
     found = Integer.parseInt(result[0].get("found"));
-
 
     ArrayList<Map<String, String>> workingPlaces = new ArrayList<>(
         Arrays.asList(result).subList(1, result.length));
