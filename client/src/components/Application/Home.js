@@ -89,6 +89,7 @@ export default class Home extends Component {
       <Pane header={'Database Query'}
             bodyJSX={<DestinationQuery
             addDestination={this.props.addDestination}
+            resetDistances={this.resetDistances}
             sendServerRequest={this.sendServerRequest}/>
             }/>
     );
