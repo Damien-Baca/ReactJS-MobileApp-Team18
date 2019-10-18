@@ -12,9 +12,9 @@ import java.util.ArrayList;
 public class SQLQuery {
   // db configuration information
   private final static String myDriver = "com.mysql.jdbc.Driver";
-  private final static String myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314";
-  private final static String user = "cs314-db";
-  private final static String pass = "eiK5liet1uej";
+  private static String myUrl = "";
+  private static String user = "";
+  private static String pass = "";
   private final static String[] identifiers = {"name","latitude","longitude",
       "id","altitude","municipality","type"};
 
@@ -22,7 +22,47 @@ public class SQLQuery {
   private static String count = "";
   private static String search = "";
 
+  // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseTesting.md
+  public SQLQuery() {
+    // Here are some environment variables. The first one is set by default in
+    // Travis, and the other we set ourselves (see the other guide)
+    String isTravis = System.getenv("TRAVIS");
+    String isDevelopment = System.getenv("CS314_ENV");
+
+    // If we're running on Travis, use the proper url + credentials
+    if (isTravis != null && isTravis.equals("true")) {
+      myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
+      user = "root";
+      pass = null;
+    }
+
+    // else, use our credentials; also account for if we have our own dev
+    // environment variable (see the other guide) for connecting through an SSH
+    // tunnel
+    else if (isDevelopment != null && isDevelopment.equals("development")) {
+      myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
+      user = "cs314-db";
+      pass = "eiK5liet1uej";
+    }
+
+    // Else, we must be running against the production database directly
+    else {
+      myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314";
+      user = "cs314-db";
+      pass = "eiK5liet1uej";
+    }
+  }
+
+  // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseGuide.md
   public Map[] sendQuery(String query, Integer limit) {
+    String isDevelopment = System.getenv("CS314_ENV");
+    if(isDevelopment != null && isDevelopment.equals("development")) {
+      this.myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
+    }
+    else {
+      this.myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314";
+    }
+
     String cleanQuery = "'%" +query.replaceAll("[^A-Za-z0-9]","_") +"%'";
     count = addLimit(constructSearch(cleanQuery, true), limit);
     search = addLimit(constructSearch(cleanQuery, false), limit);
@@ -91,5 +131,9 @@ public class SQLQuery {
     }
 
     return (Map<String, String>[]) workingResults.toArray(new Map[workingResults.size()]);
+  }
+
+  public boolean localDatabase() {
+    return (user.equals("root"));
   }
 }
