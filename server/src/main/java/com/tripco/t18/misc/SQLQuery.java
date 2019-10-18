@@ -15,6 +15,7 @@ public class SQLQuery {
   private static String myUrl = "";
   private static String user = "";
   private static String pass = "";
+  private static boolean local = false;
   private final static String[] identifiers = {"name","latitude","longitude",
       "id","altitude","municipality","type"};
 
@@ -34,6 +35,7 @@ public class SQLQuery {
       myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
       user = "root";
       pass = null;
+      local = true;
     }
 
     // else, use our credentials; also account for if we have our own dev
@@ -43,6 +45,7 @@ public class SQLQuery {
       myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
       user = "cs314-db";
       pass = "eiK5liet1uej";
+      local = true;
     }
 
     // Else, we must be running against the production database directly
@@ -134,6 +137,6 @@ public class SQLQuery {
   }
 
   public boolean localDatabase() {
-    return (user.equals("root"));
+    return local;
   }
 }
