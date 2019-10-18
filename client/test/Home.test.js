@@ -25,6 +25,7 @@ const buttonNamesInitial = [
   'add_user_destination',
   'loadJSON',
   'calculate',
+  'submit_query',
   'clear_destinations',
   'reverse_destinations'
 ];
