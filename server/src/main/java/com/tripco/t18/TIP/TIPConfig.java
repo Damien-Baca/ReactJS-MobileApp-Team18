@@ -3,8 +3,9 @@ package com.tripco.t18.TIP;
 import org.slf4j.Logger;
 import java.util.List;
 import java.util.Arrays;
-import org.slf4j.LoggerFactory;
 import java.util.Optional;
+import org.slf4j.LoggerFactory;
+
 
 
 /** This class defines the Config response that provides the client
