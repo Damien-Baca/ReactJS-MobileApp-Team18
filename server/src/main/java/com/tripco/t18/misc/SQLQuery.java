@@ -15,7 +15,7 @@ public class SQLQuery {
   private static String myUrl = "";
   private static String user = "";
   private static String pass = "";
-  private static boolean local = false;
+  private static boolean local;
   private final static String[] identifiers = {"name","latitude","longitude",
       "id","altitude","municipality","type"};
 
@@ -53,6 +53,7 @@ public class SQLQuery {
       myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314";
       user = "cs314-db";
       pass = "eiK5liet1uej";
+      local = false;
     }
   }
 
