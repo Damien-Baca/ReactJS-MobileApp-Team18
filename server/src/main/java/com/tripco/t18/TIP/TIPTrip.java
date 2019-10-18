@@ -2,9 +2,10 @@ package com.tripco.t18.TIP;
 
 import com.tripco.t18.misc.GreatCircleDistance;
 import org.slf4j.Logger;
+import java.util.ArrayList;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
-import java.util.ArrayList;
+
 
 /** Defines the TIP trip object.
  *
@@ -61,11 +62,12 @@ public class TIPTrip extends TIPHeader {
     log.trace("buildResponse -> {}", this);
   }
 
-  public Map getOptions() {
-    return options;
+  public Map getOptions() { return options;
   }
 
-  public ArrayList<Integer> getDistances() { return distances; }
+  public ArrayList<Integer> getDistances() { return distances;
+  }
 
-  public Map[] getPlaces() { return places; }
+  public Map[] getPlaces() { return places;
+  }
 }
