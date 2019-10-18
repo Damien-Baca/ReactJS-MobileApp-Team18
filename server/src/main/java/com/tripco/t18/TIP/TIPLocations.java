@@ -40,10 +40,11 @@ public class TIPLocations extends TIPHeader {
     Map<String, String>[] result = query.sendQuery(match, limit);
     found = Integer.parseInt(result[0].get("found"));
 
+
     ArrayList<Map<String, String>> workingPlaces = new ArrayList<>(
         Arrays.asList(result).subList(1, result.length));
 
-    places = (Map<String, String>[]) workingPlaces.toArray();
+    places = workingPlaces.toArray(new Map[workingPlaces.size()]);
 
     log.trace("buildResponse -> {}", this);
   }

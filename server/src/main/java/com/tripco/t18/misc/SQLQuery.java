@@ -73,15 +73,16 @@ public class SQLQuery {
     return query  + "limit " + limit + ";";
   }
 
+  @SuppressWarnings("unchecked")
   private static Map<String, String>[] constructResults(ResultSet countResult, ResultSet queryResult) throws SQLException {
-    ArrayList<Map<String, String>> workingResults = new ArrayList<Map<String, String>>();
-    HashMap<String, String> nextResult = new HashMap<String, String>();
+    countResult.next();
     Integer found = countResult.getInt(1);
-    nextResult.put("found", found.toString());
-    workingResults.add(nextResult);
+    ArrayList<Map<String, String>> workingResults = new ArrayList<>();
+    workingResults.add(new HashMap<String, String>() {{put("found", found.toString());}});
 
     while (queryResult.next()) {
-      nextResult.clear();
+      HashMap<String, String> nextResult = new HashMap<>();
+
       for (String identifier : identifiers) {
         nextResult.put(identifier, queryResult.getString(identifier));
       }
@@ -89,8 +90,6 @@ public class SQLQuery {
       workingResults.add(nextResult);
     }
 
-    System.out.println(workingResults);
-
-    return (Map<String, String>[]) workingResults.toArray();
+    return (Map<String, String>[]) workingResults.toArray(new Map[workingResults.size()]);
   }
 }
