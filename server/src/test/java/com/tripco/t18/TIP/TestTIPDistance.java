@@ -10,6 +10,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 
+
 /** Verifies the operation of the TIP distance class and its buildResponse method.
  */
 
