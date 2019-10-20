@@ -32,7 +32,6 @@ export default class Calculator extends Component {
       },
     };
   }
-
   render() {
     return (
         <Container>
@@ -59,8 +58,7 @@ export default class Calculator extends Component {
         <Pane header={'Calculator'}
               bodyJSX={<div>Determine the distance between the origin and
                 destination.
-                Change the units on the <b>Options</b> page.</div>}/>
-    );
+                Change the units on the <b>Options</b> page.</div>}/>);
   }
 
   createInputField(stateVar, coordinate) {
@@ -78,9 +76,8 @@ export default class Calculator extends Component {
                onChange={updateStateVarOnChange}
                valid={this.state.valid[stateVar+coordinate]}
                invalid={this.state.invalid[stateVar+coordinate]}
-               style={{width: "100%"}}/>
-    );
-
+               style={{width: "100%"}}
+        />);
   }
 
   createForm(stateVar) {
@@ -90,8 +87,7 @@ export default class Calculator extends Component {
                 <Form>
                   {this.createInputField(stateVar, 'latitude')}
                   {this.createInputField(stateVar, 'longitude')}
-                </Form>
-              }
+                </Form>}
         />);
   }
 
@@ -105,9 +101,9 @@ export default class Calculator extends Component {
                           disabled={ !(this.state.valid.originlatitude && this.state.valid.originlongitude && this.state.valid.destinationlatitude && this.state.valid.destinationlongitude) } //TODO
                   >Calculate</Button>
                 </div>}
-        />
-    );
+        />);
   }
+
   calculateDistance() {
     const tipConfigRequest = {
       'type': 'distance',
@@ -116,8 +112,6 @@ export default class Calculator extends Component {
       'destination': this.props.convertCoordinates(this.state.destination.latitude,this.state.destination.longitude),
       'earthRadius': this.props.options.units[this.props.options.activeUnit]
     };
-
-
 
     sendServerRequestWithBody('distance', tipConfigRequest,
         this.props.settings.serverPort)
@@ -132,8 +126,7 @@ export default class Calculator extends Component {
           errorMessage: this.props.createErrorBanner(
               response.statusText,
               response.statusCode,
-              `Request to ${this.props.settings.serverPort} failed.`
-          )
+              `Request to ${this.props.settings.serverPort} failed.`)
         });
       }
     });
@@ -148,7 +141,6 @@ export default class Calculator extends Component {
       this.setValidState(stateVar, field, value, false, true);
     }
   }
-
 
   setValidState(stateVar, field, value, valid, invalid) {
     let location = Object.assign({}, this.state[stateVar]);
