@@ -43,7 +43,10 @@ export default class Calculator extends Component {
           </Row>
           <Row>
             <Col xs={12} sm={6} md={4} lg={3}>
-              {this.createForm('origin','destination')}
+              {this.createForm('origin')}
+            </Col>
+            <Col xs={12} sm={6} md={4} lg={3}>
+              {this.createForm('destination')}
             </Col>
             <Col xs={12} sm={6} md={4} lg={3}>
               {this.createDistance()}
