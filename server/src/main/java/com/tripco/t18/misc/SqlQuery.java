@@ -72,7 +72,7 @@ public class SqlQuery {
    *
    * @param query     A string used to find matches amongst the database
    * @param limit     The maximum number of results returned
-   * @return
+   * @return A list of dictionaries containing the relevant results
    */
   public Map[] sendQuery(String query, Integer limit) {
     String cleanQuery = "'%" +query.replaceAll("[^A-Za-z0-9]","_") +"%'";
