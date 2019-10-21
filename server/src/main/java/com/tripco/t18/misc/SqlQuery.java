@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/** Performs a simple matching query for a database of Colorado locations.
+ */
 public class SqlQuery {
   // db configuration information
   private static final String myDriver = "com.mysql.jdbc.Driver";
@@ -117,8 +118,9 @@ public class SqlQuery {
     Integer found = countResult.getInt(1);
     ArrayList<Map<String, String>> workingResults = new ArrayList<>();
     workingResults.add(new HashMap<String, String>() {{
-      put("found", found.toString());
-    }});
+        put("found", found.toString());
+      }
+    });
 
     while (queryResult.next()) {
       HashMap<String, String> nextResult = new HashMap<>();
