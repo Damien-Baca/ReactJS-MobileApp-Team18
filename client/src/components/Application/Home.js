@@ -145,7 +145,6 @@ export default class Home extends Component {
   }
 
   reportGeoError(error) {
-    console.log(error.message);
     this.setState({
       errorMessage: this.props.createErrorBanner(
           "GEOLOCATOR ERROR:",

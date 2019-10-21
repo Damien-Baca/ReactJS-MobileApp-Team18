@@ -45,6 +45,7 @@ export default class DestinationQuery extends Component {
     return (
       <Button
           name='submit_query'
+          key='submit_query'
           onClick={() => this.handleServerSubmission()}
           disabled={this.state.match === ''}
       >Submit Query</Button>
@@ -71,7 +72,8 @@ export default class DestinationQuery extends Component {
       <ListGroupItem>
         <Button
             name='clear_results'
-            variante='danger'
+            key='clear_results'
+            variant='danger'
             onClick={() => this.setState({places: []})}
             disabled={this.state.places === []}
         >Clear Results</Button>
