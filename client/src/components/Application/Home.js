@@ -23,7 +23,10 @@ export default class Home extends Component {
     this.sumDistances = this.sumDistances.bind(this);
     this.sendServerRequest = this.sendServerRequest.bind(this);
     this.setDistances = this.setDistances.bind(this);
-
+    this.renderMapPane = this.renderMapPane.bind(this);
+    this.renderDestinations = this.renderDestinations.bind(this);
+    this.renderDestinationQuery = this.renderDestinationQuery.bind(this);
+    this.renderDestinationControls = this.renderDestinationControls.bind(this);
 
     this.state = {
       errorMessage: null,
@@ -44,14 +47,8 @@ export default class Home extends Component {
         <Container>
           {this.state.errorMessage}
           <Row>
-            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-              {this.renderMapPane()}
-              {this.renderDestinationControls()}
-            </Col>
-            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-              {this.renderDestinationQuery()}
-              {this.renderDestinations()}
-            </Col>
+            {this.generateColumn(this.renderMapPane, this.renderDestinationControls)}
+            {this.generateColumn(this.renderDestinationQuery, this.renderDestinations)}
           </Row>
         </Container>
     );
@@ -108,6 +105,15 @@ export default class Home extends Component {
                 resetDistances={this.resetDistances}
                 sumDistances={this.sumDistances}/>
               }/>
+    );
+  }
+
+  generateColumn(renderA, renderB) {
+    return (
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          {renderA()}
+          {renderB()}
+        </Col>
     );
   }
 
