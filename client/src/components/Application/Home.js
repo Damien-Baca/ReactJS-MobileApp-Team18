@@ -234,7 +234,6 @@ export default class Home extends Component {
   }
 
   sendServerRequest(type, tipRequest, callback) {
-    let returnState = null;
     let tipConfigRequest = {
       requestType: type,
       requestVersion: 3,
@@ -245,9 +244,13 @@ export default class Home extends Component {
     });
 
     sendServerRequestWithBody(type, tipConfigRequest,
-        this.props.settings.serverPort).then((response) => {
+        this.props.settings.serverPort).then((response) => this.handleServerResponse(response, callback));
+  }
+
+  handleServerResponse(response, callback) {
+    {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        returnState =  Object.assign({}, {
+        let returnState =  Object.assign({}, {
           errorMessage: null
         });
         Object.entries(response.body).forEach((entry) => {
@@ -264,7 +267,7 @@ export default class Home extends Component {
           )
         });
       }
-    });
+    }
   }
 
   sumDistances(index = this.state.distances.length - 1) {
