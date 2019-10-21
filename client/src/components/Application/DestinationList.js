@@ -89,6 +89,7 @@ export default class DestinationList extends Component {
   generateRemoveButton(index) {
     return (
         <Button className='btn-csu h-5 w-25 text-left'
+                style={{marginRight: 'auto'}}
                 size={'sm'}
                 name={'remove_' + index}
                 key={"button_remove_" + index}
