@@ -4,10 +4,10 @@ import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class TestSQLQuery {
+public class TestSqlQuery {
   @Test
   public void testNameQuery() {
-    SQLQuery testQuery = new SQLQuery();
+    SqlQuery testQuery = new SqlQuery();
     int expectedCount = (testQuery.localDatabase() ? 5 : 297);
 
     Map<String, String>[] queryResult = testQuery.sendQuery("airport", 10);
@@ -18,7 +18,7 @@ public class TestSQLQuery {
 
   @Test
   public void testLatitudeQuery() {
-    SQLQuery testQuery = new SQLQuery();
+    SqlQuery testQuery = new SqlQuery();
     int expectedCount = (testQuery.localDatabase() ? 9 : 223);
 
     Map<String, String>[] queryResult = testQuery.sendQuery("40", 10);

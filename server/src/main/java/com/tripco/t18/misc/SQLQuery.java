@@ -3,13 +3,13 @@ package com.tripco.t18.misc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
-import java.util.Map;
+import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 
-public class SQLQuery {
+public class SqlQuery {
   // db configuration information
   private final static String myDriver = "com.mysql.jdbc.Driver";
   private static String myUrl = "";
@@ -24,7 +24,7 @@ public class SQLQuery {
   private static String search = "";
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseTesting.md
-  public SQLQuery() {
+  public SqlQuery() {
     // Here are some environment variables. The first one is set by default in
     // Travis, and the other we set ourselves (see the other guide)
     String isTravis = System.getenv("TRAVIS");
