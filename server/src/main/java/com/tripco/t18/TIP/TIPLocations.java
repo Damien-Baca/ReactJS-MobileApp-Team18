@@ -1,11 +1,21 @@
 package com.tripco.t18.TIP;
 
 import com.tripco.t18.misc.SqlQuery;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.Map;
+
+/** Defines the TIP locations object.
+ * For use with restful API services,
+ * An object is created from the request JSON by the MicroServer using GSON.
+ * The buildResponse method is called to send a database query and return the results.
+ * The MicroServer constructs the response JSON from the object using GSON.
+ * For unit testing purposes,
+ * An object is created using the constructor below with appropriate parameters.
+ * The buildResponse method is called to find appropriate responses.
+ */
 
 public class TIPLocations extends TIPHeader {
   private String match;

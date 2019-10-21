@@ -2,21 +2,23 @@ package com.tripco.t18.misc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
 
+/** Performs a simple matching query for a database of Colorado locations.
+ */
 public class SqlQuery {
   // db configuration information
-  private final static String myDriver = "com.mysql.jdbc.Driver";
+  private static final String myDriver = "com.mysql.jdbc.Driver";
   private static String myUrl = "";
   private static String user = "";
   private static String pass = "";
   private static boolean local;
-  private final static String[] identifiers = {"name","latitude","longitude",
+  private static final String[] identifiers = {"name","latitude","longitude",
       "id","altitude","municipality","type"};
 
   // fill in SQL queries to count the number of records and to retrieve the data
@@ -24,6 +26,11 @@ public class SqlQuery {
   private static String search = "";
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseTesting.md
+
+  /**
+   * Initializes an SqlQuery object with the appropriate SQL database URL,
+   * user name, and password according to the current environment.
+   */
   public SqlQuery() {
     // Here are some environment variables. The first one is set by default in
     // Travis, and the other we set ourselves (see the other guide)
@@ -58,6 +65,15 @@ public class SqlQuery {
   }
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseGuide.md
+
+  /**
+   * Constructs and sends an SQL query based on input.
+   * Precondition: query is not empty and limit is >= 0
+   *
+   * @param query     A string used to find matches amongst the database
+   * @param limit     The maximum number of results returned
+   * @return A list of dictionaries containing the relevant results
+   */
   public Map[] sendQuery(String query, Integer limit) {
     String cleanQuery = "'%" +query.replaceAll("[^A-Za-z0-9]","_") +"%'";
     count = addLimit(constructSearch(cleanQuery, true), limit);
@@ -110,11 +126,15 @@ public class SqlQuery {
   }
 
   @SuppressWarnings("unchecked")
-  private static Map<String, String>[] constructResults(ResultSet countResult, ResultSet queryResult) throws SQLException {
+  private static Map<String, String>[] constructResults(ResultSet countResult,
+      ResultSet queryResult) throws SQLException {
     countResult.next();
     Integer found = countResult.getInt(1);
     ArrayList<Map<String, String>> workingResults = new ArrayList<>();
-    workingResults.add(new HashMap<String, String>() {{put("found", found.toString());}});
+    workingResults.add(new HashMap<String, String>() {{
+        put("found", found.toString());
+      }
+    });
 
     while (queryResult.next()) {
       HashMap<String, String> nextResult = new HashMap<>();
