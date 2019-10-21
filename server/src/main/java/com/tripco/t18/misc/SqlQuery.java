@@ -26,6 +26,11 @@ public class SqlQuery {
   private static String search = "";
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseTesting.md
+
+  /**
+   * Initializes an SqlQuery object with the appropriate SQL database URL,
+   * user name, and password according to the current environment.
+   */
   public SqlQuery() {
     // Here are some environment variables. The first one is set by default in
     // Travis, and the other we set ourselves (see the other guide)
@@ -60,6 +65,15 @@ public class SqlQuery {
   }
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseGuide.md
+
+  /**
+   * Constructs and sends an SQL query based on input.
+   * Precondition: query is not empty and limit is >= 0
+   *
+   * @param query     A string used to find matches amongst the database
+   * @param limit     The maximum number of results returned
+   * @return
+   */
   public Map[] sendQuery(String query, Integer limit) {
     String cleanQuery = "'%" +query.replaceAll("[^A-Za-z0-9]","_") +"%'";
     count = addLimit(constructSearch(cleanQuery, true), limit);
