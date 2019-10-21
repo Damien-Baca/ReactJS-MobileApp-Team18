@@ -21,7 +21,6 @@ export default class Home extends Component {
     this.resetDistances = this.resetDistances.bind(this);
     this.calculateDistances = this.calculateDistances.bind(this);
     this.sumDistances = this.sumDistances.bind(this);
-    this.handleUserDestination = this.handleUserDestination.bind(this);
     this.sendServerRequest = this.sendServerRequest.bind(this);
     this.setDistances = this.setDistances.bind(this);
     this.renderMapPane = this.renderMapPane.bind(this);
@@ -68,6 +67,7 @@ export default class Home extends Component {
     return (
         <Pane header={'Bon Voyage!'}
               bodyJSX={<DestinationControls
+                  userLocation={this.state.userLocation}
                   distances={this.state.distances}
                   destinations={this.props.destinations}
                   addDestination={this.props.addDestination}
@@ -129,11 +129,6 @@ export default class Home extends Component {
         )
       });
     }
-  }
-
-  handleUserDestination() {
-    this.props.addDestination(Object.assign({}, this.state.userLocation));
-    this.resetDistances();
   }
 
   storeUserLocation(position) {
