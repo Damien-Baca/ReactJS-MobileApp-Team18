@@ -2,21 +2,22 @@ package com.tripco.t18.misc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
+
 
 public class SqlQuery {
   // db configuration information
-  private final static String myDriver = "com.mysql.jdbc.Driver";
+  private static final String myDriver = "com.mysql.jdbc.Driver";
   private static String myUrl = "";
   private static String user = "";
   private static String pass = "";
   private static boolean local;
-  private final static String[] identifiers = {"name","latitude","longitude",
+  private static final String[] identifiers = {"name","latitude","longitude",
       "id","altitude","municipality","type"};
 
   // fill in SQL queries to count the number of records and to retrieve the data
@@ -110,11 +111,14 @@ public class SqlQuery {
   }
 
   @SuppressWarnings("unchecked")
-  private static Map<String, String>[] constructResults(ResultSet countResult, ResultSet queryResult) throws SQLException {
+  private static Map<String, String>[] constructResults(ResultSet countResult,
+      ResultSet queryResult) throws SQLException {
     countResult.next();
     Integer found = countResult.getInt(1);
     ArrayList<Map<String, String>> workingResults = new ArrayList<>();
-    workingResults.add(new HashMap<String, String>() {{put("found", found.toString());}});
+    workingResults.add(new HashMap<String, String>() {{
+      put("found", found.toString());
+    }});
 
     while (queryResult.next()) {
       HashMap<String, String> nextResult = new HashMap<>();

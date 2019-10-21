@@ -2,10 +2,11 @@ package com.tripco.t18.TIP;
 
 import com.tripco.t18.misc.SqlQuery;
 import java.util.Arrays;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class TIPLocations extends TIPHeader {
   private String match;
