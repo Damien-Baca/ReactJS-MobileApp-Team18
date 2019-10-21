@@ -249,7 +249,6 @@ export default class Home extends Component {
   }
 
   handleServerResponse(response, callback) {
-    {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         let returnState =  Object.assign({}, {
           errorMessage: null
@@ -268,7 +267,6 @@ export default class Home extends Component {
           )
         });
       }
-    }
   }
 
   sumDistances(index = this.state.distances.length - 1) {
