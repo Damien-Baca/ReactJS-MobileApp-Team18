@@ -9,28 +9,19 @@ import hgqPhoto from './images/hqMongoose.jpg'
 export default class About extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       team: {
-        "Christopher Ablein": {
-          img: cabeleinPhoto,
+        "Christopher Ablein": {img: cabeleinPhoto,
           text: "Has a psychological dependency on writing out plans "
               + "for projects. The Fighting Mongooses. That's a cool team name."
         },
-        "Damien Baca": {
-          img: dbacaPhoto,
-          text: "a CS Senior with a Math Minor"
+        "Damien Baca": {img: dbacaPhoto, text: "a CS Senior with a Math Minor"
         },
-        "James Lounsbury": {
-          img: jamesl84Photo,
-          text: "A CS and Physics major"
+        "James Lounsbury": {img: jamesl84Photo, text: "A CS and Physics major"
         },
-        "Long Chen": {
-          img: longChenPhoto,
-          text: "a ME major."
+        "Long Chen": {img: longChenPhoto, text: "a ME major."
         },
-        "Hayden Quintana": {
-          img: hgqPhoto,
+        "Hayden Quintana": {img: hgqPhoto,
           text: "likes long walks on the beach and poking dead things "
               + "with a stick"
         }
