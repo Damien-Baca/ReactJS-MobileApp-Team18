@@ -52,8 +52,22 @@ export default class DestinationControls extends Component {
             {this.renderAddUserDestinationButton()}
             {this.renderJSONInput()}
             {this.renderAddJSONButton()}
+            {this.renderExportFileButton()}
           </FormGroup>
         </Form>
+    );
+  }
+
+  renderExportFileButton() {
+    return (
+        <Button
+            className='btn-csu w-100 text-left'
+            name='exportFile'
+            key='button_exportFile'
+            active={true}
+            onClick={() => this.props.handleExportFile()}>
+          Export Trip to File
+        </Button>
     );
   }
 
