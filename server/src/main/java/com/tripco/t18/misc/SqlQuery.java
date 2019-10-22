@@ -52,7 +52,7 @@ public class SqlQuery {
       myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
       user = "cs314-db";
       pass = "eiK5liet1uej";
-      local = true;
+      local = false;
     }
 
     // Else, we must be running against the production database directly
