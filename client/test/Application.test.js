@@ -3,6 +3,7 @@ import React from 'react'
 import {shallow} from 'enzyme'
 import Application from '../src/components/Application/Application'
 
+const destinationsStub = [];
 const newDestinations = [{
   name: 'Fort Collins',
   latitude: '40.5853',
@@ -136,3 +137,19 @@ function testConvertCoordinates() {
 }
 
 test('Testing convertCoordinates', testConvertCoordinates);
+
+function testSwapDestinations() {
+  const app = shallow(<Application/>);
+  app.state().destinations = destinationsStub;
+  let expected = newDestinations;
+
+  app.instance().addDestination(newDestinations[0]);
+  app.instance().addDestination(newDestinations[2]);
+  app.instance().addDestination(newDestinations[1]);
+  app.instance().swapDestinations(2, 1);
+  let actual = app.state().destinations;
+
+  expect(actual).toEqual(expected);
+}
+
+test('Testing swapDestinations', testSwapDestinations);
