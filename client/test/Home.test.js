@@ -26,6 +26,7 @@ const buttonNamesInitial = [
   'loadJSON',
   'exportFile',
   'calculate',
+  'submit_query',
   'clear_destinations',
   'reverse_destinations'
 ];

@@ -103,7 +103,7 @@ export default class DestinationControls extends Component {
             name='add_user_destination'
             key='button_add_user_destination'
             active={true}
-            onClick={() => this.props.handleUserDestination()}>
+            onClick={() => this.handleUserDestination()}>
           Add User Location
         </Button>
     );
@@ -165,6 +165,11 @@ export default class DestinationControls extends Component {
       valid: superFalse,
       invalid: superFalse
     });
+    this.props.resetDistances();
+  }
+
+  handleUserDestination() {
+    this.props.addDestination(Object.assign({}, this.props.userLocation));
     this.props.resetDistances();
   }
 

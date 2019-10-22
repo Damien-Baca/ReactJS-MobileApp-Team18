@@ -6,6 +6,7 @@ import DestinationMap from "./DestinationMap";
 import DestinationControls from "./DestinationControls";
 import DestinationList from "./DestinationList";
 import {sendServerRequestWithBody} from '../../api/restfulAPI'
+import DestinationQuery from "./DestinationQuery";
 
 /*
  * Renders the home page.
@@ -21,8 +22,12 @@ export default class Home extends Component {
     this.resetDistances = this.resetDistances.bind(this);
     this.calculateDistances = this.calculateDistances.bind(this);
     this.sumDistances = this.sumDistances.bind(this);
-    this.handleUserDestination = this.handleUserDestination.bind(this);
-
+    this.sendServerRequest = this.sendServerRequest.bind(this);
+    this.setDistances = this.setDistances.bind(this);
+    this.renderMapPane = this.renderMapPane.bind(this);
+    this.renderDestinations = this.renderDestinations.bind(this);
+    this.renderDestinationQuery = this.renderDestinationQuery.bind(this);
+    this.renderDestinationControls = this.renderDestinationControls.bind(this);
 
     this.state = {
       errorMessage: null,
@@ -43,13 +48,8 @@ export default class Home extends Component {
         <Container>
           {this.state.errorMessage}
           <Row>
-            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-              {this.renderMapPane()}
-            </Col>
-            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-              {this.renderDestinationControls()}
-              {this.renderDestinations()}
-            </Col>
+            {this.generateColumn(this.renderMapPane, this.renderDestinationControls)}
+            {this.generateColumn(this.renderDestinationQuery, this.renderDestinations)}
           </Row>
         </Container>
     );
@@ -68,6 +68,7 @@ export default class Home extends Component {
     return (
         <Pane header={'Bon Voyage!'}
               bodyJSX={<DestinationControls
+                  userLocation={this.state.userLocation}
                   distances={this.state.distances}
                   destinations={this.props.destinations}
                   addDestination={this.props.addDestination}
@@ -77,7 +78,18 @@ export default class Home extends Component {
                   handleLoadJSON={this.handleLoadJSON}
                   handleExportFile={this.handleExportFile}
                   handleUserDestination={this.handleUserDestination}
-                  calculateDistances={this.calculateDistances}/>}/>
+                  calculateDistances={this.calculateDistances}/>
+              }/>
+    );
+  }
+
+  renderDestinationQuery() {
+    return (
+      <Pane header={'Database Query'}
+            bodyJSX={<DestinationQuery
+            addDestination={this.props.addDestination}
+            sendServerRequest={this.sendServerRequest}/>
+            }/>
     );
   }
 
@@ -97,6 +109,15 @@ export default class Home extends Component {
     );
   }
 
+  generateColumn(renderA, renderB) {
+    return (
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          {renderA()}
+          {renderB()}
+        </Col>
+    );
+  }
+
   handleGetUserLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((this.storeUserLocation),
@@ -110,11 +131,6 @@ export default class Home extends Component {
         )
       });
     }
-  }
-
-  handleUserDestination() {
-    this.props.addDestination(Object.assign({}, this.state.userLocation));
-    this.resetDistances();
   }
 
   storeUserLocation(position) {
@@ -191,7 +207,7 @@ export default class Home extends Component {
     });
   }
 
-  calculateDistances() {
+  async calculateDistances() {
     let convertedDestinations = [];
     this.props.destinations.forEach((destination) => {
       let convertedDestination = {name: destination.name};
@@ -201,30 +217,53 @@ export default class Home extends Component {
       convertedDestinations.push(convertedDestination);
     });
 
-    const tipConfigRequest = {
-      'type': 'trip',
-      'version': 3,
+    const tipRequest = {
       'options': {
         'title': 'My Trip',
         'earthRadius': String(
-          this.props.options.units[this.props.options.activeUnit]),
+            this.props.options.units[this.props.options.activeUnit]),
         'optimization': 'none'
       },
       'places': convertedDestinations,
       'distances': []
     };
 
-    this.sendServerTripRequest(tipConfigRequest);
+    this.sendServerRequest('trip', tipRequest, this.setDistances);
   }
 
-  sendServerTripRequest(tipConfigRequest) {
-    sendServerRequestWithBody('trip', tipConfigRequest,
-        this.props.settings.serverPort).then((response) => {
+  setDistances(newDistances) {
+    if (newDistances !== null) {
+      this.setState({
+        errorMessage: newDistances.errorMessage,
+        distances: newDistances.distances
+      })
+    }
+  }
+
+  sendServerRequest(type, tipRequest, callback) {
+    let tipConfigRequest = {
+      requestType: type,
+      requestVersion: 3,
+    };
+
+    Object.entries(tipRequest).forEach((entry) => {
+      tipConfigRequest[entry[0]] = entry[1];
+    });
+
+    sendServerRequestWithBody(type, tipConfigRequest,
+        this.props.settings.serverPort).then((response) => this.handleServerResponse(response, callback));
+  }
+
+  handleServerResponse(response, callback) {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        this.setState({
-          distances: Object.assign([], response.body.distances),
+        let returnState =  Object.assign({}, {
           errorMessage: null
         });
+        Object.entries(response.body).forEach((entry) => {
+          returnState[entry[0]] = entry[1];
+        });
+
+        callback(returnState);
       } else {
         this.setState({
           errorMessage: this.props.createErrorBanner(
@@ -234,7 +273,6 @@ export default class Home extends Component {
           )
         });
       }
-    });
   }
 
   sumDistances(index = this.state.distances.length - 1) {
