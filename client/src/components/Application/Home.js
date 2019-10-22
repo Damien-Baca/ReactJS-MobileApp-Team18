@@ -15,6 +15,7 @@ export default class Home extends Component {
     super(props);
 
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
+    this.handleExportFile = this.handleExportFile.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
     this.reportGeoError = this.reportGeoError.bind(this);
     this.resetDistances = this.resetDistances.bind(this);
@@ -74,6 +75,7 @@ export default class Home extends Component {
                   sumDistances={this.sumDistances}
                   resetDistances={this.resetDistances}
                   handleLoadJSON={this.handleLoadJSON}
+                  handleExportFile={this.handleExportFile}
                   handleUserDestination={this.handleUserDestination}
                   calculateDistances={this.calculateDistances}/>}/>
     );
@@ -136,6 +138,10 @@ export default class Home extends Component {
           error.message
       )
     });
+  }
+
+  handleExportFile() {
+    
   }
 
   handleLoadJSON(fileContents) {
