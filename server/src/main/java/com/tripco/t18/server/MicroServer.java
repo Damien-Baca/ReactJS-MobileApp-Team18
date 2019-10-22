@@ -8,6 +8,9 @@ import com.tripco.t18.TIP.TIPTrip;
 import com.tripco.t18.TIP.TIPLocation;
 import com.tripco.t18.TIP.TIPHeader;
 
+import TIPDistanceRequestSchema.json from '../../resources';
+import com.tripco.t18.validation.SchemaValidator;
+
 import java.lang.reflect.Type;
 
 import spark.Request;
@@ -113,6 +116,7 @@ class MicroServer {
     response.status(200);
     try {
       Gson jsonConverter = new Gson();
+      //throw to schema on TIPtype (conditional)
       TIPHeader tipRequest = jsonConverter.fromJson(request.body(), tipType);
       tipRequest.buildResponse();
       String responseBody = jsonConverter.toJson(tipRequest);

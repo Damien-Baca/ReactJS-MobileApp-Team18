@@ -20,14 +20,9 @@ public class SchemaValidator {
 
   private static final Logger log = LoggerFactory.getLogger(SchemaValidator.class);
 
-  public static void main(String[] args) {
-    if (args.length != 2) {
-      log.error("Requires two arguments! Usage: SchemaValidator <json-file> <schema-file>");
-      return;
-    }
-
-    String jsonPath = args[0];
-    String schemaPath = args[1];
+  public static boolean validate(String arg1, String arg2) {
+    String jsonPath = arg1;
+    String schemaPath = arg2;
 
     // Schema files should probably be placed in src/main/resources (see Maven guide)
     JSONObject jsonString = parseJsonFile(jsonPath);
