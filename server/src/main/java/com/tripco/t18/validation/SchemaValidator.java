@@ -77,7 +77,8 @@ public class SchemaValidator {
       validationResult = false;
     }
     catch (ValidationException e) {
-      log.error("Caught validation exception when validating schema! Root message: {}", e.getErrorMessage());
+      log.error("Caught validation exception when validating schema! Root message: {}", 
+                e.getErrorMessage());
       log.error("All messages from errors (including nested):");
       // For now, messages are probably just good for debugging, to see why something failed
       List<String> allMessages = e.getAllMessages();
