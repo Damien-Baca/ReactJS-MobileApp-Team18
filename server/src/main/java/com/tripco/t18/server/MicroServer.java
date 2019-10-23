@@ -8,7 +8,6 @@ import com.tripco.t18.TIP.TIPTrip;
 import com.tripco.t18.TIP.TIPLocation;
 import com.tripco.t18.TIP.TIPHeader;
 
-import TIPDistanceRequestSchema.json from '../../resources';
 import com.tripco.t18.validation.SchemaValidator;
 
 import java.lang.reflect.Type;
