@@ -14,17 +14,18 @@ export default class Optimizations extends Component {
               className='bg-csu-gold text-white font-weight-semibold'>Units</CardHeader>
           <CardBody>
             <ButtonGroup vertical className='w100'>
-              {this.renderUnitButtons(Object.assign([], this.props.options.optimizations))}
+              {this.renderOptimizationButtons(Object.assign([], this.props.options.optimizations))}
             </ButtonGroup>
           </CardBody>
         </Card>
     );
   }
 
-  renderOptimizationButtons(names) {
-    return names.map((optimization) =>
+  renderOptimizationButtons(opts) {
+    return opts.map((optimization) =>
         <Button
-            className='btn-csu w-100 text-left'
+            className='w-100 text-left'
+            variant='success'
             key={"button_" + optimization}
             active={this.props.activeOptimization === optimization}
             value={optimization}
