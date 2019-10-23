@@ -14,7 +14,7 @@ export default class ExportFileFormat extends Component {
               className='bg-csu-gold text-white font-weight-semibold'>ExportFileFormat</CardHeader>
           <CardBody>
             <ButtonGroup vertical className='w100'>
-              {this.renderUnitButtons(Object.keys(this.props.options.formats))}
+              {this.renderUnitButtons(Object.assign([], this.props.optimizations))}
             </ButtonGroup>
           </CardBody>
         </Card>

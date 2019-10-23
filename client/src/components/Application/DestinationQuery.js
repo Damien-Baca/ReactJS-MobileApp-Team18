@@ -8,9 +8,9 @@ export default class DestinationQuery extends Component {
     this.setPlaces = this.setPlaces.bind(this);
 
     this.state = {
-      match: 'dave',
+      match: '',
       limit: 10,
-      found: 0,
+      found: null,
       places: []
     }
   }
@@ -45,6 +45,7 @@ export default class DestinationQuery extends Component {
     return (
       <Button
           name='submit_query'
+          color='info'
           key='submit_query'
           onClick={() => this.handleServerSubmission()}
           disabled={this.state.match === ''}
@@ -53,17 +54,27 @@ export default class DestinationQuery extends Component {
   }
 
   renderConditionalPlaces() {
-    if (this.state.places.length !== 0) {
-      return (
-          <ListGroup>
-            <ListGroupItem>
-              {`Displaying ${Math.min(this.state.limit, this.state.found)}` +
-               ` results out of ${this.state.found}`}
-            </ListGroupItem>
-            {this.renderClearPlaces()}
-            {this.generateResultsList()}
-          </ListGroup>
-      );
+    if (this.state.found != null) {
+      if (this.state.places.length > 0) {
+        return (
+            <ListGroup>
+              <ListGroupItem>
+                {`Displaying ${Math.min(this.state.limit, this.state.found)}` +
+                ` results out of ${this.state.found}`}
+              </ListGroupItem>
+              {this.renderClearPlaces()}
+              {this.generateResultsList()}
+            </ListGroup>
+        );
+      } else {
+        return (
+            <ListGroup>
+              <ListGroupItem>
+                {'No result found.'}
+              </ListGroupItem>
+            </ListGroup>
+        );
+      }
     }
   }
 
@@ -71,10 +82,10 @@ export default class DestinationQuery extends Component {
     return (
       <ListGroupItem>
         <Button
+            color='danger'
             name='clear_results'
             key='clear_results'
-            variant='danger'
-            onClick={() => this.setState({places: []})}
+            onClick={() => this.setState({places: [], found: null})}
             disabled={this.state.places === []}
         >Clear Results</Button>
       </ListGroupItem>
@@ -102,7 +113,8 @@ export default class DestinationQuery extends Component {
 
   generateAddDestinationButton(index) {
     return (
-        <Button className='btn-csu h-5 w-10'
+        <Button className='h-5 w-10'
+                color='success'
                 size={'sm'}
                 name={'add_query_' + index}
                 key={"button_add_" + index}
@@ -137,12 +149,11 @@ export default class DestinationQuery extends Component {
   }
 
   setPlaces(newPlaces) {
-    let testPlaces = Object.assign({}, newPlaces);
-    console.log("DestinationQuery Received: " + testPlaces);
+    this.props.setErrorBanner(newPlaces.errorMessage);
 
     this.setState( {
       found: newPlaces.found,
-      places: Object.assign([], newPlaces.places)
+      places: newPlaces.places
     })
   }
 }
