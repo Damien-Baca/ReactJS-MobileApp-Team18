@@ -73,6 +73,7 @@ export default class Home extends Component {
                   destinations={this.props.destinations}
                   addDestination={this.props.addDestination}
                   validation={this.props.validation}
+                  optimization={this.props.options.activeOptimization}
                   sumDistances={this.sumDistances}
                   resetDistances={this.resetDistances}
                   handleLoadJSON={this.handleLoadJSON}
@@ -157,18 +158,18 @@ export default class Home extends Component {
   }
 
   handleExportFile() {
-    var saveTrip = {
+    let saveTrip = {
       "requestType"    : "trip",
       "requestVersion" : 3,
       "options"        : {"optimization" : "none"},
       "places"         : this.props.destinations,
       "distances"      : this.state.distances
-    }
+    };
 
     if(this.state.optimizations != null)
       saveTrip.options["optimization"] = this.state.optimizations;
     
-    var json = JSON.stringify(saveTrip);
+    let json = JSON.stringify(saveTrip);
     if (window.navigator && window.navigator.msSaveOrOpenBlob)  {
       let blob = new Blob([json], {type: "octet/stream"});
       window.navigator.msSaveOrOpenBlob(blob, "exportedTrip.json");
@@ -227,7 +228,7 @@ export default class Home extends Component {
     });
   }
 
-  async calculateDistances() {
+  calculateDistances(optimization) {
     let convertedDestinations = [];
     this.props.destinations.forEach((destination) => {
       let convertedDestination = {name: destination.name};
@@ -242,7 +243,7 @@ export default class Home extends Component {
         'title': 'My Trip',
         'earthRadius': String(
             this.props.options.units[this.props.options.activeUnit]),
-        'optimization': 'none'
+        'optimization': optimization
       },
       'places': convertedDestinations,
       'distances': []

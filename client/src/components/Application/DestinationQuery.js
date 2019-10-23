@@ -8,7 +8,7 @@ export default class DestinationQuery extends Component {
     this.setPlaces = this.setPlaces.bind(this);
 
     this.state = {
-      match: 'dave',
+      match: '',
       limit: 10,
       found: 0,
       places: []

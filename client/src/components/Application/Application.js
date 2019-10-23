@@ -93,38 +93,63 @@ export default class Application extends Component {
   createApplicationPage(pageToRender) {
     switch (pageToRender) {
       case 'calc':
-        return <Calculator options={this.state.planOptions}
-                           settings={this.state.clientSettings}
-                           createErrorBanner={this.createErrorBanner}
-                           convertCoordinates={this.convertCoordinates}
-                           validation={this.validation}/>;
+        return this.renderCalculator();
 
       case 'options':
-        return <Options options={this.state.planOptions}
-                        config={this.state.serverConfig}
-                        updateOption={this.updatePlanOption}/>;
+        return this.renderOptions();
 
       case 'about':
         return <About/>;
 
       case 'settings':
-        return <Settings settings={this.state.clientSettings}
-                         serverConfig={this.state.serverConfig}
-                         updateSetting={this.updateClientSetting}/>;
+        return this.renderSettings();
+
       default:
-        return <Home options={this.state.planOptions}
-                     destinations={this.state.destinations}
-                     settings={this.state.clientSettings}
-                     swapDestinations={this.swapDestinations}
-                     addDestination={this.addDestination}
-                     removeDestination={this.removeDestination}
-                     clearDestinations={this.clearDestinations}
-                     reverseDestinations={this.reverseDestinations}
-                     createErrorBanner={this.createErrorBanner}
-                     convertCoordinates={this.convertCoordinates}
-                     validation={this.validation}
-                     validateCoordinates={this.validateCoordinates}/>;
+        return this.renderHome();
     }
+  }
+
+  renderCalculator() {
+    return (
+      <Calculator options={this.state.planOptions}
+                  settings={this.state.clientSettings}
+                  createErrorBanner={this.createErrorBanner}
+                  convertCoordinates={this.convertCoordinates}
+                  validation={this.validation}/>
+    );
+  }
+
+  renderOptions() {
+    return (
+        <Options options={this.state.planOptions}
+                 config={this.state.serverConfig}
+                 updateOption={this.updatePlanOption}/>
+    );
+  }
+
+  renderSettings() {
+    return (
+        <Settings settings={this.state.clientSettings}
+                  serverConfig={this.state.serverConfig}
+                  updateSetting={this.updateClientSetting}/>
+    );
+  }
+
+  renderHome() {
+    return (
+        <Home options={this.state.planOptions}
+              destinations={this.state.destinations}
+              settings={this.state.clientSettings}
+              swapDestinations={this.swapDestinations}
+              addDestination={this.addDestination}
+              removeDestination={this.removeDestination}
+              clearDestinations={this.clearDestinations}
+              reverseDestinations={this.reverseDestinations}
+              createErrorBanner={this.createErrorBanner}
+              convertCoordinates={this.convertCoordinates}
+              validation={this.validation}
+              validateCoordinates={this.validateCoordinates}/>
+    );
   }
 
   processConfigResponse(config) {
