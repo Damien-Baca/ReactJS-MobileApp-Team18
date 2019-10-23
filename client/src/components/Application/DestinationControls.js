@@ -22,8 +22,9 @@ export default class DestinationControls extends Component {
           <Row>
             {this.renderAddDestination()}
           </Row>
-          <Row>
-            {this.renderDestinationOptions()}
+          <Row style={{display:"flex"}} >
+            {this.renderCalculateDistances()}
+            {this.renderOptimizeDistances()}
           </Row>
         </Container>
     );
@@ -71,14 +72,29 @@ export default class DestinationControls extends Component {
     );
   }
 
-  renderDestinationOptions() {
+  renderCalculateDistances() {
     return (
         <Button
             name='calculate'
-            onClick={() => this.props.calculateDistances()}
+            color='info'
+            style={{marginLeft: 'auto'}}
+            onClick={() => this.props.calculateDistances('none')}
             disabled={this.props.destinations.length === 0}
         >Calculate Trip Distances</Button>
     );
+  }
+
+  renderOptimizeDistances() {
+      return (
+        <Button
+          name='optimize'
+          color='info'
+          style={{marginLeft: 'auto'}}
+          onClick={() => this.props.calculateDistances(this.props.optimization)}
+          disabled={this.props.destinations.length === 0 ||
+          this.props.optimization === 'none'}
+        >Optimize Trip Distances</Button>
+      );
   }
 
   renderAddDestinationButton() {
@@ -90,16 +106,16 @@ export default class DestinationControls extends Component {
             active={true}
             onClick={() => this.handleNewDestination()}
             disabled={!(this.state.valid.latitude && this.state.valid.longitude)
-            || (this.state.newDestination.name === '')}>
-          Add New Destination
-        </Button>
+            || (this.state.newDestination.name === '')}
+        >Add New Destination</Button>
     );
   }
 
   renderAddUserDestinationButton() {
     return (
         <Button
-            className='btn-csu w-100 text-left'
+            className='w-100 text-left'
+            color='success'
             name='add_user_destination'
             key='button_add_user_destination'
             active={true}
@@ -122,10 +138,12 @@ export default class DestinationControls extends Component {
   renderAddJSONButton() {
     return (
         <Button
-            className='btn-csu w-100 text-left'
+            className='w-100 text-left'
+            color='success'
             name='loadJSON'
             key='button_loadJSON'
             active={true}
+            disabled={this.state.fileContents === null}
             onClick={() => this.props.handleLoadJSON(this.state.fileContents)}>
           Import JSON
         </Button>

@@ -4,6 +4,12 @@ import Home from '../src/components/Application/Home'
 import {mount} from 'enzyme'
 
 const destinations = [];
+const options = {
+  units: {'miles': 3958.8, 'kilometers': 6371},
+  activeUnit: 'miles',
+  optimizations: ['none', 'short'],
+  activeOptimization: 'none'
+};
 const initialState = {
   errorMessage: null,
   userLocation: {
@@ -27,6 +33,7 @@ const buttonNamesInitial = [
   'loadJSON',
   'exportFile',
   'calculate',
+  'optimize',
   'submit_query',
   'clear_destinations',
   'reverse_destinations'
@@ -40,6 +47,7 @@ const createErrorBannerDummy = () => {
 
 function testInitialState() {
   const home = mount((<Home destinations = {destinations}
+                            options={options}
                             createErrorBanner={createErrorBannerDummy}/>));
   let expected = initialState;
   let actual = home.state();
@@ -51,6 +59,7 @@ test('Testing inital state.', testInitialState);
 
 function testCreateInputFields() {
   const home = mount((<Home destinations={destinations}
+                            options={options}
                             validation={validationDummy}
                             createErrorBanner={createErrorBannerDummy}/>));
   let expectedInputs = inputNames;
@@ -68,6 +77,7 @@ test('Testing Input rendering.', testCreateInputFields);
 
 function testCreateButtons() {
   const home = mount((<Home destinations={destinations}
+                            options={options}
                             createErrorBanner={createErrorBannerDummy}/>));
   let expectedButtons = buttonNamesInitial;
 

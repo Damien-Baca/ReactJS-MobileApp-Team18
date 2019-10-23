@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {Container, Row, Col} from 'reactstrap'
 import {Button} from 'reactstrap'
 import {Form, Input} from 'reactstrap'
-import {sendServerRequestWithBody} from '../../../api/restfulAPI'
 import Pane from '../Pane';
 
 export default class Calculator extends Component {
@@ -12,6 +11,7 @@ export default class Calculator extends Component {
     this.updateLocationOnChange = this.updateLocationOnChange.bind(this);
     this.calculateDistance = this.calculateDistance.bind(this);
     this.createInputField = this.createInputField.bind(this);
+    this.setDistance = this.setDistance.bind(this);
 
     this.state = {
       origin: {latitude: '', longitude: ''},
@@ -108,7 +108,7 @@ export default class Calculator extends Component {
   }
 
   calculateDistance() {
-    const tipConfigRequest = {
+    const tipRequest = {
       'type': 'distance',
       'version': 3,
       'origin': this.props.convertCoordinates(this.state.origin.latitude,this.state.origin.longitude),
@@ -116,22 +116,13 @@ export default class Calculator extends Component {
       'earthRadius': this.props.options.units[this.props.options.activeUnit]
     };
 
-    sendServerRequestWithBody('distance', tipConfigRequest,
-        this.props.settings.serverPort)
-    .then((response) => {
-      if (response.statusCode >= 200 && response.statusCode <= 299) {
-        this.setState({
-          distance: response.body.distance,
-          errorMessage: null
-        });
-      } else {
-        this.setState({
-          errorMessage: this.props.createErrorBanner(
-              response.statusText,
-              response.statusCode,
-              `Request to ${this.props.settings.serverPort} failed.`)
-        });
-      }
+    this.props.sendServerRequest('distance', tipRequest, this.setDistance);
+  }
+
+  setDistance(newDistance) {
+    this.setState({
+      errorMessage: newDistance.errorMessage,
+      distance: newDistance.distance
     });
   }
 
