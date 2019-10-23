@@ -23,7 +23,8 @@ export default class DestinationList extends Component {
   renderClearDestinations() {
     return (
         <ListGroupItem>
-          <Button className='btn-csu h-5 w-100 text-left'
+          <Button className='h-5 w-100 text-left'
+                  color='danger'
                   size={'sm'}
                   name='clear_destinations'
                   key={"button_clear_all_destinations"}
@@ -40,6 +41,7 @@ export default class DestinationList extends Component {
     return (
       <ListGroupItem>
         <Button className='btn-csu h-5 w-100 text-left'
+                color='warning'
                 size={'sm'}
                 name='reverse_destinations'
                 key={"button_reverse_destinations"}
@@ -88,13 +90,14 @@ export default class DestinationList extends Component {
 
   generateRemoveButton(index) {
     return (
-        <Button className='btn-csu h-5 w-25 text-left'
+        <Button className='h-5 w-25 text-left'
+                color='danger'
                 style={{marginRight: 'auto'}}
                 size={'sm'}
                 name={'remove_' + index}
                 key={"button_remove_" + index}
                 value='Remove Destination'
-                active={false}
+                active={true}
                 onClick={() => this.handleRemoveDestination(index)}
         >Remove</Button>
     );
@@ -102,7 +105,8 @@ export default class DestinationList extends Component {
 
   generateNewOriginButton(index) {
     return (
-        <Button className='btn-csu h-5 w-25 text-left'
+        <Button className='h-5 w-25 text-left'
+                color='primary'
                 size={'sm'}
                 name={'set_origin_' + index}
                 key={"button_set_origin_" + index}
@@ -116,7 +120,8 @@ export default class DestinationList extends Component {
 
   generateMoveUpButton(index) {
     return (
-        <Button className='btn-csu h-5 w-25 text-right'
+        <Button className='h-5 w-25 text-right'
+                color='primary'
                 style={{marginLeft: 'auto'}}
                 size={'sm'}
                 name={'move_up_' + index}
@@ -131,7 +136,8 @@ export default class DestinationList extends Component {
 
   generateMoveDownButton(index) {
     return (
-        <Button className='btn-csu h-5 w-25 text-right'
+        <Button className='h-5 w-25 text-right'
+                color='primary'
                 style={{marginLeft: 'auto'}}
                 size={'sm'}
                 name={'move_down_' + index}

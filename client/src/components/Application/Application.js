@@ -272,7 +272,7 @@ export default class Application extends Component {
       callback(returnState);
     } else {
       return {
-        errorMessage: this.props.createErrorBanner(
+        errorMessage: this.createErrorBanner(
             response.statusText,
             response.statusCode,
             `Request to ${this.state.clientSettings.serverPort} failed.`

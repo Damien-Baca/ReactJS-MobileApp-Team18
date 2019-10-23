@@ -14,7 +14,7 @@ export default class Units extends Component {
               className='bg-csu-gold text-white font-weight-semibold'>Units</CardHeader>
           <CardBody>
             <ButtonGroup vertical className='w100'>
-              {this.renderUnitButtons(Object.keys(this.props.options.units))}
+              {this.renderUnitButtons(Object.keys(this.props.units))}
             </ButtonGroup>
           </CardBody>
         </Card>
@@ -24,7 +24,7 @@ export default class Units extends Component {
   renderUnitButtons(names) {
     return names.sort().map((unit) =>
         <Button
-            className='btn-csu w-100 text-left'
+            className='btn-csu w-100'
             key={"button_" + unit}
             active={this.props.activeUnit === unit}
             value={unit}
