@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Container, Row, Col} from 'reactstrap'
 import Pane from '../Pane';
 import Units from './Units'
+import Optimizations from "./Optimizations";
 
 /* Options allows the user to change the parameters for planning
  * and rendering the trip map and itinerary.
@@ -26,6 +27,11 @@ export default class Options extends Component {
               <Units options={this.props.options}
                      activeUnit={this.props.options.activeUnit}
                      updateOption={this.props.updateOption}/>
+            </Col>
+            <Col>
+              <Optimizations options={this.props.options}
+                             activeOptimization={this.props.options.activeOptimization}
+                             updateOption={this.props.updateOption}/>
             </Col>
           </Row>
         </Container>

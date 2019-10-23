@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Card, CardHeader, CardBody} from 'reactstrap'
 import {Button, ButtonGroup} from 'reactstrap'
 
-export default class Units extends Component {
+export default class Optimizations extends Component {
   constructor(props) {
     super(props)
   }
@@ -14,7 +14,7 @@ export default class Units extends Component {
               className='bg-csu-gold text-white font-weight-semibold'>Units</CardHeader>
           <CardBody>
             <ButtonGroup vertical className='w100'>
-              {this.renderUnitButtons(Object.keys(this.props.options.units))}
+              {this.renderUnitButtons(Object.keys(this.props.options.optimizations))}
             </ButtonGroup>
           </CardBody>
         </Card>
@@ -22,16 +22,16 @@ export default class Units extends Component {
   }
 
   renderUnitButtons(names) {
-    return names.sort().map((unit) =>
+    return names.sort().map((optimization) =>
         <Button
             className='btn-csu w-100 text-left'
-            key={"button_" + unit}
-            active={this.props.activeUnit === unit}
-            value={unit}
-            onClick={(event) => this.props.updateOption('activeUnit',
+            key={"button_" + optimization}
+            active={this.props.activeOptimization === optimization}
+            value={optimization}
+            onClick={(event) => this.props.updateOption('activeOptimization',
                 event.target.value)}
         >
-          {unit.charAt(0).toUpperCase() + unit.slice(1)}
+          {optimization.charAt(0).toUpperCase() + optimization.slice(1)}
         </Button>
     );
   }
