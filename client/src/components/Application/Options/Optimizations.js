@@ -21,7 +21,7 @@ export default class Optimizations extends Component {
     );
   }
 
-  renderUnitButtons(names) {
+  renderOptimizationButtons(names) {
     return names.map((optimization) =>
         <Button
             className='btn-csu w-100 text-left'

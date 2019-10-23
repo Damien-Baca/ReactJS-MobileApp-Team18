@@ -102,13 +102,21 @@ export default class Application extends Component {
         return this.renderCalculator();
 
       case 'options':
-        return this.renderOptions();
+        return (
+          <Options options={this.state.planOptions}
+                   config={this.state.serverConfig}
+                   updateOption={this.updatePlanOption}/>
+                   );
 
       case 'about':
         return <About/>;
 
       case 'settings':
-        return this.renderSettings();
+        return (
+            <Settings settings={this.state.clientSettings}
+                      serverConfig={this.state.serverConfig}
+                      updateSetting={this.updateClientSetting}/>
+        );
 
       default:
         return this.renderHome();
@@ -123,22 +131,6 @@ export default class Application extends Component {
                   convertCoordinates={this.convertCoordinates}
                   validation={this.validation}
                   sendServerRequest={this.sendServerRequest}/>
-    );
-  }
-
-  renderOptions() {
-    return (
-        <Options options={this.state.planOptions}
-                 config={this.state.serverConfig}
-                 updateOption={this.updatePlanOption}/>
-    );
-  }
-
-  renderSettings() {
-    return (
-        <Settings settings={this.state.clientSettings}
-                  serverConfig={this.state.serverConfig}
-                  updateSetting={this.updateClientSetting}/>
     );
   }
 
@@ -202,19 +194,14 @@ export default class Application extends Component {
   }
 
   clearDestinations() {
-    let clearDestinations = [];
-
     this.setState({
-      destinations: clearDestinations
+      destinations: []
     });
   }
 
   reverseDestinations() {
-    let reverseDestinations = Object.assign([], this.state.destinations);
-    reverseDestinations.reverse();
-
     this.setState({
-      destinations: reverseDestinations
+      destinations: Object.assign([], this.state.destinations).reverse()
     });
   }
 
