@@ -157,7 +157,27 @@ export default class Home extends Component {
   }
 
   handleExportFile() {
+    var saveTrip = {
+      "requestType"    : "trip",
+      "requestVersion" : 3,
+      "options"        : {"optimization" : "none"},
+      "places"         : this.props.destinations,
+      "distances"      : this.state.distances
+    }
+
+    if(this.state.optimizations != null)
+      saveTrip.options["optimization"] = this.state.optimizations;
     
+    var json = JSON.stringify(saveTrip);
+    if (window.navigator && window.navigator.msSaveOrOpenBlob)  {
+      let blob = new Blob([json], {type: "octet/stream"});
+      window.navigator.msSaveOrOpenBlob(blob, "exportedTrip.json");
+    } else {
+        let file = new File([json], "exportedTrip.json", {type: "octet/stream"});
+        let exportUrl = URL.createObjectURL(file);
+        window.location.assign(exportUrl);
+        URL.revokeObjectURL(exportUrl);
+    }
   }
 
   handleLoadJSON(fileContents) {
