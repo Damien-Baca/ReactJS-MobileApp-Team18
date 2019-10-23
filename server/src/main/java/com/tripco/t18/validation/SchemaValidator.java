@@ -68,7 +68,8 @@ public class SchemaValidator {
     boolean validationResult = true;
     try {
       Schema schema = SchemaLoader.load(jsonSchema);
-      // This is the line that will throw a ValidationException if anything doesn't conform to the schema!
+      // This is the line that will throw a ValidationException 
+      // if anything doesn't conform to the schema!
       schema.validate(json);
     }
     catch (SchemaException e) {
