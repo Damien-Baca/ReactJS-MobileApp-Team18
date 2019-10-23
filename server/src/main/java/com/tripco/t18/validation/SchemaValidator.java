@@ -30,7 +30,7 @@ public class SchemaValidator {
 
     if (null == jsonString || null == schemaString) {
       log.error("Failed to read JSON strings!");
-      return;
+      return false;
     }
 
     log.trace(jsonString.toString());
@@ -39,6 +39,7 @@ public class SchemaValidator {
 
     boolean isValid = performValidation(jsonString, schemaString);
     log.info("Was JSON body valid when checked against the schema?: {}", isValid);
+    return isValid;
   }
 
   private static JSONObject parseJsonFile(String path) {
