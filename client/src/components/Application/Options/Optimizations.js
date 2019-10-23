@@ -11,7 +11,7 @@ export default class Optimizations extends Component {
     return (
         <Card className='text-center'>
           <CardHeader
-              className='bg-csu-gold text-white font-weight-semibold'>Units</CardHeader>
+              className='bg-csu-gold text-white font-weight-semibold'>Optimizations</CardHeader>
           <CardBody>
             <ButtonGroup vertical className='w100'>
               {this.renderOptimizationButtons(Object.assign([], this.props.optimizations))}
@@ -25,6 +25,7 @@ export default class Optimizations extends Component {
     return opts.map((optimization) =>
         <Button
             className='btn-csu w-100 text-left'
+            color='success'
             key={"button_" + optimization}
             active={this.props.activeOptimization === optimization}
             value={optimization}

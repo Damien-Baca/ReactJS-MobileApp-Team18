@@ -23,12 +23,12 @@ export default class Options extends Component {
             </Col>
           </Row>
           <Row>
-            <Col xs="12" sm="12" md="6" lg="4" xl="3">
+            <Col>
               <Units units={this.props.options.units}
                      activeUnit={this.props.options.activeUnit}
                      updateOption={this.props.updateOption}/>
             </Col>
-            <Col xs="8" sm="8" md="6" lg="4" xl="3">
+            <Col>
               <Optimizations optimizations={this.props.options.optimizations}
                              activeOptimization={this.props.options.activeOptimization}
                              updateOption={this.props.updateOption}/>
@@ -37,6 +37,8 @@ export default class Options extends Component {
         </Container>
     )
   }
+
+
 
   heading() {
     return (
