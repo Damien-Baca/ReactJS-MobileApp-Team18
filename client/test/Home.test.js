@@ -18,7 +18,8 @@ const inputNames = [
   'name',
   'latitude',
   'longitude',
-  'json_file'
+  'json_file',
+  'query_match'
 ];
 const buttonNamesInitial = [
   'add_new_destination',

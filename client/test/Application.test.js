@@ -29,7 +29,7 @@ function testInitialState() {
 
   let actualOptions = app.state().planOptions;
   let expectedOptions = {
-    units: {kilometers: 6371, miles: 3959},
+    units: {kilometers: 6371, miles: 3958.8},
     activeUnit: 'miles'
   };
 
@@ -44,7 +44,7 @@ function mockConfigResponse() {
         body: {
           'placeAttributes': ["latitude", "longitude", "serverName"],
           'requestType': "config",
-          'requestVersion': 1,
+          'requestVersion': 3,
           'serverName': "t18"
         },
         type: 'basic',

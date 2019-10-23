@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TestGreatCircleDistance {
-  private final Double earthRadiusMiles= 3959.0;
+  private final Double earthRadiusMiles= 3958.8;
   private final Double earthRadiusKilometer= 6371.0;
   private Map<String, Object> origin;
   private Map<String, Object> destination;
@@ -94,7 +94,7 @@ public class TestGreatCircleDistance {
     origin.replace("longitude","2.294432");
     destination.replace("latitude","-33.856646");
     destination.replace("longitude","151.215404");
-    expect = 10542;
+    expect = 10541;
     actual = test.calculateDistance(origin,destination,earthRadiusMiles);
     assertEquals("Paris to Sydney",expect,actual);
     origin.replace("latitude","40.5753");

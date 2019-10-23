@@ -7,7 +7,7 @@ import Units from '../src/components/Application/Options/Units'
 
 const startProperties = {
   'options': {
-    'units': {'miles':3959, 'kilometers':6371},
+    'units': {'miles':3958.8, 'kilometers':6371},
     'activeUnit': 'miles'
   },
   'updateOption' : () => {}
