@@ -8,7 +8,9 @@ const options = {
   units: {'miles': 3958.8, 'kilometers': 6371},
   activeUnit: 'miles',
   optimizations: ['none', 'short'],
-  activeOptimization: 'none'
+  activeOptimization: 'none',
+  formats: ['json', 'csv'],
+  activeFileFormat: 'json'
 };
 const initialState = {
   errorMessage: null,
