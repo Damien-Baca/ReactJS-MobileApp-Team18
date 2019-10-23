@@ -28,7 +28,7 @@ export default class Options extends Component {
                      activeUnit={this.props.options.activeUnit}
                      updateOption={this.props.updateOption}/>
             </Col>
-            <Col>
+            <Col xs="8" sm="8" md="6" lg="4" xl="3">
               <Optimizations options={this.props.options}
                              activeOptimization={this.props.options.activeOptimization}
                              updateOption={this.props.updateOption}/>

@@ -14,7 +14,7 @@ export default class Optimizations extends Component {
               className='bg-csu-gold text-white font-weight-semibold'>Units</CardHeader>
           <CardBody>
             <ButtonGroup vertical className='w100'>
-              {this.renderUnitButtons(Object.keys(this.props.options.optimizations))}
+              {this.renderUnitButtons(Object.assign([], this.props.options.optimizations))}
             </ButtonGroup>
           </CardBody>
         </Card>
@@ -22,7 +22,7 @@ export default class Optimizations extends Component {
   }
 
   renderUnitButtons(names) {
-    return names.sort().map((optimization) =>
+    return names.map((optimization) =>
         <Button
             className='btn-csu w-100 text-left'
             key={"button_" + optimization}
