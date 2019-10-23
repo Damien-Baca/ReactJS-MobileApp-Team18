@@ -30,7 +30,7 @@ export default class Options extends Component {
                      updateOption={this.props.updateOption}/>
             </Col>
             
-            <Col xs="12" sm="12" md="6" lg="4" xl="3">
+            <Col>
               <ExportFileFormat formats={this.props.options.formats}
                                 activeFileFormat={this.props.options.activeFileFormat}
                                 updateOption={this.props.updateOption}/>
