@@ -20,12 +20,11 @@ public class SchemaValidator {
 
   private static final Logger log = LoggerFactory.getLogger(SchemaValidator.class);
 
-  public static boolean validate(String arg1, String arg2) {
-    String jsonPath = arg1;
-    String schemaPath = arg2;
+  public static boolean validate(JSONObject jsonString, String schemaPath) {
+
 
     // Schema files should probably be placed in src/main/resources (see Maven guide)
-    JSONObject jsonString = parseJsonFile(jsonPath);
+
     JSONObject schemaString = parseJsonFile(schemaPath);
 
     if (null == jsonString || null == schemaString) {

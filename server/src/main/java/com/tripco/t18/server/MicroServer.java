@@ -117,7 +117,10 @@ class MicroServer {
       Gson jsonConverter = new Gson();
       //throw to schema on TIPtype (conditional)
       TIPHeader tipRequest = jsonConverter.fromJson(request.body(), tipType);
-      if(SchemaValidator.validate(request.body(), "../../"+tipType.getTypeName()+"RequestSchema.json") ) {
+      System.out.println("request.body() start");
+      System.out.println(request.body());
+      System.out.println("request.body() end");
+      if(SchemaValidator.validate(request.body() , "../../"+tipType.getTypeName()+"RequestSchema.json") ) {
         tipRequest.buildResponse();
         String responseBody = jsonConverter.toJson(tipRequest);
         log.trace("TIP Response: {}", responseBody);
