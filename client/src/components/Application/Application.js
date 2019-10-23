@@ -27,12 +27,12 @@ export default class Application extends Component {
     this.convertCoordinates = this.convertCoordinates.bind(this);
     this.validateCoordinates = this.validateCoordinates.bind(this);
     this.validation = this.validation.bind(this);
-    this.setNewOrigin = this.setNewOrigin.bind(this);
+    this.swapDestinations = this.swapDestinations.bind(this);
 
     this.state = {
       serverConfig: null,
       planOptions: {
-        units: {'miles': 3959, 'kilometers': 6371},
+        units: {'miles': 3958.8, 'kilometers': 6371},
         activeUnit: 'miles'
       },
       clientSettings: {
@@ -113,7 +113,7 @@ export default class Application extends Component {
         return <Home options={this.state.planOptions}
                      destinations={this.state.destinations}
                      settings={this.state.clientSettings}
-                     setNewOrigin={this.setNewOrigin}
+                     swapDestinations={this.swapDestinations}
                      addDestination={this.addDestination}
                      removeDestination={this.removeDestination}
                      clearDestinations={this.clearDestinations}
@@ -183,11 +183,10 @@ export default class Application extends Component {
     });
   }
 
-  setNewOrigin(index) {
+  swapDestinations(index1, index2) {
     let newDestinationList = Object.assign([], this.state.destinations);
-    let newOrigin = newDestinationList.splice(index, 1)[0];
-    console.log(newOrigin);
-    newDestinationList.splice(0, 0, newOrigin);
+    let movedDestination = newDestinationList.splice(index1, 1)[0];
+    newDestinationList.splice(index2, 0, movedDestination);
 
     this.setState({
       destinations: newDestinationList

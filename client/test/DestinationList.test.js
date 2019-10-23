@@ -22,12 +22,18 @@ function testListButtonRendering() {
   const expectedButtons = [
     'clear_destinations',
     'reverse_destinations',
+    'move_up_0',
     'remove_0',
     'set_origin_0',
+    'move_down_0',
+    'move_up_1',
     'remove_1',
     'set_origin_1',
+    'move_down_1',
+    'move_up_2',
     'remove_2',
     'set_origin_2',
+    'move_down_2'
   ];
 
   let dlist = mount((<DestinationList

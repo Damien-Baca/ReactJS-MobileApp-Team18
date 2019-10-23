@@ -1,7 +1,12 @@
 before_script:
+  - mysql -u root -e 'CREATE DATABASE cs314;'
+  - for SQL in server/src/test/resources/*.sql; do mysql cs314 < $SQL; done
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+
+addons:
+    mariadb: "10.2"
 
 language: java
 jdk: oraclejdk8
@@ -20,7 +25,7 @@ install:
 
 script:
   - npm test --prefix client || travis_terminate 1
-  - mvn test || travis_terminate 2
+  - mvn verify || travis_terminate 2
 
 after_script:
   - JACOCO_SOURCE_PATH=server/src/main/java ./cc-test-reporter format-coverage -t jacoco target/site/jacoco/jacoco.xml --output "codeclimate.java.json"
