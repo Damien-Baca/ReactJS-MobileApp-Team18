@@ -157,6 +157,7 @@ export default class Home extends Component {
   }
 
   handleExportFile() {
+
     var saveTrip = {
       "requestType"    : "trip",
       "requestVersion" : 3,

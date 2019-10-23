@@ -32,8 +32,10 @@ export default class Application extends Component {
     this.state = {
       serverConfig: null,
       planOptions: {
-        units: {'miles': 3958.8, 'kilometers': 6371},
-        activeUnit: 'miles'
+        units  : {'miles': 3958.8, 'kilometers': 6371},
+        formats: {'json':0, 'csv':1},
+        activeUnit: 'miles',
+        activeFileFormat: 'json'
       },
       clientSettings: {
         serverPort: getOriginalServerPort()
