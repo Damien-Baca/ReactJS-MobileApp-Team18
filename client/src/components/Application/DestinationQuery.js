@@ -140,6 +140,7 @@ export default class DestinationQuery extends Component {
     this.props.setErrorBanner(newPlaces.errorMessage);
 
     this.setState( {
+      found: newPlaces.found,
       places: newPlaces.places
     })
   }

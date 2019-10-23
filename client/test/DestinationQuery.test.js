@@ -23,9 +23,13 @@ const generateButtons = [
     "add_query_1",
     "add_query_2",
 ];
+const setErrorBannerDriver = () => {
+  return null;
+};
 
 function testSetPlaces() {
-  let dQuery = shallow(<DestinationQuery/>);
+  let dQuery = shallow(<DestinationQuery
+                        setErrorBanner={setErrorBannerDriver}/>);
   let expectedFound = newPlaces.length;
   let expectedPlaces = newPlaces;
 
@@ -47,7 +51,8 @@ function testSetPlaces() {
 test('Testing found and place setting.', testSetPlaces);
 
 function testUpdateMatch() {
-  let dQuery = shallow(<DestinationQuery/>);
+  let dQuery = shallow(<DestinationQuery
+      setErrorBanner={setErrorBannerDriver}/>);
   let expectedMatch = "dave";
   let testEvent = {
     target: {
@@ -65,7 +70,8 @@ function testUpdateMatch() {
 test('Testing input update for match', testUpdateMatch);
 
 function testGeneratedButtons() {
-  let dQuery = shallow(<DestinationQuery/>);
+  let dQuery = shallow(<DestinationQuery
+      setErrorBanner={setErrorBannerDriver}/>);
   let expectedButtons = Object.assign([], generateButtons);
 
   let testPlaces = {
