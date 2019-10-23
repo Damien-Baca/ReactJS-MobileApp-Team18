@@ -1,9 +1,7 @@
 import React, {Component} from 'react'
 import {Container, Row, Col} from 'reactstrap'
 import Pane from '../Pane';
-import Units from './Units';
-import ExportFileFormat from './ExportFileFormat';
-import Optimizations from "./Optimizations";
+import SelectOption from "./SelectOption";
 
 /* Options allows the user to change the parameters for planning
  * and rendering the trip map and itinerary.
@@ -25,20 +23,23 @@ export default class Options extends Component {
           </Row>
           <Row>
             <Col>
-              <Units units={this.props.options.units}
-                     activeUnit={this.props.options.activeUnit}
-                     updateOption={this.props.updateOption}/>
+              <SelectOption units={Object.keys(this.props.options.units)}
+                            activeOption={this.props.options.activeUnit}
+                            activeOptionString={'activeUnit'}
+                            updateOption={this.props.updateOption}/>
             </Col>
             
             <Col>
-              <ExportFileFormat formats={this.props.options.formats}
-                                activeFileFormat={this.props.options.activeFileFormat}
-                                updateOption={this.props.updateOption}/>
+              <SelectOption units={this.props.options.formats}
+                            activeOption={this.props.options.activeFileFormat}
+                            activeOptionString={'activeFileFormat'}
+                            updateOption={this.props.updateOption}/>
             </Col>
 
             <Col>
-              <Optimizations optimizations={this.props.options.optimizations}
-                             activeOptimization={this.props.options.activeOptimization}
+              <SelectOption  units={this.props.options.optimizations}
+                             activeOption={this.props.options.activeOptimization}
+                             activeOptionString={'activeOptimization'}
                              updateOption={this.props.updateOption}/>
             </Col>
           </Row>

@@ -2,7 +2,7 @@ import './enzyme.config.js'
 import React from 'react'
 import {shallow} from 'enzyme'
 import Options from '../src/components/Application/Options/Options'
-import Units from '../src/components/Application/Options/Units'
+import SelectOption from "../src/components/Application/Options/SelectOption";
 
 
 const startProperties = {
@@ -18,9 +18,10 @@ function testRender() {
                                    config={null}
                                    updateOption={startProperties.updateOption}/>);
 
-  expect(options.contains(<Units units={startProperties.options.units}
-                                 activeUnit={startProperties.options.activeUnit}
-                                 updateOption={startProperties.updateOption}/>)).toEqual(true);
+  expect(options.contains(<SelectOption units={Object.keys(startProperties.options.units)}
+                                        activeOption={startProperties.options.activeUnit}
+                                        activeOptionString={Object.keys(startProperties.options)[1]}
+                                        updateOption={startProperties.updateOption}/>)).toEqual(true);
 }
 
 test('Check to see if a Units component is rendered', testRender);
