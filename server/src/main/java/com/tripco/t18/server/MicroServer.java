@@ -12,6 +12,7 @@ import com.tripco.t18.validation.SchemaValidator;
 
 import java.lang.reflect.Type;
 
+import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
@@ -117,10 +118,12 @@ class MicroServer {
       Gson jsonConverter = new Gson();
       //throw to schema on TIPtype (conditional)
       TIPHeader tipRequest = jsonConverter.fromJson(request.body(), tipType);
+
+      JSONObject jsonRequestBody = new JSONObject(request.body());
       System.out.println("request.body() start");
-      System.out.println(request.body());
+      System.out.println(jsonRequestBody);
       System.out.println("request.body() end");
-      if(SchemaValidator.validate(request.body() , "../../"+tipType.getTypeName()+"RequestSchema.json") ) {
+      if(SchemaValidator.validate(jsonRequestBody , "../../"+tipType.getTypeName()+"RequestSchema.json") ) {
         tipRequest.buildResponse();
         String responseBody = jsonConverter.toJson(tipRequest);
         log.trace("TIP Response: {}", responseBody);
