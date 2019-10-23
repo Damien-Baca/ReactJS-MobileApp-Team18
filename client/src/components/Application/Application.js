@@ -41,7 +41,9 @@ export default class Application extends Component {
         units: {'miles': 3958.8, 'kilometers': 6371},
         activeUnit: 'miles',
         optimizations: ['none', 'short'],
-        activeOptimization: 'none'
+        activeOptimization: 'none',
+        formats: ['json', 'csv'],
+        activeFileFormat: 'json'
       },
       clientSettings: {
         serverPort: getOriginalServerPort()

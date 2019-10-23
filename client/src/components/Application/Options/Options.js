@@ -28,6 +28,14 @@ export default class Options extends Component {
                             activeOptionString={'activeUnit'}
                             updateOption={this.props.updateOption}/>
             </Col>
+            
+            <Col>
+              <SelectOption units={this.props.options.formats}
+                            activeOption={this.props.options.activeFileFormat}
+                            activeOptionString={'activeFileFormat'}
+                            updateOption={this.props.updateOption}/>
+            </Col>
+
             <Col>
               <SelectOption  units={this.props.options.optimizations}
                              activeOption={this.props.options.activeOptimization}
