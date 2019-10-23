@@ -18,7 +18,7 @@ function testRender() {
                                    config={null}
                                    updateOption={startProperties.updateOption}/>);
 
-  expect(options.contains(<Units options={startProperties.options}
+  expect(options.contains(<Units units={startProperties.options.units}
                                  activeUnit={startProperties.options.activeUnit}
                                  updateOption={startProperties.updateOption}/>)).toEqual(true);
 }
