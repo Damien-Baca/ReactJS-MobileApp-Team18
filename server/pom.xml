@@ -12,7 +12,7 @@
     <groupId>com.tripco.t18</groupId>
     <artifactId>server</artifactId>
     <packaging>jar</packaging>
-    <version>2.0</version>
+    <version>3.0</version>
     <name>t18</name>
     <url>https://github.com/csu314sp18/repo-base</url>
 
@@ -34,17 +34,6 @@
                     <archive>
                         <manifest>
                             <mainClass>com.tripco.t18.server.WebApplication</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>validation.SchemaValidator</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
