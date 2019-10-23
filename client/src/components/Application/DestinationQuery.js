@@ -137,12 +137,10 @@ export default class DestinationQuery extends Component {
   }
 
   setPlaces(newPlaces) {
-    let testPlaces = Object.assign({}, newPlaces);
-    console.log("DestinationQuery Received: " + testPlaces);
+    this.props.setErrorBanner(newPlaces.errorMessage);
 
     this.setState( {
-      found: newPlaces.found,
-      places: Object.assign([], newPlaces.places)
+      places: newPlaces.places
     })
   }
 }

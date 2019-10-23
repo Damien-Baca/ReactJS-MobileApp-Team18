@@ -5,7 +5,6 @@ import Pane from './Pane'
 import DestinationMap from "./DestinationMap";
 import DestinationControls from "./DestinationControls";
 import DestinationList from "./DestinationList";
-import {sendServerRequestWithBody} from '../../api/restfulAPI'
 import DestinationQuery from "./DestinationQuery";
 
 /*
@@ -22,8 +21,8 @@ export default class Home extends Component {
     this.resetDistances = this.resetDistances.bind(this);
     this.calculateDistances = this.calculateDistances.bind(this);
     this.sumDistances = this.sumDistances.bind(this);
-    this.sendServerRequest = this.sendServerRequest.bind(this);
     this.setDistances = this.setDistances.bind(this);
+    this.setErrorBanner = this.setErrorBanner.bind(this);
     this.renderMapPane = this.renderMapPane.bind(this);
     this.renderDestinations = this.renderDestinations.bind(this);
     this.renderDestinationQuery = this.renderDestinationQuery.bind(this);
@@ -88,10 +87,11 @@ export default class Home extends Component {
     return (
       <Pane header={'Database Query'}
             bodyJSX={<DestinationQuery
-            addDestination={this.props.addDestination}
-            resetDistances={this.resetDistances}
-            sendServerRequest={this.sendServerRequest}/>
-            }/>
+                setErrorBanner={this.setErrorBanner}
+                addDestination={this.props.addDestination}
+                resetDistances={this.resetDistances}
+                sendServerRequest={this.props.sendServerRequest}/>
+                }/>
     );
   }
 
@@ -249,7 +249,7 @@ export default class Home extends Component {
       'distances': []
     };
 
-    this.sendServerRequest('trip', tipRequest, this.setDistances);
+    this.props.sendServerRequest('trip', tipRequest, this.setDistances);
   }
 
   setDistances(newDistances) {
@@ -257,43 +257,14 @@ export default class Home extends Component {
       this.setState({
         errorMessage: newDistances.errorMessage,
         distances: newDistances.distances
-      })
+      });
     }
   }
 
-  sendServerRequest(type, tipRequest, callback) {
-    let tipConfigRequest = {
-      requestType: type,
-      requestVersion: 3,
-    };
-
-    Object.entries(tipRequest).forEach((entry) => {
-      tipConfigRequest[entry[0]] = entry[1];
+  setErrorBanner(error) {
+    this.setState({
+      errorMessage: error
     });
-
-    sendServerRequestWithBody(type, tipConfigRequest,
-        this.props.settings.serverPort).then((response) => this.handleServerResponse(response, callback));
-  }
-
-  handleServerResponse(response, callback) {
-      if (response.statusCode >= 200 && response.statusCode <= 299) {
-        let returnState =  Object.assign({}, {
-          errorMessage: null
-        });
-        Object.entries(response.body).forEach((entry) => {
-          returnState[entry[0]] = entry[1];
-        });
-
-        callback(returnState);
-      } else {
-        this.setState({
-          errorMessage: this.props.createErrorBanner(
-              response.statusText,
-              response.statusCode,
-              `Request to ${this.props.settings.serverPort} failed.`
-          )
-        });
-      }
   }
 
   sumDistances(index = this.state.distances.length - 1) {

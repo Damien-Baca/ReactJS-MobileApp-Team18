@@ -6,7 +6,11 @@ import Options from './Options/Options';
 import Calculator from './Calculator/Calculator';
 import About from './About/About';
 import Settings from './Settings/Settings';
-import {getOriginalServerPort, sendServerRequest} from '../../api/restfulAPI';
+import {
+  getOriginalServerPort,
+  sendServerRequest,
+  sendServerRequestWithBody
+} from '../../api/restfulAPI';
 import ErrorBanner from './ErrorBanner';
 import 'coordinate-parser';
 
@@ -28,6 +32,8 @@ export default class Application extends Component {
     this.validateCoordinates = this.validateCoordinates.bind(this);
     this.validation = this.validation.bind(this);
     this.swapDestinations = this.swapDestinations.bind(this);
+    this.sendServerRequest = this.sendServerRequest.bind(this);
+    this.handleServerResponse = this.handleServerResponse.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -115,7 +121,8 @@ export default class Application extends Component {
                   settings={this.state.clientSettings}
                   createErrorBanner={this.createErrorBanner}
                   convertCoordinates={this.convertCoordinates}
-                  validation={this.validation}/>
+                  validation={this.validation}
+                  sendServerRequest={this.sendServerRequest}/>
     );
   }
 
@@ -148,7 +155,8 @@ export default class Application extends Component {
               createErrorBanner={this.createErrorBanner}
               convertCoordinates={this.convertCoordinates}
               validation={this.validation}
-              validateCoordinates={this.validateCoordinates}/>
+              validateCoordinates={this.validateCoordinates}
+              sendServerRequest={this.sendServerRequest}/>
     );
   }
 
@@ -249,5 +257,40 @@ export default class Application extends Component {
     let Coordinates = require('coordinate-parser');
     let converter = new Coordinates(`${latitude} ${longitude}`);
     return {latitude: String(converter.getLatitude()),longitude: String(converter.getLongitude())};
+  }
+
+  sendServerRequest(type, tipRequest, callback) {
+    let tipConfigRequest = {
+      requestType: type,
+      requestVersion: 3,
+    };
+
+    Object.entries(tipRequest).forEach((entry) => {
+      tipConfigRequest[entry[0]] = entry[1];
+    });
+
+    sendServerRequestWithBody(type, tipConfigRequest,
+        this.state.clientSettings.serverPort).then((response) => this.handleServerResponse(response, callback));
+  }
+
+  handleServerResponse(response, callback) {
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      let returnState =  Object.assign({}, {
+        errorMessage: null
+      });
+      Object.entries(response.body).forEach((entry) => {
+        returnState[entry[0]] = entry[1];
+      });
+
+      callback(returnState);
+    } else {
+      return {
+        errorMessage: this.props.createErrorBanner(
+            response.statusText,
+            response.statusCode,
+            `Request to ${this.state.clientSettings.serverPort} failed.`
+        )
+      };
+    }
   }
 }
