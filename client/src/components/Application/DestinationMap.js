@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import {marker} from "leaflet/dist/leaflet-src.esm";
 
 /*
  * Renders a Leaflet Map with Markers and a Polyline.
@@ -10,6 +11,11 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 export default class DestinationMap extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      convertedDestinations: [],
+      userMarker: false
+    };
   }
 
   render() {
@@ -17,6 +23,8 @@ export default class DestinationMap extends Component {
   }
 
   renderLeafletMap() {
+    this.convertDestinations();
+
     return (
         <Map bounds={this.itineraryBounds()}
              style={{height: 500, maxwidth: 700}}>
@@ -30,14 +38,8 @@ export default class DestinationMap extends Component {
   }
 
   renderMarkers() {
-    let markerList = [Object.assign({}, this.props.userLocation)];
-
-    if (this.props.destinations.length > 0) {
-      markerList = Object.assign([], this.props.destinations);
-    }
-
     return (
-        markerList.map((marker, index) => (
+        this.state.convertedDestinations.map((marker, index) => (
             <Marker
                 key={`marker_${index}`}
                 position={L.latLng(marker.latitude, marker.longitude)}
@@ -52,11 +54,11 @@ export default class DestinationMap extends Component {
   renderPolyline() {
     let polylineList = [];
 
-    if (this.props.destinations.length > 1) {
+    if (this.state.convertedDestinations.length > 1) {
       let origin = [];
       polylineList.splice(0, 1);
 
-      this.props.destinations.map((destination, index) => {
+      this.state.convertedDestinations.map((destination, index) => {
         if (index === 0) {
           origin = [parseFloat(destination.latitude),
             parseFloat(destination.longitude)];
@@ -80,6 +82,37 @@ export default class DestinationMap extends Component {
     }
   }
 
+  convertDestinations() {
+    let destinationLength = this.props.destinations.length;
+    let convertedLength = this.state.convertedDestinations.length;
+
+    if (destinationLength === 0 && !this.state.userMarker) {
+      this.setState({
+        convertedDestinations: [Object.assign({}, this.props.userLocation)],
+        userMarker: true
+      });
+    } else if ((this.state.userMarker && destinationLength !== 0) ||
+    (convertedLength !== destinationLength && !this.state.userMarker)) {
+      let markerList = [];
+      this.props.destinations.forEach((destination) => {
+        markerList.push(Object.assign({}, destination))
+      });
+
+      console.log(markerList);
+
+      markerList.forEach((destination) => {
+        let convertedLatLong = this.props.convertCoordinates(
+            destination.latitude, destination.longitude);
+        destination.latitude = convertedLatLong.latitude;
+        destination.longitude = convertedLatLong.longitude;
+      });
+      this.setState({
+        convertedDestinations: markerList,
+        userMarker: false
+      });
+    }
+  }
+
   itineraryBounds() {
     let boundaries = {
       max: {
@@ -92,7 +125,7 @@ export default class DestinationMap extends Component {
       }
     };
 
-    if (this.props.destinations.length > 0) {
+    if (this.state.convertedDestinations.length > 0) {
       this.destinationsBound(boundaries)
     }
 
@@ -104,9 +137,8 @@ export default class DestinationMap extends Component {
             boundaries.max.longitude + margin));
   }
 
-
   destinationsBound(boundaries) {
-    this.props.destinations.forEach((destination) => {
+    this.state.convertedDestinations.forEach((destination) => {
       Object.keys(boundaries).map((field) => {
         if (field === 'min') {
           boundaries[field] = {

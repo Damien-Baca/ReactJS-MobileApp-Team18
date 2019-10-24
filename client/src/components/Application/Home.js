@@ -60,7 +60,8 @@ export default class Home extends Component {
         <Pane header={'Where Am I?'}
               bodyJSX={<DestinationMap
                   userLocation={this.state.userLocation}
-                  destinations={this.props.destinations}/>}/>
+                  destinations={this.props.destinations}
+                  convertCoordinates={this.props.convertCoordinates}/>}/>
     );
   }
 
@@ -71,7 +72,7 @@ export default class Home extends Component {
                   userLocation={this.state.userLocation}
                   distances={this.state.distances}
                   destinations={this.props.destinations}
-                  addDestination={this.props.addDestination}
+                  addDestinations={this.props.addDestinations}
                   validation={this.props.validation}
                   optimization={this.props.options.activeOptimization}
                   sumDistances={this.sumDistances}
@@ -89,7 +90,7 @@ export default class Home extends Component {
       <Pane header={'Database Query'}
             bodyJSX={<DestinationQuery
                 setErrorBanner={this.setErrorBanner}
-                addDestination={this.props.addDestination}
+                addDestinations={this.props.addDestinations}
                 resetDistances={this.resetDistances}
                 sendServerRequest={this.props.sendServerRequest}/>
                 }/>
@@ -103,7 +104,6 @@ export default class Home extends Component {
                 destinations={this.props.destinations}
                 removeDestination={this.props.removeDestination}
                 reverseDestinations={this.props.reverseDestinations}
-                clearDestinations={this.props.clearDestinations}
                 swapDestinations={this.props.swapDestinations}
                 distances={this.state.distances}
                 resetDistances={this.resetDistances}
@@ -212,7 +212,7 @@ export default class Home extends Component {
 
   calculateDistances(optimization) {
     let convertedDestinations = [];
-    this.props.destinations.forEach((destination) => {
+    Object.assign([], this.props.destinations).forEach((destination) => {
       let convertedDestination = {name: destination.name};
       Object.assign(convertedDestination,
           this.props.convertCoordinates(destination.latitude,
@@ -240,6 +240,14 @@ export default class Home extends Component {
         errorMessage: newDistances.errorMessage,
         distances: newDistances.distances
       });
+
+      if (newDistances.optimization === 'short') {
+        let nameList = [];
+        newDistances.places.forEach((place) => {
+          nameList.push(place.name);
+        });
+        this.props.setDestinations(nameList);
+      }
     }
   }
 
@@ -262,9 +270,7 @@ export default class Home extends Component {
       optimizations: newTrip.options.optimizations
     };
 
-    newTrip.places.forEach((destination) => (
-        this.props.addDestination(destination)
-    ));
+    this.props.addDestinations(newTrip.places);
 
     if (newTrip.hasOwnProperty('distances')) {
       newState['distances'] = newTrip.distances

@@ -176,7 +176,7 @@ export default class DestinationControls extends Component {
   }
 
   handleNewDestination() {
-    this.props.addDestination(Object.assign({}, this.state.newDestination));
+    this.props.addDestinations([Object.assign({}, this.state.newDestination)]);
     let superFalse = {latitude: false, longitude: false};
     this.setState({
       newDestination: {name: '', latitude: '', longitude: ''},
@@ -187,7 +187,7 @@ export default class DestinationControls extends Component {
   }
 
   handleUserDestination() {
-    this.props.addDestination(Object.assign({}, this.props.userLocation));
+    this.props.addDestinations([Object.assign({}, this.props.userLocation)]);
     this.props.resetDistances();
   }
 
