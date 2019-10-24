@@ -6,6 +6,7 @@ public class OptimizeTrip {
   public static Map[] shortTrip(Map[] places, double earthRadius) {
     int[] bestTrip = new int[places.length];
     int bestDistance = Integer.MAX_VALUE;
+    int bestZeroIndex = -1;
     int[][] distanceMatrix = new int[places.length][places.length];
     GreatCircleDistance calculator = new GreatCircleDistance();
 
@@ -23,10 +24,10 @@ public class OptimizeTrip {
       boolean[] visited = new boolean[places.length];
       int[] trip = new int[places.length];
       int currentLocation = i;
-      int tripIndex = 0;
       int distanceSum = 0;
       visited[currentLocation] = true;
       trip[0] = currentLocation;
+      int zeroIndex = -1;
 
       for (int j = 1; j < places.length; ++j) {
         int localMinIndex = 0;
@@ -36,6 +37,9 @@ public class OptimizeTrip {
           if (distanceMatrix[currentLocation][k] < localMin && !visited[k]) {
             localMinIndex = k;
             localMin = distanceMatrix[currentLocation][k];
+            if (k == 0) {
+              zeroIndex = j;
+            }
           }
         }
 
@@ -48,16 +52,15 @@ public class OptimizeTrip {
       if (distanceSum < bestDistance) {
         bestTrip = trip;
         bestDistance = distanceSum;
+        bestZeroIndex = zeroIndex;
       }
-
     }
 
     Map[] newPlaces = new Map[places.length];
     int newIndex = 0;
 
-    for (int i : bestTrip) {
-      newPlaces[newIndex] = places[i];
-      ++newIndex;
+    for (int i = 0; i < places.length; ++i) {
+      newPlaces[newIndex++] = places[bestTrip[(i + bestZeroIndex) % places.length]];
     }
 
     return newPlaces;
