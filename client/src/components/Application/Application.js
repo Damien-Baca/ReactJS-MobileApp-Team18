@@ -14,10 +14,6 @@ import {
 import ErrorBanner from './ErrorBanner';
 import 'coordinate-parser';
 import 'ajv'
-import TIPDisSchema from '../schemas/TIPDistanceResponseSchema'
-import TIPConSchema from '../schemas/TIPConfigResponseSchema'
-import TIPLocSchema from '../schemas/TIPLocationsResponseSchema'
-import TIPTripSchema from '../schemas/TIPTripResponseSchema'
 
 /* Renders the application.
  * Holds the destinations and options state shared with the trip.
@@ -272,6 +268,7 @@ export default class Application extends Component {
       let returnState =  Object.assign({}, {
         errorMessage: null
       });
+      this.validateSchema(response);
       Object.entries(response.body).forEach((entry) => {
         returnState[entry[0]] = entry[1];
       });
@@ -288,21 +285,26 @@ export default class Application extends Component {
     }
   }
 
-  validate(json) {
+  validateSchema(response) {
     let Ajv = require('ajv');
     let ajv = new Ajv();
-    let TIPtype=;
-    if(){
-      let validate = ajv.compile(TIPConSchema);
-    }else if() {
-      let validate = ajv.compile(TIPDisSchema);
-    }else if(){
-      let validate = ajv.compile(TIPLocSchema);
-    } else{
-      let validate = ajv.compile(TIPTripSchema);
+    let TIPConSchema = require('../../../schemas/TIPConfigResponseSchema');
+    let TIPDisSchema = require('../../../schemas/TIPDistanceResponseSchema');
+    let TIPLocSchema = require('../../../schemas/TIPLocationsResponseSchema');
+    let TIPTripSchema = require('../../../schemas/TIPTripResponseSchema');
+    let TIPType=response.body.title;
+    let valid =false;
+    if(TIPType==='config'){
+      valid=ajv.validate(TIPConSchema,response.body);
+    }else if(TIPType==='distance') {
+      valid=ajv.validate(TIPDisSchema,response.body);
+    }else if(TIPType==='locations'){
+      valid=ajv.validate(TIPLocSchema,response.body);
+    }else{
+      valid=ajv.validate(TIPTripSchema,response.body);
     }
-    let valid = validate(json);
     if (!valid)
-      console.log(validate.errors);
+      console.log(ajv.errors);
+      console.log((response.body));
   }
 }
