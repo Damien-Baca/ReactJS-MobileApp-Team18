@@ -13,6 +13,7 @@ import {
 } from '../../api/restfulAPI';
 import ErrorBanner from './ErrorBanner';
 import 'coordinate-parser';
+import 'ajv'
 
 /* Renders the application.
  * Holds the destinations and options state shared with the trip.
@@ -247,6 +248,8 @@ export default class Application extends Component {
       valid = this.validateCoordinates(value, 0);
     } else if (name === 'longitude') {
       valid = this.validateCoordinates(0, value);
+    } else {
+      valid = this.validateCoordinates(name, value)
     }
     return valid;
   }
@@ -290,6 +293,7 @@ export default class Application extends Component {
       let returnState =  Object.assign({}, {
         errorMessage: null
       });
+      this.validateSchema(response);
       Object.entries(response.body).forEach((entry) => {
         returnState[entry[0]] = entry[1];
       });
@@ -303,6 +307,31 @@ export default class Application extends Component {
             `Request to ${this.state.clientSettings.serverPort} failed.`
         )
       };
+    }
+  }
+
+  validateSchema(response) {
+    let Ajv = require('ajv');
+    let ajv = new Ajv();
+    let TIPConSchema = require('../../../schemas/TIPConfigResponseSchema');
+    let TIPDisSchema = require('../../../schemas/TIPDistanceResponseSchema');
+    let TIPLocSchema = require('../../../schemas/TIPLocationsResponseSchema');
+    let TIPTripSchema = require('../../../schemas/TIPTripResponseSchema');
+    let TIPType=response.body.requestType;
+    let valid =false;
+    if(TIPType==='config'){
+      valid=ajv.validate(TIPConSchema,response.body);
+    }else if(TIPType==='distance') {
+      valid=ajv.validate(TIPDisSchema,response.body);
+    }else if(TIPType==='locations'){
+      valid=ajv.validate(TIPLocSchema,response.body);
+    }else if(TIPType==='trip'){
+      valid=ajv.validate(TIPTripSchema,response.body);
+    }
+    if (!valid) {
+      console.log(valid);
+      console.log(ajv.errors);
+      console.log((response.body));
     }
   }
 }

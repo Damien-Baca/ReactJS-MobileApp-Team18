@@ -39,4 +39,4 @@ function testItineraryBounding() {
   expect(actualBound).toEqual(expectedBound);
 }
 
-test('Test itierary bounding.', testItineraryBounding);
+test('Test itinerary bounding.', testItineraryBounding);
