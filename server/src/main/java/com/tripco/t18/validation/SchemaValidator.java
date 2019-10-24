@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import org.everit.json.schema.Schema;
 import org.everit.json.schema.SchemaException;
 import org.everit.json.schema.loader.SchemaLoader;
-import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,10 +19,6 @@ public class SchemaValidator {
   private static final Logger log = LoggerFactory.getLogger(SchemaValidator.class);
 
   public static boolean validate(JSONObject jsonString, String schemaPath) {
-
-
-    // Schema files should probably be placed in src/main/resources (see Maven guide)
-
     JSONObject schemaString = parseJsonFile(schemaPath);
 
     if (null == jsonString || null == schemaString) {
@@ -65,7 +61,8 @@ public class SchemaValidator {
     boolean validationResult = true;
     try {
       Schema schema = SchemaLoader.load(jsonSchema);
-      // This is the line that will throw a ValidationException if anything doesn't conform to the schema!
+      // This is the line that will throw a ValidationException 
+      // if anything doesn't conform to the schema!
       schema.validate(json);
     }
     catch (SchemaException e) {
@@ -74,7 +71,8 @@ public class SchemaValidator {
       validationResult = false;
     }
     catch (ValidationException e) {
-      log.error("Caught validation exception when validating schema! Root message: {}", e.getErrorMessage());
+      log.error("Caught validation exception when validating schema! Root message: {}", 
+                e.getErrorMessage());
       log.error("All messages from errors (including nested):");
       // For now, messages are probably just good for debugging, to see why something failed
       List<String> allMessages = e.getAllMessages();

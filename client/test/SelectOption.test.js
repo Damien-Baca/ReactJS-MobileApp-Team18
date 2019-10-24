@@ -2,18 +2,21 @@
 import './enzyme.config.js'
 import React from 'react'
 import { mount } from 'enzyme'
-import Units from '../src/components/Application/Options/Units'
+import SelectOption from "../src/components/Application/Options/SelectOption";
 
 
 const startProperties = {
   'config': { 'units': {'miles':3959, 'kilometers':6371} },
-  'activeUnit': 'miles'
+  'activeUnit': 'miles',
+  'activeOptimization': 'none'
 };
 
 function testButtonValues() {
   const units = mount((
-      <Units options={startProperties.config}
-             activeUnit={startProperties.activeUnit}/>
+      <SelectOption units={Object.keys(startProperties.config.units)}
+                    activeOption={startProperties.activeUnit}
+                    activeOptionString='activeUnit'
+                    updateOption={()=>{}}/>
     ));
 
   let actual = [];
@@ -31,8 +34,10 @@ test('Check to see if a Button is rendered for each unit', testButtonValues);
 
 function testInitialActiveButton() {
   const units = mount((
-      <Units options={startProperties.config}
-             activeUnit={startProperties.activeUnit}/>
+      <SelectOption units={Object.keys(startProperties.config.units)}
+                    activeOption={startProperties.activeUnit}
+                    activeOptionString='activeUnit'
+                    updateOption={()=>{}}/>
   ));
 
   let actualButtons = [];

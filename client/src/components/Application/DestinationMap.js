@@ -104,6 +104,7 @@ export default class DestinationMap extends Component {
             boundaries.max.longitude + margin));
   }
 
+
   destinationsBound(boundaries) {
     this.props.destinations.forEach((destination) => {
       Object.keys(boundaries).map((field) => {
