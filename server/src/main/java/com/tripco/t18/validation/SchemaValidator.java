@@ -1,7 +1,6 @@
 package com.tripco.t18.validation;
 //credit to 314 ta and instructor
 
-//FIXME imports are not working (fails to build)
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,7 +11,6 @@ import org.everit.json.schema.loader.SchemaLoader;
 import org.everit.json.schema.ValidationException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +18,7 @@ public class SchemaValidator {
 
   private static final Logger log = LoggerFactory.getLogger(SchemaValidator.class);
 
-  public static boolean validate(String arg1, String arg2) {
-    String jsonPath = arg1;
-    String schemaPath = arg2;
-
-    // Schema files should probably be placed in src/main/resources (see Maven guide)
-    JSONObject jsonString = parseJsonFile(jsonPath);
+  public static boolean validate(JSONObject jsonString, String schemaPath) {
     JSONObject schemaString = parseJsonFile(schemaPath);
 
     if (null == jsonString || null == schemaString) {
