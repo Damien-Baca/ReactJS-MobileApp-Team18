@@ -13,6 +13,11 @@ import {
 } from '../../api/restfulAPI';
 import ErrorBanner from './ErrorBanner';
 import 'coordinate-parser';
+import 'ajv'
+import TIPDisSchema from '../schemas/TIPDistanceResponseSchema'
+import TIPConSchema from '../schemas/TIPConfigResponseSchema'
+import TIPLocSchema from '../schemas/TIPLocationsResponseSchema'
+import TIPTripSchema from '../schemas/TIPTripResponseSchema'
 
 /* Renders the application.
  * Holds the destinations and options state shared with the trip.
@@ -281,5 +286,23 @@ export default class Application extends Component {
         )
       };
     }
+  }
+
+  validate(json) {
+    let Ajv = require('ajv');
+    let ajv = new Ajv();
+    let TIPtype=;
+    if(){
+      let validate = ajv.compile(TIPConSchema);
+    }else if() {
+      let validate = ajv.compile(TIPDisSchema);
+    }else if(){
+      let validate = ajv.compile(TIPLocSchema);
+    } else{
+      let validate = ajv.compile(TIPTripSchema);
+    }
+    let valid = validate(json);
+    if (!valid)
+      console.log(validate.errors);
   }
 }
