@@ -35,6 +35,7 @@ export default class Application extends Component {
     this.swapDestinations = this.swapDestinations.bind(this);
     this.sendServerRequest = this.sendServerRequest.bind(this);
     this.handleServerResponse = this.handleServerResponse.bind(this);
+    this.validateSchema = this.validateSchema.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -294,21 +295,29 @@ export default class Application extends Component {
     let TIPDisSchema = require('../../../schemas/TIPDistanceResponseSchema');
     let TIPLocSchema = require('../../../schemas/TIPLocationsResponseSchema');
     let TIPTripSchema = require('../../../schemas/TIPTripResponseSchema');
-    let TIPType=response.body.requestType;
-    let valid =false;
-    if(TIPType==='config'){
-      valid=ajv.validate(TIPConSchema,response.body);
-    }else if(TIPType==='distance') {
-      valid=ajv.validate(TIPDisSchema,response.body);
-    }else if(TIPType==='locations'){
-      valid=ajv.validate(TIPLocSchema,response.body);
-    }else if(TIPType==='trip'){
-      valid=ajv.validate(TIPTripSchema,response.body);
+    let TIPType = response.body.requestType;
+    let valid = false;
+    if (TIPType === 'config') {
+      valid = ajv.validate(TIPConSchema, response.body);
+    } else if (TIPType === 'distance') {
+      valid = ajv.validate(TIPDisSchema, response.body);
+    } else if (TIPType === 'locations') {
+      valid = ajv.validate(TIPLocSchema, response.body);
+    } else if (TIPType === 'trip') {
+      valid = ajv.validate(TIPTripSchema, response.body);
     }
-    if (!valid) {
-      console.log(valid);
-      console.log(ajv.errors);
-      console.log((response.body));
+    if(!valid){
+      this.setState({
+        errorMessage: this.createErrorBanner(
+            "Server Response Error",
+            0,
+            `Response from server does not match ${response.body.requestType} schema`
+        )
+      });
+    }else{
+      this.setState({
+        errorMessage: null
+      });
     }
   }
 }
