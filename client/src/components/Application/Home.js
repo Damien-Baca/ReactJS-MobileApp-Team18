@@ -14,6 +14,15 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
+    this.bindHomeFunctions = this.bindHomeFunctions.bind(this);
+    this.setHomeState = this.setHomeState.bind(this);
+    this.bindHomeFunctions();
+    this.setHomeState();
+
+    this.handleGetUserLocation();
+  }
+
+  bindHomeFunctions() {
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.handleExportFile = this.handleExportFile.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
@@ -28,7 +37,9 @@ export default class Home extends Component {
     this.renderDestinationQuery = this.renderDestinationQuery.bind(this);
     this.renderDestinationControls = this.renderDestinationControls.bind(this);
     this.addJsonValues = this.addJsonValues.bind(this);
+  }
 
+  setHomeState() {
     this.state = {
       errorMessage: null,
       userLocation: {
@@ -39,8 +50,6 @@ export default class Home extends Component {
       distances: null,
       optimizations: null
     };
-
-    this.handleGetUserLocation();
   }
 
   render() {
@@ -186,25 +195,21 @@ export default class Home extends Component {
     if (fileContents) {
       try {
         let newTrip = JSON.parse(fileContents);
-
         this.addJsonValues(newTrip);
+
       } catch (e) {
-        this.setState({
-          errorMessage: this.props.createErrorBanner(
+        this.setErrorBanner( this.props.createErrorBanner(
               "File Error",
               0,
               "File has invalid JSON TIP Trip format."
-          )
-        });
+          ));
       }
     } else {
-      this.setState({
-        errorMessage: this.props.createErrorBanner(
+      this.setErrorBanner( this.props.createErrorBanner(
             "File Error",
             0,
             "No file has been selected."
-        )
-      });
+        ));
     }
   }
 
@@ -254,9 +259,7 @@ export default class Home extends Component {
   }
 
   sumDistances(index = this.state.distances.length - 1) {
-    const reducer = (sum, current) => {
-      return sum + current;
-    };
+    const reducer = (sum, current) => { return sum + current; };
 
     let distanceSlice = Object.assign([], this.state.distances).slice(0,
         index + 1);

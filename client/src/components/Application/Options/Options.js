@@ -22,45 +22,30 @@ export default class Options extends Component {
             </Col>
           </Row>
           <Row>
-            {this.renderUnits()}
-            {this.renderFormats()}
-            {this.renderOptimizations()}
+            {this.generateOption(Object.keys(this.props.options.units),
+                this.props.options.activeUnit, 'activeUnit',
+              this.props.updateOption)}
+            {this.generateOption(this.props.options.formats,
+                this.props.options.activeFileFormat, 'activeFileFormat',
+              this.props.updateOption)}
+            {this.generateOption(this.props.options.optimizations,
+                this.props.options.activeOptimization, 'activeOptimization',
+              this.props.updateOption)}
+
           </Row>
         </Container>
     )
   }
 
-  renderUnits() {
+  generateOption(units, activeOption, activeString, callBack) {
     return (
         <Col>
-          <SelectOption units={Object.keys(this.props.options.units)}
-                        activeOption={this.props.options.activeUnit}
-                        activeOptionString={'activeUnit'}
-                        updateOption={this.props.updateOption}/>
+          <SelectOption units={units}
+                        activeOption={activeOption}
+                        activeOptionString={activeString}
+                        updateOption={callBack}/>
         </Col>
-    );
-  }
-
-  renderFormats() {
-    return (
-        <Col>
-          <SelectOption units={this.props.options.formats}
-                        activeOption={this.props.options.activeFileFormat}
-                        activeOptionString={'activeFileFormat'}
-                        updateOption={this.props.updateOption}/>
-        </Col>
-    );
-  }
-
-  renderOptimizations() {
-    return (
-        <Col>
-          <SelectOption  units={this.props.options.optimizations}
-                         activeOption={this.props.options.activeOptimization}
-                         activeOptionString={'activeOptimization'}
-                         updateOption={this.props.updateOption}/>
-        </Col>
-    );
+    )
   }
 
   heading() {
