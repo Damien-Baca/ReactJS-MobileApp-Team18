@@ -239,7 +239,6 @@ export default class Home extends Component {
   }
 
   setDistances(newDistances) {
-    console.log(newDistances);
     if (newDistances !== null) {
       this.setState({
         errorMessage: newDistances.errorMessage,
