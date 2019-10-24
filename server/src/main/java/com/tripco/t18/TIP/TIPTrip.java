@@ -33,10 +33,6 @@ public class TIPTrip extends TIPHeader {
     this();
     this.requestVersion = version;
     this.options = options;
-    // change this when optimizations are implemented
-    if (this.options.get("optimization") == "shorter") {
-      this.options.put("optimization", "none");
-    }
 
     this.places = places;
     this.distances = new ArrayList<>();
@@ -47,7 +43,6 @@ public class TIPTrip extends TIPHeader {
 
   @Override
   public void buildResponse() {
-    GreatCircleDistance calculate = new GreatCircleDistance();
     Double earthRadius = Double.parseDouble((String) options.get("earthRadius"));
 
     if (options.get("optimization").equals("short")) {
@@ -61,7 +56,7 @@ public class TIPTrip extends TIPHeader {
         destination = places[i + 1];
       }
 
-      this.distances.add(calculate.calculateDistance(origin, destination, earthRadius));
+      this.distances.add(GreatCircleDistance.calculateDistance(origin, destination, earthRadius));
     }
     log.trace("buildResponse -> {}", this);
   }

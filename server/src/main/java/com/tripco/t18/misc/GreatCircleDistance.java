@@ -8,7 +8,7 @@ import java.util.Map;
 /** Determines the distance between geographic coordinates.
  */
 public class GreatCircleDistance {
-  public int calculateDistance(Map origin, Map destination, Double earthRadius) {
+  public static int calculateDistance(Map origin, Map destination, Double earthRadius) {
     Double origin_lat = to_radians(Double.parseDouble((String) origin.get("latitude")));
     Double origin_lon = to_radians(Double.parseDouble((String) origin.get("longitude")));
 
@@ -30,7 +30,7 @@ public class GreatCircleDistance {
     return (int) Math.round((arc * earthRadius));
   }
 
-  public Double to_radians(Double degrees) {
+  public static Double to_radians(Double degrees) {
     Double pi = Math.PI;
     return degrees * (pi/180);
   }
