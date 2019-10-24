@@ -292,7 +292,7 @@ export default class Application extends Component {
     let TIPDisSchema = require('../../../schemas/TIPDistanceResponseSchema');
     let TIPLocSchema = require('../../../schemas/TIPLocationsResponseSchema');
     let TIPTripSchema = require('../../../schemas/TIPTripResponseSchema');
-    let TIPType=response.body.title;
+    let TIPType=response.body.requestType;
     let valid =false;
     if(TIPType==='config'){
       valid=ajv.validate(TIPConSchema,response.body);
@@ -300,11 +300,14 @@ export default class Application extends Component {
       valid=ajv.validate(TIPDisSchema,response.body);
     }else if(TIPType==='locations'){
       valid=ajv.validate(TIPLocSchema,response.body);
-    }else{
+      console.log('loc')
+    }else if(TIPType==='trip'){
       valid=ajv.validate(TIPTripSchema,response.body);
     }
-    if (!valid)
+    if (!valid) {
+      console.log(valid);
       console.log(ajv.errors);
       console.log((response.body));
+    }
   }
 }
