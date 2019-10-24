@@ -211,6 +211,7 @@ export default class Application extends Component {
   }
 
   setDestinations(names) {
+    console.log(names);
     let newDestinationList = [];
 
     names.forEach((name) => {
@@ -224,6 +225,8 @@ export default class Application extends Component {
 
       newDestinationList.push(newDestination);
     });
+
+    console.log(newDestinationList);
 
     this.setState({
       destinations: newDestinationList

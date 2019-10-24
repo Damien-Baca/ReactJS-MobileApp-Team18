@@ -26,23 +26,23 @@ public class OptimizeTrip {
       int tripIndex = 0;
       int distanceSum = 0;
       visited[currentLocation] = true;
-      trip[tripIndex++] = currentLocation;
+      trip[0] = currentLocation;
 
-      while(tripIndex < places.length) {
+      for (int j = 1; j < places.length; ++j) {
         int localMinIndex = 0;
         int localMin = Integer.MAX_VALUE;
 
-        for (int j = 0; j < places.length; j++) {
-          if (distanceMatrix[currentLocation][j] < localMin && !visited[j]) {
-            localMinIndex = j;
-            localMin = distanceMatrix[currentLocation][j];
+        for (int k = 0; k < places.length; k++) {
+          if (distanceMatrix[currentLocation][k] < localMin && !visited[k]) {
+            localMinIndex = k;
+            localMin = distanceMatrix[currentLocation][k];
           }
         }
 
         currentLocation = localMinIndex;
         distanceSum += localMin;
         visited[currentLocation] = true;
-        trip[tripIndex++] = currentLocation;
+        trip[j] = currentLocation;
       }
 
       if (distanceSum < bestDistance) {

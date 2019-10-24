@@ -44,6 +44,10 @@ export default class Home extends Component {
   }
 
   render() {
+    if (this.props.destinations.length !== 0) {
+      this.convertDestinations();
+    }
+
     return (
         <Container>
           {this.state.errorMessage}
@@ -60,7 +64,7 @@ export default class Home extends Component {
         <Pane header={'Where Am I?'}
               bodyJSX={<DestinationMap
                   userLocation={this.state.userLocation}
-                  destinations={this.props.destinations}
+                  destinations={this.convertDestinations()}
                   convertCoordinates={this.props.convertCoordinates}/>}/>
     );
   }
@@ -263,6 +267,25 @@ export default class Home extends Component {
     return Object.assign([], this.state.distances).slice(0,
         index + 1).reduce(reducer);
   }
+
+  convertDestinations() {
+    let markerList = [];
+    this.props.destinations.forEach((destination) => {
+      markerList.push(Object.assign({}, destination))
+    });
+
+    console.log(markerList);
+
+    markerList.forEach((destination) => {
+      let convertedLatLong = this.props.convertCoordinates(
+          destination.latitude, destination.longitude);
+      destination.latitude = convertedLatLong.latitude;
+      destination.longitude = convertedLatLong.longitude;
+    });
+
+    return markerList;
+  }
+
 
   addJsonValues(newTrip) {
     let newState = {
