@@ -252,10 +252,8 @@ export default class Home extends Component {
   sumDistances(index = this.state.distances.length - 1) {
     const reducer = (sum, current) => { return sum + current; };
 
-    let distanceSlice = Object.assign([], this.state.distances).slice(0,
-        index + 1);
-
-    return distanceSlice.reduce(reducer);
+    return Object.assign([], this.state.distances).slice(0,
+        index + 1).reduce(reducer);
   }
 
   addJsonValues(newTrip) {

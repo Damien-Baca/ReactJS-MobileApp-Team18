@@ -22,30 +22,29 @@ export default class Options extends Component {
             </Col>
           </Row>
           <Row>
-            {this.generateOption(Object.keys(this.props.options.units),
-                this.props.options.activeUnit, 'activeUnit',
-              this.props.updateOption)}
-            {this.generateOption(this.props.options.formats,
-                this.props.options.activeFileFormat, 'activeFileFormat',
-              this.props.updateOption)}
-            {this.generateOption(this.props.options.optimizations,
-                this.props.options.activeOptimization, 'activeOptimization',
-              this.props.updateOption)}
-
+            {this.generateOptions()}
           </Row>
         </Container>
     )
   }
 
-  generateOption(units, activeOption, activeString, callBack) {
+  generateOptions() {
+    let optionSets = [[Object.keys(this.props.options.units),
+      this.props.options.activeUnit, 'activeUnit'],
+      [this.props.options.formats, this.props.options.activeFileFormat,
+        'activeFileFormat'],
+      [this.props.options.optimizations, this.props.options.activeOptimization,
+        'activeOptimization']];
+
     return (
+        optionSets.map((options) => (
         <Col>
-          <SelectOption units={units}
-                        activeOption={activeOption}
-                        activeOptionString={activeString}
-                        updateOption={callBack}/>
+          <SelectOption units={options[0]}
+                        activeOption={options[1]}
+                        activeOptionString={options[2]}
+                        updateOption={this.props.updateOption}/>
         </Col>
-    )
+    )));
   }
 
   heading() {
