@@ -45,6 +45,7 @@ public class SchemaValidator {
     // there are other ways of creating a JSONObject, like from an InputStream...
     // (https://github.com/everit-org/json-schema#quickstart)
     JSONObject parsedObject = null;
+    System.out.println(path);
     try {
       byte[] jsonBytes = Files.readAllBytes(Paths.get(path));
       parsedObject = new JSONObject(new String(jsonBytes));
