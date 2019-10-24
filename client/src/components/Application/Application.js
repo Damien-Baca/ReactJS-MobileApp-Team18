@@ -300,7 +300,6 @@ export default class Application extends Component {
       valid=ajv.validate(TIPDisSchema,response.body);
     }else if(TIPType==='locations'){
       valid=ajv.validate(TIPLocSchema,response.body);
-      console.log('loc')
     }else if(TIPType==='trip'){
       valid=ajv.validate(TIPTripSchema,response.body);
     }
