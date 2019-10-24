@@ -4,9 +4,6 @@ import com.tripco.t18.misc.GreatCircleDistance;
 
 public class OptimizeTrip {
   public static Map[] shortTrip(Map[] places, double earthRadius) {
-    System.out.println("Optimizing");
-    System.out.println(places);
-
     int[] bestTrip = new int[places.length];
     int bestDistance = Integer.MAX_VALUE;
     int[][] distanceMatrix = new int[places.length][places.length];
@@ -26,11 +23,12 @@ public class OptimizeTrip {
       boolean[] visited = new boolean[places.length];
       int[] trip = new int[places.length];
       int currentLocation = i;
+      int tripIndex = 0;
       int distanceSum = 0;
       visited[currentLocation] = true;
-      trip[0] = currentLocation;
+      trip[tripIndex++] = currentLocation;
 
-      while(trip.length < places.length) {
+      while(tripIndex < places.length) {
         int localMinIndex = 0;
         int localMin = Integer.MAX_VALUE;
 
@@ -44,11 +42,14 @@ public class OptimizeTrip {
         currentLocation = localMinIndex;
         distanceSum += localMin;
         visited[currentLocation] = true;
+        trip[tripIndex++] = currentLocation;
       }
 
       if (distanceSum < bestDistance) {
         bestTrip = trip;
+        bestDistance = distanceSum;
       }
+
     }
 
     Map[] newPlaces = new Map[places.length];
@@ -58,8 +59,6 @@ public class OptimizeTrip {
       newPlaces[newIndex] = places[i];
       ++newIndex;
     }
-
-    System.out.println(newPlaces);
 
     return newPlaces;
   }
