@@ -293,7 +293,7 @@ export default class Home extends Component {
       optimizations: newTrip.options.optimizations
     };
 
-    this.props.addDestinations(newTrip.places);
+    this.props.addDestinations(newTrip.places.reverse());
 
     if (newTrip.hasOwnProperty('distances')) {
       newState['distances'] = newTrip.distances
