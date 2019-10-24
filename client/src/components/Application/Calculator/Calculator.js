@@ -108,7 +108,7 @@ export default class Calculator extends Component {
   }
 
   calculateDistance() {
-    const tipConfigRequest = {
+    const tipRequest = {
       'requestType': 'distance',
       'requestVersion': 3,
       'origin': this.props.convertCoordinates(this.state.origin.latitude,this.state.origin.longitude),
