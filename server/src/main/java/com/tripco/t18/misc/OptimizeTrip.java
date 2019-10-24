@@ -3,15 +3,64 @@ import java.util.Map;
 import com.tripco.t18.misc.GreatCircleDistance;
 
 public class OptimizeTrip {
-  public static int[] shortTrip(Map[] places) {
+  public static Map[] shortTrip(Map[] places, double earthRadius) {
+    System.out.println("Optimizing");
+    System.out.println(places);
+
     int[] bestTrip = new int[places.length];
-    int bestDistances = Integer.MAX_VALUE;
+    int bestDistance = Integer.MAX_VALUE;
     int[][] distanceMatrix = new int[places.length][places.length];
+    GreatCircleDistance calculator = new GreatCircleDistance();
 
     for (int i = 0; i < places.length; ++i) {
-
+      for (int j = 0; j < places.length; ++j) {
+        if (distanceMatrix[i][j] == 0 && i != j) {
+          int locationDistance = calculator.calculateDistance(places[i], places[j], earthRadius);
+          distanceMatrix[i][j] = locationDistance;
+          distanceMatrix[j][i] = locationDistance;
+        }
+      }
     }
 
-    return bestTrip;
+    for (int i = 0; i < places.length; ++i) {
+      boolean[] visited = new boolean[places.length];
+      int[] trip = new int[places.length];
+      int currentLocation = i;
+      int distanceSum = 0;
+      visited[currentLocation] = true;
+      trip[0] = currentLocation;
+
+      while(trip.length < places.length) {
+        int localMinIndex = 0;
+        int localMin = Integer.MAX_VALUE;
+
+        for (int j = 0; j < places.length; j++) {
+          if (distanceMatrix[currentLocation][j] < localMin && !visited[j]) {
+            localMinIndex = j;
+            localMin = distanceMatrix[currentLocation][j];
+          }
+        }
+
+        currentLocation = localMinIndex;
+        distanceSum += localMin;
+        visited[currentLocation] = true;
+      }
+
+      if (distanceSum < bestDistance) {
+        bestTrip = trip;
+      }
+    }
+
+    Map[] newPlaces = new Map[places.length];
+    int newIndex = 0;
+
+    for (int i : bestTrip) {
+      newPlaces[newIndex] = places[i];
+      ++newIndex;
+    }
+
+    System.out.println(newPlaces);
+
+    return newPlaces;
   }
 }
