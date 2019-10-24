@@ -14,6 +14,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
+    this.ExportCSV = this.ExportCSV.bind(this);
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.handleExportFile = this.handleExportFile.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
@@ -157,6 +158,51 @@ export default class Home extends Component {
     });
   }
 
+  ExportCSV() {
+    let csv_file = "";
+    let cumulative = 0;
+    for(let i = 0; i < this.props.destinations.length; i++)
+    {
+      if(this.props.destinations[i].hasOwnProperty("name"))
+        csv_file += this.props.destinations[i]["name"];
+      csv_file += ",";
+
+      if(this.props.destinations[i].hasOwnProperty("latitude"))
+        csv_file += this.props.destinations[i]["latitude"];
+      csv_file += ",";
+
+      if(this.props.destinations[i].hasOwnProperty("longitude"))
+        csv_file += this.props.destinations[i]["longitude"];
+      csv_file += ",";
+
+      if(this.props.destinations[i].hasOwnProperty("id"))
+        csv_file += this.props.destinations[i]["id"];
+      csv_file += ",";
+
+      if(this.props.destinations[i].hasOwnProperty("altitude"))
+        csv_file += this.props.destinations[i]["altitude"];
+      csv_file += ",";
+
+      if(this.props.destinations[i].hasOwnProperty("municipality"))
+        csv_file += this.props.destinations[i]["municipality"];
+      csv_file += ",";
+
+      if(this.props.destinations[i].hasOwnProperty("type"))
+        csv_file += this.props.destinations[i]["type"];
+      csv_file += ",";
+
+      if(this.state.distances === null || i === 0) {
+        csv_file += "0,0,\n";
+      } else {
+        cumulative += this.state.distances[i-1];
+        csv_file   += this.state.distances[i-1] + ",";
+        csv_file   += cumulative + ",\n";
+      }
+
+    }
+    return csv_file;
+  }
+
   handleExportFile() {
     let saveTrip = {
       "requestType"    : "trip",
@@ -168,13 +214,25 @@ export default class Home extends Component {
 
     if(this.state.optimizations != null)
       saveTrip.options["optimization"] = this.state.optimizations;
+
+    let data = "";
+    let fileName = "default.txt";
+
+    if(this.props.options.activeFileFormat == 'json') {
+      data = JSON.stringify(saveTrip);
+      fileName = "Trip.json";
+    }
+
+    if(this.props.options.activeFileFormat == 'csv') {
+      data = this.ExportCSV();
+      fileName = "Trip.csv";
+    }
     
-    let json = JSON.stringify(saveTrip);
     if (window.navigator && window.navigator.msSaveOrOpenBlob)  {
-      let blob = new Blob([json], {type: "octet/stream"});
-      window.navigator.msSaveOrOpenBlob(blob, "exportedTrip.json");
+      let blob = new Blob([data], {type: "octet/stream"});
+      window.navigator.msSaveOrOpenBlob(blob, fileName);
     } else {
-        let file = new File([json], "exportedTrip.json", {type: "octet/stream"});
+        let file = new File([data], fileName, {type: "octet/stream"});
         let exportUrl = URL.createObjectURL(file);
         window.location.assign(exportUrl);
         URL.revokeObjectURL(exportUrl);
