@@ -144,7 +144,7 @@ export default class Application extends Component {
               swapDestinations={this.swapDestinations}
               addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
-              setDestiantions={this.setDestinations}
+              setDestinations={this.setDestinations}
               reverseDestinations={this.reverseDestinations}
               createErrorBanner={this.createErrorBanner}
               convertCoordinates={this.convertCoordinates}

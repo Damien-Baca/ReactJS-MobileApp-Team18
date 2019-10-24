@@ -239,13 +239,14 @@ export default class Home extends Component {
   }
 
   setDistances(newDistances) {
+    console.log(newDistances);
     if (newDistances !== null) {
       this.setState({
         errorMessage: newDistances.errorMessage,
         distances: newDistances.distances
       });
 
-      if (newDistances.optimization === 'short') {
+      if (newDistances.options.optimization === 'short') {
         let nameList = [];
         newDistances.places.forEach((place) => {
           nameList.push(place.name);
@@ -273,8 +274,6 @@ export default class Home extends Component {
     this.props.destinations.forEach((destination) => {
       markerList.push(Object.assign({}, destination))
     });
-
-    console.log(markerList);
 
     markerList.forEach((destination) => {
       let convertedLatLong = this.props.convertCoordinates(
