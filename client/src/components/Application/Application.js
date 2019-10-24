@@ -25,9 +25,9 @@ export default class Application extends Component {
     this.updatePlanOption = this.updatePlanOption.bind(this);
     this.updateClientSetting = this.updateClientSetting.bind(this);
     this.createApplicationPage = this.createApplicationPage.bind(this);
-    this.addDestination = this.addDestination.bind(this);
+    this.addDestinations = this.addDestinations.bind(this);
     this.removeDestination = this.removeDestination.bind(this);
-    this.clearDestinations = this.clearDestinations.bind(this);
+    this.setDestinations = this.setDestinations.bind(this);
     this.reverseDestinations = this.reverseDestinations.bind(this);
     this.convertCoordinates = this.convertCoordinates.bind(this);
     this.validateCoordinates = this.validateCoordinates.bind(this);
@@ -43,7 +43,7 @@ export default class Application extends Component {
         units: {'miles': 3958.8, 'kilometers': 6371},
         activeUnit: 'miles',
         optimizations: ['none', 'short'],
-        activeOptimization: 'none',
+        activeOptimization: 'short',
         formats: ['json', 'csv'],
         activeFileFormat: 'json'
       },
@@ -144,9 +144,9 @@ export default class Application extends Component {
               destinations={this.state.destinations}
               settings={this.state.clientSettings}
               swapDestinations={this.swapDestinations}
-              addDestination={this.addDestination}
+              addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
-              clearDestinations={this.clearDestinations}
+              setDestinations={this.setDestinations}
               reverseDestinations={this.reverseDestinations}
               createErrorBanner={this.createErrorBanner}
               convertCoordinates={this.convertCoordinates}
@@ -176,12 +176,17 @@ export default class Application extends Component {
     }
   }
 
-  addDestination(newDestination, index = (this.state.destinations.length)) {
-    if (newDestination.name !== '' && newDestination.latitude !== '' && newDestination.longitude !== '' ) {
-      let newDestinationList = this.state.destinations;
-      let convertedNewDestination = {name: newDestination.name};
-      Object.assign(convertedNewDestination,this.convertCoordinates(newDestination.latitude,newDestination.longitude));
-      newDestinationList.splice(index, 0, convertedNewDestination);
+  addDestinations(newDestinations, index = (this.state.destinations.length)) {
+    if (newDestinations.length > 0) {
+      let newDestinationList = Object.assign([], this.state.destinations);
+
+      newDestinations.forEach((destination, offset) => {
+        newDestinationList.splice(index + offset, 0, {
+          name: String(destination.name),
+          latitude: String(destination.latitude),
+          longitude: String(destination.longitude)
+        });
+      });
 
       this.setState({
         destinations: newDestinationList
@@ -190,23 +195,41 @@ export default class Application extends Component {
   }
 
   removeDestination(index) {
-    let newDestinationList = Object.assign([], this.state.destinations);
-    newDestinationList.splice(index, 1);
+    let newDestinationList = [];
+
+    if (index >= 0) {
+      Object.assign(newDestinationList, this.state.destinations);
+      newDestinationList.splice(index, 1);
+    }
 
     this.setState({
       destinations: newDestinationList
     });
   }
 
-  clearDestinations() {
-    this.setState({
-      destinations: []
-    });
-  }
-
   reverseDestinations() {
     this.setState({
       destinations: Object.assign([], this.state.destinations).reverse()
+    });
+  }
+
+  setDestinations(names) {
+    let newDestinationList = [];
+
+    names.forEach((name) => {
+      let newDestination = {};
+
+      this.state.destinations.forEach((destination) => {
+        if (destination.name === name) {
+          newDestination = Object.assign({}, destination);
+        }
+      });
+
+      newDestinationList.push(newDestination);
+    });
+
+    this.setState({
+      destinations: newDestinationList
     });
   }
 

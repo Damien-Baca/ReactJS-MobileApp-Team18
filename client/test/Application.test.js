@@ -30,7 +30,7 @@ function testInitialState() {
   let actualOptions = app.state().planOptions;
   let expectedOptions = {
     optimizations: ['none', 'short'],
-    activeOptimization: 'none',
+    activeOptimization: 'short',
     units: {kilometers: 6371, miles: 3958.8},
     activeUnit: 'miles',
     formats: ['json', 'csv'],
@@ -76,9 +76,7 @@ function testAddDestination() {
   const app = shallow(<Application/>);
   let expectedDestinations = newDestinations;
 
-  newDestinations.forEach((destination) => {
-    app.instance().addDestination(destination);
-  });
+  app.instance().addDestinations(newDestinations);
 
   let actualDestinations = app.state().destinations;
 
@@ -91,9 +89,9 @@ function testRemoveDestination() {
   const app = shallow(<Application/>);
   let expectedDestinations = Object.assign([],app.state().destinations);
 
-  app.instance().addDestination(newDestinations[0]);
-  app.instance().addDestination(newDestinations[1]);
-  app.instance().addDestination(newDestinations[2]);
+  app.instance().addDestinations([newDestinations[0]]);
+  app.instance().addDestinations([newDestinations[1]]);
+  app.instance().addDestinations([newDestinations[2]]);
   app.instance().removeDestination(1);
   app.instance().removeDestination(0);
   app.instance().removeDestination(0);
@@ -108,10 +106,10 @@ function testClearDestinationList() {
   const app = shallow(<Application/>);
   let expected = Object.assign([], app.state().destinations);
 
-  app.instance().addDestination(newDestinations[0]);
-  app.instance().addDestination(newDestinations[1]);
-  app.instance().addDestination(newDestinations[2]);
-  app.instance().clearDestinations();
+  app.instance().addDestinations([newDestinations[0]]);
+  app.instance().addDestinations([newDestinations[1]]);
+  app.instance().addDestinations([newDestinations[2]]);
+  app.instance().removeDestination(-1);
   let actual = app.state().destinations;
 
   expect(actual).toEqual(expected);
@@ -147,9 +145,9 @@ function testSwapDestinations() {
   app.state().destinations = destinationsStub;
   let expected = newDestinations;
 
-  app.instance().addDestination(newDestinations[0]);
-  app.instance().addDestination(newDestinations[2]);
-  app.instance().addDestination(newDestinations[1]);
+  app.instance().addDestinations([newDestinations[0]]);
+  app.instance().addDestinations([newDestinations[2]]);
+  app.instance().addDestinations([newDestinations[1]]);
   app.instance().swapDestinations(2, 1);
   let actual = app.state().destinations;
 

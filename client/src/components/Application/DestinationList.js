@@ -152,7 +152,7 @@ export default class DestinationList extends Component {
   }
 
   handleClearDestinations() {
-    this.props.clearDestinations();
+    this.props.removeDestination(-1);
     this.props.resetDistances();
   }
 

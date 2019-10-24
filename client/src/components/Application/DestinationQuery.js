@@ -138,7 +138,7 @@ export default class DestinationQuery extends Component {
       longitude: this.state.places[index].longitude
     };
 
-    this.props.addDestination(newDestination);
+    this.props.addDestinations([newDestination]);
     this.props.resetDistances();
   }
 

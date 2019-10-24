@@ -23,17 +23,20 @@ export default class DestinationMap extends Component {
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
-          {this.renderMarkers()}
+          {this.generateDestinationMarkers()}
           {this.renderPolyline()}
         </Map>
     )
   }
 
-  renderMarkers() {
-    let markerList = [Object.assign({}, this.props.userLocation)];
-
+  generateDestinationMarkers() {
+    let markerList = [this.props.userLocation];
     if (this.props.destinations.length > 0) {
-      markerList = Object.assign([], this.props.destinations);
+      markerList = [];
+
+      this.props.destinations.forEach((destination) => (
+          markerList.push(Object.assign({}, destination))
+      ));
     }
 
     return (
@@ -103,7 +106,6 @@ export default class DestinationMap extends Component {
         L.latLng(boundaries.min.latitude - margin,
             boundaries.max.longitude + margin));
   }
-
 
   destinationsBound(boundaries) {
     this.props.destinations.forEach((destination) => {

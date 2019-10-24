@@ -1,6 +1,7 @@
 package com.tripco.t18.TIP;
 
 import com.tripco.t18.misc.GreatCircleDistance;
+import com.tripco.t18.misc.OptimizeTrip;
 import org.slf4j.Logger;
 import java.util.ArrayList;
 import org.slf4j.LoggerFactory;
@@ -32,11 +33,6 @@ public class TIPTrip extends TIPHeader {
     this();
     this.requestVersion = version;
     this.options = options;
-    // change this when optimizations are implemented
-    if (this.options.get("optimization") == "shorter" ||
-        this.options.get("optimization") == "short") {
-      this.options.put("optimization", "none");
-    }
 
     this.places = places;
     this.distances = new ArrayList<>();
@@ -47,8 +43,11 @@ public class TIPTrip extends TIPHeader {
 
   @Override
   public void buildResponse() {
-    GreatCircleDistance calculate = new GreatCircleDistance();
     Double earthRadius = Double.parseDouble((String) options.get("earthRadius"));
+
+    if (options.get("optimization").equals("short")) {
+      places = OptimizeTrip.shortTrip(places, earthRadius);
+    }
 
     for (int i = 0; i < this.places.length; ++i) {
       Map origin = places[i];
@@ -57,7 +56,7 @@ public class TIPTrip extends TIPHeader {
         destination = places[i + 1];
       }
 
-      this.distances.add(calculate.calculateDistance(origin, destination, earthRadius));
+      this.distances.add(GreatCircleDistance.calculateDistance(origin, destination, earthRadius));
     }
     log.trace("buildResponse -> {}", this);
   }
