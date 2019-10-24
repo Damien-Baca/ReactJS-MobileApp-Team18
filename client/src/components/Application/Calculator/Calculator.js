@@ -108,15 +108,28 @@ export default class Calculator extends Component {
   }
 
   calculateDistance() {
-    const tipRequest = {
-      'requestType': 'distance',
-      'requestVersion': 3,
-      'origin': this.props.convertCoordinates(this.state.origin.latitude,this.state.origin.longitude),
-      'destination': this.props.convertCoordinates(this.state.destination.latitude,this.state.destination.longitude),
-      'earthRadius': this.props.options.units[this.props.options.activeUnit]
-    };
+    if(this.props.validation(this.state.origin.latitude, this.state.origin.longitude) &&
+        this.props.validation(this.state.destination.latitude, this.state.destination.longitude) ) {
+      const tipRequest = {
+        'requestType': 'distance',
+        'requestVersion': 3,
+        'origin': this.props.convertCoordinates(this.state.origin.latitude,
+            this.state.origin.longitude),
+        'destination': this.props.convertCoordinates(
+            this.state.destination.latitude, this.state.destination.longitude),
+        'earthRadius': this.props.options.units[this.props.options.activeUnit]
+      };
+      this.props.sendServerRequest('distance', tipRequest, this.setDistance);
+    } else {
+      this.setState({
+        errorMessage: this.props.createErrorBanner(
+            'Invalid Coordinates',
+            "400",
+            'Invalid Cardinal Coordinates')
+      });
+    }
 
-    this.props.sendServerRequest('distance', tipRequest, this.setDistance);
+
   }
 
   setDistance(newDistance) {

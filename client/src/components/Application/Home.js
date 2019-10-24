@@ -68,6 +68,8 @@ export default class Home extends Component {
     return (
         <Pane header={'Bon Voyage!'}
               bodyJSX={<DestinationControls
+                  createErrorBanner={this.props.createErrorBanner}
+                  setErrorBanner={this.setErrorBanner}
                   userLocation={this.state.userLocation}
                   distances={this.state.distances}
                   destinations={this.props.destinations}
