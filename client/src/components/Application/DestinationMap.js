@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import {marker} from "leaflet/dist/leaflet-src.esm";
 
 /*
  * Renders a Leaflet Map with Markers and a Polyline.
