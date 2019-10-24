@@ -14,15 +14,6 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.bindHomeFunctions = this.bindHomeFunctions.bind(this);
-    this.setHomeState = this.setHomeState.bind(this);
-    this.bindHomeFunctions();
-    this.setHomeState();
-
-    this.handleGetUserLocation();
-  }
-
-  bindHomeFunctions() {
     this.handleLoadJSON = this.handleLoadJSON.bind(this);
     this.handleExportFile = this.handleExportFile.bind(this);
     this.storeUserLocation = this.storeUserLocation.bind(this);
@@ -37,9 +28,7 @@ export default class Home extends Component {
     this.renderDestinationQuery = this.renderDestinationQuery.bind(this);
     this.renderDestinationControls = this.renderDestinationControls.bind(this);
     this.addJsonValues = this.addJsonValues.bind(this);
-  }
 
-  setHomeState() {
     this.state = {
       errorMessage: null,
       userLocation: {
@@ -50,6 +39,8 @@ export default class Home extends Component {
       distances: null,
       optimizations: null
     };
+
+    this.handleGetUserLocation();
   }
 
   render() {

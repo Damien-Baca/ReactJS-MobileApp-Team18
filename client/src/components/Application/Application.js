@@ -21,15 +21,6 @@ export default class Application extends Component {
   constructor(props) {
     super(props);
 
-    this.bindApplicationFunctions = this.bindApplicationFunctions.bind(this);
-    this.setApplicationState = this.setApplicationState.bind(this);
-    this.bindApplicationFunctions();
-    this.setApplicationState();
-
-    this.updateServerConfig();
-  }
-
-  bindApplicationFunctions() {
     this.updatePlanOption = this.updatePlanOption.bind(this);
     this.updateClientSetting = this.updateClientSetting.bind(this);
     this.createApplicationPage = this.createApplicationPage.bind(this);
@@ -43,9 +34,7 @@ export default class Application extends Component {
     this.swapDestinations = this.swapDestinations.bind(this);
     this.sendServerRequest = this.sendServerRequest.bind(this);
     this.handleServerResponse = this.handleServerResponse.bind(this);
-  }
 
-  setApplicationState() {
     this.state = {
       serverConfig: null,
       planOptions: {
@@ -62,6 +51,8 @@ export default class Application extends Component {
       destinations: [],
       errorMessage: null
     };
+
+    this.updateServerConfig();
   }
 
   render() {
