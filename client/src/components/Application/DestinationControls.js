@@ -176,14 +176,22 @@ export default class DestinationControls extends Component {
   }
 
   handleNewDestination() {
-    this.props.addDestination(Object.assign({}, this.state.newDestination));
-    let superFalse = {latitude: false, longitude: false};
-    this.setState({
-      newDestination: {name: '', latitude: '', longitude: ''},
-      valid: superFalse,
-      invalid: superFalse
-    });
-    this.props.resetDistances();
+      if(this.props.validation(this.state.newDestination.latitude, this.state.newDestination.longitude)) {
+        this.props.addDestination(Object.assign({}, this.state.newDestination));
+        let superFalse = {latitude: false, longitude: false};
+        this.setState({
+          newDestination: {name: '', latitude: '', longitude: ''},
+          valid: superFalse,
+          invalid: superFalse
+        });
+        this.props.resetDistances();
+      } else {
+        this.props.setErrorBanner(this.props.createErrorBanner(
+              'Invalid Coordinates',
+              "400",
+              'Invalid Cardinal Coordinates')
+        )
+      }
   }
 
   handleUserDestination() {
