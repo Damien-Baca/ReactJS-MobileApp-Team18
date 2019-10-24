@@ -27,6 +27,7 @@ export default class Home extends Component {
     this.renderDestinations = this.renderDestinations.bind(this);
     this.renderDestinationQuery = this.renderDestinationQuery.bind(this);
     this.renderDestinationControls = this.renderDestinationControls.bind(this);
+    this.addJsonValues = this.addJsonValues.bind(this);
 
     this.state = {
       errorMessage: null,
@@ -185,40 +186,21 @@ export default class Home extends Component {
     if (fileContents) {
       try {
         let newTrip = JSON.parse(fileContents);
-        this.setState({errorMessage: null});
-
-        newTrip.places.forEach((destination) => (
-            this.props.addDestination(Object.assign({}, destination))
-        ));
-
-        if (newTrip.hasOwnProperty('distances')) {
-          let newDist = [];
-          Object.assign(newDist, this.state.distances);
-          newTrip.distances.forEach((distance) => (
-              newDist.push(distance)
-          ));
-          this.setState({distances: newDist});
-        }
-
-        this.setState({optimizations: newTrip.options["optimization"]});
+        this.addJsonValues(newTrip);
 
       } catch (e) {
-        this.setState({
-          errorMessage: this.props.createErrorBanner(
+        this.setErrorBanner( this.props.createErrorBanner(
               "File Error",
               0,
               "File has invalid JSON TIP Trip format."
-          )
-        });
+          ));
       }
     } else {
-      this.setState({
-        errorMessage: this.props.createErrorBanner(
+      this.setErrorBanner( this.props.createErrorBanner(
             "File Error",
             0,
             "No file has been selected."
-        )
-      });
+        ));
     }
   }
 
@@ -268,16 +250,28 @@ export default class Home extends Component {
   }
 
   sumDistances(index = this.state.distances.length - 1) {
-    const reducer = (sum, current) => {
-      return sum + current;
-    };
+    const reducer = (sum, current) => { return sum + current; };
 
-    let distanceSlice = Object.assign([], this.state.distances).slice(0,
-        index + 1);
-
-    return distanceSlice.reduce(reducer);
+    return Object.assign([], this.state.distances).slice(0,
+        index + 1).reduce(reducer);
   }
 
+  addJsonValues(newTrip) {
+    let newState = {
+      errorMessage: null,
+      optimizations: newTrip.options.optimizations
+    };
+
+    newTrip.places.forEach((destination) => (
+        this.props.addDestination(destination)
+    ));
+
+    if (newTrip.hasOwnProperty('distances')) {
+      newState['distances'] = newTrip.distances
+    }
+
+    this.setState(newState);
+  }
 
 /* not currently used, may be used in future sprints.
   coloradoGeographicBoundaries() {

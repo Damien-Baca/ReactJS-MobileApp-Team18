@@ -4,7 +4,7 @@ import {Button, ButtonGroup} from 'reactstrap'
 
 export default class Units extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
@@ -30,9 +30,7 @@ export default class Units extends Component {
             value={name}
             onClick={(event) => this.props.updateOption(this.props.activeOptionString,
                 event.target.value)}
-        >
-          {name.charAt(0).toUpperCase() + name.slice(1)}
-        </Button>
+        >{name.charAt(0).toUpperCase() + name.slice(1)}</Button>
     );
   }
 }
