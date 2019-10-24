@@ -49,6 +49,8 @@ public class OptimizeTrip {
         trip[j] = currentLocation;
       }
 
+      distanceSum += distanceMatrix[trip[trip.length - 1]][trip[0]];
+
       if (distanceSum < bestDistance) {
         bestTrip = trip;
         bestDistance = distanceSum;
