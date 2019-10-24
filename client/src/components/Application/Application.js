@@ -224,6 +224,8 @@ export default class Application extends Component {
       valid = this.validateCoordinates(value, 0);
     } else if (name === 'longitude') {
       valid = this.validateCoordinates(0, value);
+    } else {
+      valid = this.validateCoordinates(name, value)
     }
     return valid;
   }
