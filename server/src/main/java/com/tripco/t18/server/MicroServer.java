@@ -9,7 +9,6 @@ import com.tripco.t18.TIP.TIPLocations;
 import com.tripco.t18.TIP.TIPHeader;
 
 import com.tripco.t18.validation.SchemaValidator;
-
 import java.lang.reflect.Type;
 
 import org.json.JSONObject;
@@ -120,19 +119,17 @@ class MicroServer {
       TIPHeader tipRequest = jsonConverter.fromJson(request.body(), tipType);
 
       JSONObject jsonRequestBody = new JSONObject(request.body());
-      System.out.println("request.body() start");
-      System.out.println(jsonRequestBody);
-      System.out.println("request.body() end");
       String path = tipType.getTypeName();
       path = path.substring(19);
-      System.out.println(path);
-      if(SchemaValidator.validate(jsonRequestBody , "../../../../../resources/"+path+"RequestSchema.json") ) {
+      path = "server/src/main/resources/"+path+"RequestSchema.json";
+
+      if(SchemaValidator.validate(jsonRequestBody , path) ) {
         tipRequest.buildResponse();
         String responseBody = jsonConverter.toJson(tipRequest);
         log.trace("TIP Response: {}", responseBody);
         return responseBody;
       } else {
-        log.error("you fucked up boooiiiii");
+        log.error("Invalid Schema");
         response.status(400);
         return request.body();
       }

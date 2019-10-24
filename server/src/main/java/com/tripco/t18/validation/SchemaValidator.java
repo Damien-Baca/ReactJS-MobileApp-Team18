@@ -11,7 +11,6 @@ import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +44,6 @@ public class SchemaValidator {
     // there are other ways of creating a JSONObject, like from an InputStream...
     // (https://github.com/everit-org/json-schema#quickstart)
     JSONObject parsedObject = null;
-    System.out.println(path);
     try {
       byte[] jsonBytes = Files.readAllBytes(Paths.get(path));
       parsedObject = new JSONObject(new String(jsonBytes));
