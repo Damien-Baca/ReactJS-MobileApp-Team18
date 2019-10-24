@@ -123,7 +123,10 @@ class MicroServer {
       System.out.println("request.body() start");
       System.out.println(jsonRequestBody);
       System.out.println("request.body() end");
-      if(SchemaValidator.validate(jsonRequestBody , "../../"+tipType.getTypeName()+"RequestSchema.json") ) {
+      String path = tipType.getTypeName();
+      path = path.substring(19);
+      System.out.println(path);
+      if(SchemaValidator.validate(jsonRequestBody , "../../../../../resources/"+path+"RequestSchema.json") ) {
         tipRequest.buildResponse();
         String responseBody = jsonConverter.toJson(tipRequest);
         log.trace("TIP Response: {}", responseBody);
