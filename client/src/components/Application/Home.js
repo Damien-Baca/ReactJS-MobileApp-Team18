@@ -158,39 +158,48 @@ export default class Home extends Component {
     });
   }
 
+  ExportPlace(place) {
+    let csv_file = "";
+    if(place.hasOwnProperty("name"))
+      csv_file += place["name"];
+    csv_file += ",";
+
+    if(place.hasOwnProperty("latitude"))
+      csv_file += place["latitude"];
+    csv_file += ",";
+
+    if(place.hasOwnProperty("longitude"))
+      csv_file += place["longitude"];
+    csv_file += ",";
+
+    if(place.hasOwnProperty("id"))
+      csv_file += place["id"];
+    csv_file += ",";
+
+    if(place.hasOwnProperty("altitude"))
+      csv_file += place["altitude"];
+    csv_file += ",";
+
+    if(place.hasOwnProperty("municipality"))
+      csv_file += place["municipality"];
+    csv_file += ",";
+
+    if(place.hasOwnProperty("type"))
+      csv_file += place["type"];
+    csv_file += ",";
+
+    return csv_file;
+  }
+
   ExportCSV() {
     let csv_file = "";
     let cumulative = 0;
+
+    csv_file += "name,latitude,longitude,id,altitude,municipality,type,distance,cumulative\n";
     for(let i = 0; i < this.props.destinations.length; i++)
     {
-      if(this.props.destinations[i].hasOwnProperty("name"))
-        csv_file += this.props.destinations[i]["name"];
-      csv_file += ",";
-
-      if(this.props.destinations[i].hasOwnProperty("latitude"))
-        csv_file += this.props.destinations[i]["latitude"];
-      csv_file += ",";
-
-      if(this.props.destinations[i].hasOwnProperty("longitude"))
-        csv_file += this.props.destinations[i]["longitude"];
-      csv_file += ",";
-
-      if(this.props.destinations[i].hasOwnProperty("id"))
-        csv_file += this.props.destinations[i]["id"];
-      csv_file += ",";
-
-      if(this.props.destinations[i].hasOwnProperty("altitude"))
-        csv_file += this.props.destinations[i]["altitude"];
-      csv_file += ",";
-
-      if(this.props.destinations[i].hasOwnProperty("municipality"))
-        csv_file += this.props.destinations[i]["municipality"];
-      csv_file += ",";
-
-      if(this.props.destinations[i].hasOwnProperty("type"))
-        csv_file += this.props.destinations[i]["type"];
-      csv_file += ",";
-
+      csv_file += this.ExportPlace(this.props.destinations[i]);
+      
       if(this.state.distances === null || i === 0) {
         csv_file += "0,0,\n";
       } else {
@@ -198,8 +207,16 @@ export default class Home extends Component {
         csv_file   += this.state.distances[i-1] + ",";
         csv_file   += cumulative + ",\n";
       }
-
     }
+    csv_file += this.ExportPlace(this.props.destinations[0]);
+
+    if(this.state.distances === null) {
+      csv_file += "0,0,\n";
+    } else {
+      cumulative += this.state.distances[this.state.distances.length - 1];
+      csv_file   += this.state.distances[this.state.distances.length - 1] + "," + cumulative + ",\n";
+    }
+
     return csv_file;
   }
 
