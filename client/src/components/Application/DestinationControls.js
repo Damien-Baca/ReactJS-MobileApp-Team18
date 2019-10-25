@@ -177,7 +177,7 @@ export default class DestinationControls extends Component {
 
   handleNewDestination() {
       if(this.props.validation(this.state.newDestination.latitude, this.state.newDestination.longitude)) {
-        this.props.addDestinations(Object.assign({}, this.state.newDestination));
+        this.props.addDestinations([Object.assign({}, this.state.newDestination)]);
         let superFalse = {latitude: false, longitude: false};
         this.setState({
           newDestination: {name: '', latitude: '', longitude: ''},
