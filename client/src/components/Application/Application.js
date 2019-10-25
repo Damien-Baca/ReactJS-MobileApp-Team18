@@ -177,7 +177,6 @@ export default class Application extends Component {
   }
 
   addDestinations(newDestinations, index = (this.state.destinations.length)) {
-    console.log(newDestinations);
     if (newDestinations.length > 0) {
       let newDestinationList = Object.assign([], this.state.destinations);
 
