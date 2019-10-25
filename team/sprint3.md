@@ -105,62 +105,59 @@ Modify Trip Diagram
 | *10/22/2019* | *#175,#232,#193* | *#218,#186,#177,#224,#223,#216* | *none* |
 | *10/23/2019* | *#225,#227* | *#235,#191,#177,#186,#184* | *none* |
 
-
-
-
-
-
-
-
-
-
-
-
-
 ## Review (focus on solution and technology)
 
-In this sprint, ...
+We completed all of our epics. We learned how to use GitHub better, and learned to use all of the 
+new programming tools used in this sprint.
 
 #### Completed epics in Sprint Backlog 
 
 These Epics were completed.
 
 * *## epic title: comments*
-* 
+* Tip V3
+* Validate API
+* Short Trip
+* Save Trip
+* Modify Trip
 
 #### Incomplete epics in Sprint Backlog 
 
 These Epics were not completed.
 
 * *## epic title: explanation*
-*
+* 
 
 #### What went well
 
-The ...
-
+We got all of our planned epics done. We where much better at planning this epic than last sprint, our estimation
+of the work involved was much more accurate.
 
 #### Problems encountered and resolutions
 
-The ...
-
+The instructions provided for implementing the validation schemas were difficult to interpret. The solution was
+several hours of research. Github also presented an interesting last minute problem, insisting that a branch
+that was merged with master was the same as master in spite of the fact that it very obviously had not correctly
+merged and had differences.
 
 ## Retrospective (focus on people, process, tools)
 
-In this sprint, ...
+Other than somewhat sparse commits for the first few weeks, we followed the GitHub process well.
 
 #### What we changed this sprint
 
-Our changes for this sprint included ...
+We got better estimation for breaking down epics into tasks.
 
 #### What we did well
 
-We ...
+We managed to get all of the epics done for this sprint. We followed the GitHub process well. We communicated and
+solved issues individuals were having more effectively as a team.
 
 #### What we need to work on
 
-We could improve ...
+We need to start working earlier. We need to work on communicating in a more timely and effective manner. We need to 
+work on making more regular commits to GitHub.
 
 #### What we will change next sprint 
 
-We will change ...
+We will start working earlier. We'll make more regular commits rather than just working locally.
