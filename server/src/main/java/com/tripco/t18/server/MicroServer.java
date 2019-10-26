@@ -12,6 +12,7 @@ import com.tripco.t18.validation.SchemaValidator;
 
 import java.lang.reflect.Type;
 
+import java.net.URL;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -120,11 +121,21 @@ class MicroServer {
       TIPHeader tipRequest = jsonConverter.fromJson(request.body(), tipType);
 
       JSONObject jsonRequestBody = new JSONObject(request.body());
-      String path = tipType.getTypeName();
-      path = path.substring(19);
-      path = "server/src/main/resources/"+path+"RequestSchema.json";
 
-      if(SchemaValidator.validate(jsonRequestBody , path) ) {
+      String path = tipType.getTypeName();
+      path = /*"com.tripco.t18.resources." + */path.substring(19) + "RequestSchema.json";
+      System.out.println(path);
+      //path = "server/src/main/resources/"+path+"RequestSchema.json";
+      Class cls = Class.forName("com.tripco.t18.server.MicroServer");
+      ClassLoader cLoad = cls.getClassLoader();
+
+      URL url = cLoad.getResource(path);
+
+      System.out.println(url);
+
+      assert url != null;
+
+      if(SchemaValidator.validate(jsonRequestBody , url.toString()) ) {
         tipRequest.buildResponse();
         String responseBody = jsonConverter.toJson(tipRequest);
         log.trace("TIP Response: {}", responseBody);
