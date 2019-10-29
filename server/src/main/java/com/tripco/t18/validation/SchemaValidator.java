@@ -1,7 +1,10 @@
 package com.tripco.t18.validation;
 //credit to 314 ta and instructor
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -20,20 +23,24 @@ public class SchemaValidator {
   private static final Logger log = LoggerFactory.getLogger(SchemaValidator.class);
 
   public static boolean validate(JSONObject jsonString, String schemaPath) {
-    JSONObject schemaString = parseJsonFile(schemaPath);
+    try {
+      Class cls = Class.forName("com.tripco.t18.validation.SchemaValidator");
+      System.out.println(schemaPath);
+      System.out.println(System.getProperty("user.dir"));
 
-    if (null == jsonString || null == schemaString) {
-      log.error("Failed to read JSON strings!");
+      try (InputStream inputStream = cls.getClassLoader().getClass().getResourceAsStream(schemaPath)) {
+        System.out.println("Valid stream");
+        JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
+        System.out.println("Raw schema");
+        Schema schema = SchemaLoader.load(rawSchema);
+        System.out.println("Validating...");
+        schema.validate(jsonString);
+        return true;
+      }
+    } catch(Exception e) {
+      log.error("Exception: {}", e.getMessage());
       return false;
     }
-
-    log.trace(jsonString.toString());
-    log.trace(schemaString.toString());
-    log.trace("Starting validation");
-
-    boolean isValid = performValidation(jsonString, schemaString);
-    log.info("Was JSON body valid when checked against the schema?: {}", isValid);
-    return isValid;
   }
 
   private static JSONObject parseJsonFile(String path) {
@@ -53,13 +60,13 @@ public class SchemaValidator {
       log.error("Caught exception when constructing JSON objects!");
       e.printStackTrace();
     }
-    finally {
-      return parsedObject;
-    }
+
+    return parsedObject;
   }
 
   private static boolean performValidation(JSONObject json, JSONObject jsonSchema) {
     boolean validationResult = true;
+
     try {
       Schema schema = SchemaLoader.load(jsonSchema);
       // This is the line that will throw a ValidationException 
@@ -82,8 +89,7 @@ public class SchemaValidator {
       }
       validationResult = false;
     }
-    finally {
-      return validationResult;
-    }
+
+    return validationResult;
   }
 }

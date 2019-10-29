@@ -72,7 +72,7 @@ class MicroServer {
     Spark.get("/api/config", this::processTIPconfigRequest);
     Spark.post("/api/distance", this::processTIPdistanceRequest);
     Spark.post("/api/trip", this::processTIPtripRequest);
-    Spark.post("/api/locations", this::processTIPlocationsRequest);
+    Spark.post("/api/location", this::processTIPlocationsRequest);
     Spark.get("/api/echo", this::echoHTTPrequest);
     log.trace("Restful configuration complete");
   }
@@ -123,19 +123,9 @@ class MicroServer {
       JSONObject jsonRequestBody = new JSONObject(request.body());
 
       String path = tipType.getTypeName();
-      path = /*"com.tripco.t18.resources." + */path.substring(19) + "RequestSchema.json";
-      System.out.println(path);
-      //path = "server/src/main/resources/"+path+"RequestSchema.json";
-      Class cls = Class.forName("com.tripco.t18.server.MicroServer");
-      ClassLoader cLoad = cls.getClassLoader();
+      path = "server/src/main/java/com/tripco/t18/resources/" + path.substring(19) + "RequestSchema.json";
 
-      URL url = cLoad.getResource(path);
-
-      System.out.println(url);
-
-      assert url != null;
-
-      if(SchemaValidator.validate(jsonRequestBody , url.toString()) ) {
+      if(SchemaValidator.validate(jsonRequestBody , path)) {
         tipRequest.buildResponse();
         String responseBody = jsonConverter.toJson(tipRequest);
         log.trace("TIP Response: {}", responseBody);
