@@ -55,6 +55,11 @@ This sprint we will complete the following Epics.
     3: Each teammate chose some epics or tasks
     4: We also talked about updates from previous sprint
     5: We also want to do some tests for many implications***
+    
+Diagrams
+
+![Modify Trip Diagram](images/modifyTripDiaghram.jpg)
+![TIP Obj Diagram](images/TIPObjDia.jpg)
 
 
 ## Metrics
