@@ -28,11 +28,8 @@ public class SchemaValidator {
 
       try (InputStream inputStream = cls.getClassLoader().getResourceAsStream(schemaPath)) {
         assert inputStream != null;
-        System.out.println("Valid stream");
         JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
-        System.out.println("Raw schema");
         Schema schema = SchemaLoader.load(rawSchema);
-        System.out.println("Validating...");
         schema.validate(jsonString);
         return true;
       }
