@@ -75,7 +75,7 @@ Diagrams
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *date* | *#task, ...* | *#task, ...* | *none* | 
+| *10/30/19* | ** | *#264,#268,#285,* | *none* | 
 
 
 ## Review (focus on solution and technology)
