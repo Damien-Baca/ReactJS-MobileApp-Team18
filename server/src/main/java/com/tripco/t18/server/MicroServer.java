@@ -91,7 +91,7 @@ class MicroServer {
       log.trace("TIP Config response: {}", responseBody);
       return responseBody;
     } catch (Exception e) {
-      log.error("Exception: {}", e);
+      log.error("Exception: {}", e.getMessage());
       response.status(500);
       return request.body();
     }
@@ -115,6 +115,7 @@ class MicroServer {
     response.type("application/json");
     response.header("Access-Control-Allow-Origin", "*");
     response.status(200);
+
     try {
       Gson jsonConverter = new Gson();
       //throw to schema on TIPtype (conditional)
@@ -123,7 +124,7 @@ class MicroServer {
       JSONObject jsonRequestBody = new JSONObject(request.body());
 
       String path = tipType.getTypeName();
-      path = "server/src/main/java/com/tripco/t18/resources/" + path.substring(19) + "RequestSchema.json";
+      path = path.substring(19) + "RequestSchema.json";
 
       if(SchemaValidator.validate(jsonRequestBody , path)) {
         tipRequest.buildResponse();
@@ -136,7 +137,7 @@ class MicroServer {
         return request.body();
       }
     } catch (Exception e) {
-      log.error("Exception: {}", e);
+      log.error("Exception: {}", e.getMessage());
       response.status(500);
       return request.body();
     }

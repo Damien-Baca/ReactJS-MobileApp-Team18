@@ -145,7 +145,7 @@ export default class DestinationQuery extends Component {
   handleServerSubmission() {
     let query = Object.assign({}, this.state);
     query.found = 0;
-    this.props.sendServerRequest('location', query, this.setPlaces)
+    this.props.sendServerRequest('locations', query, this.setPlaces)
   }
 
   setPlaces(newPlaces) {

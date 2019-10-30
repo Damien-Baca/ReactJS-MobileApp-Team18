@@ -25,10 +25,9 @@ public class SchemaValidator {
   public static boolean validate(JSONObject jsonString, String schemaPath) {
     try {
       Class cls = Class.forName("com.tripco.t18.validation.SchemaValidator");
-      System.out.println(schemaPath);
-      System.out.println(System.getProperty("user.dir"));
 
-      try (InputStream inputStream = cls.getClassLoader().getClass().getResourceAsStream(schemaPath)) {
+      try (InputStream inputStream = cls.getClassLoader().getResourceAsStream(schemaPath)) {
+        assert inputStream != null;
         System.out.println("Valid stream");
         JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
         System.out.println("Raw schema");
