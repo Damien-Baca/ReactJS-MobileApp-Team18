@@ -1,4 +1,4 @@
-# Sprint 4 - *your team number* - *your team name*
+# Sprint 4 - t18 - THE FIGHTING MONGOOSES
 
 ## Goal
 
