@@ -133,6 +133,16 @@ function testReverseDestinations() {
 
 test('Testing reverseDestinations.', testReverseDestinations);
 
+function testSetDestinations() {
+  const app = shallow(<Application/>);
+  app.state().destinations = Object.assign([], newDestinations);
+  let expected = Object.assign([], newDestinations.reverse());
+  let names = []
+  newDestinations
+}
+
+test('Testing setDestinations', testSetDestinations);
+
 function testConvertCoordinates() {
   const app = shallow(<Application/>);
   let expected = {latitude: "40",longitude: "110"};
