@@ -48,6 +48,14 @@ This sprint we will complete the following Epics.
 * *#77 Distance Units*: Add new distances for calculations
 * *#265 Save Map*: Save map for use in Google Maps and offline
 
+*
+***Key planning decisions for this sprint4: 
+    1: We discussed the 6 required epics, which is main goal for this sprint
+    2: We distributed the 6 epics to 18 tasks
+    3: Each teammate chose some epics or tasks
+    4: We also talked about updates from previous sprint
+    5: We also want to do some tests for many implications***
+
 
 ## Metrics
 
