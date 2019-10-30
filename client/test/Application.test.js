@@ -150,16 +150,6 @@ function testSetDestinations() {
 
 test('Testing setDestinations', testSetDestinations);
 
-function testConvertCoordinates() {
-  const app = shallow(<Application/>);
-  let expected = {latitude: "40",longitude: "110"};
-  let actual = app.instance().convertCoordinates("N 40","E 110");
-  expect(actual).toEqual(expected);
-
-}
-
-test('Testing convertCoordinates', testConvertCoordinates);
-
 function testSwapDestinations() {
   const app = shallow(<Application/>);
   app.state().destinations = destinationsStub;
@@ -175,3 +165,33 @@ function testSwapDestinations() {
 }
 
 test('Testing swapDestinations', testSwapDestinations);
+
+function testValidationTrue() {
+  const app = shallow(<Application/>);
+  let expected = true;
+  let actual = app.instance().validation('longitude', '105');
+
+  expect(actual).toEqual(expected);
+}
+
+test('Testing true validation', testValidationTrue);
+
+function testValidationFalse() {
+  const app = shallow(<Application/>);
+  let expected = false;
+  let actual = app.instance().validation('30S', '105S');
+
+  expect(actual).toEqual(expected);
+}
+
+test('Testing false validation', testValidationFalse);
+
+function testConvertCoordinates() {
+  const app = shallow(<Application/>);
+  let expected = {latitude: "40",longitude: "110"};
+  let actual = app.instance().convertCoordinates("N 40","E 110");
+  expect(actual).toEqual(expected);
+
+}
+
+test('Testing convertCoordinates', testConvertCoordinates);
