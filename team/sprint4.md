@@ -1,4 +1,4 @@
-# Sprint 4 - t18 - THE FIGHTING MONGOOSES
+# Sprint 4 - T18 - THE FIGHTING MONGOOSES
 
 ## Goal
 
