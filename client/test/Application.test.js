@@ -137,8 +137,15 @@ function testSetDestinations() {
   const app = shallow(<Application/>);
   app.state().destinations = Object.assign([], newDestinations);
   let expected = Object.assign([], newDestinations.reverse());
-  let names = []
-  newDestinations
+  let names = [];
+  newDestinations.forEach((destination) => {
+    names.push(destination.name);
+  });
+
+  app.instance().setDestinations(names);
+  let actual = Object.assign([], app.state().destinations);
+
+  expect(actual).toEqual(expected);
 }
 
 test('Testing setDestinations', testSetDestinations);
