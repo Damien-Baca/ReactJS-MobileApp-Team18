@@ -208,8 +208,15 @@ export default class Application extends Component {
   }
 
   reverseDestinations() {
+    let newDestinations = [];
+    Object.assign(newDestinations,
+        this.state.destinations.slice(1).reverse());
+
+    newDestinations.splice(0,0,
+        Object.assign({}, this.state.destinations[0]));
+
     this.setState({
-      destinations: Object.assign([], this.state.destinations).reverse()
+      destinations: newDestinations
     });
   }
 
