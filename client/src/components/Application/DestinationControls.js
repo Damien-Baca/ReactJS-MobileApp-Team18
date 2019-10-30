@@ -80,6 +80,7 @@ export default class DestinationControls extends Component {
             style={{marginLeft: 'auto'}}
             onClick={() => this.props.calculateDistances('none')}
             disabled={this.props.destinations.length === 0}
+            active={true}
         >Calculate Trip Distances</Button>
     );
   }
@@ -94,6 +95,7 @@ export default class DestinationControls extends Component {
                   this.props.optimization)}
               disabled={this.props.destinations.length === 0 ||
               this.props.optimization === 'none'}
+              active={true}
           >Optimize Trip Distances</Button>
       );
   }
@@ -139,7 +141,6 @@ export default class DestinationControls extends Component {
     return (
         <Button
             className='btn-csu w-100 text-left'
-            color='success'
             name='loadJSON'
             key='button_loadJSON'
             active={true}
