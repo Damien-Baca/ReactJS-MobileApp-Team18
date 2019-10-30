@@ -120,7 +120,10 @@ test('Testing clearDestination.', testClearDestinationList);
 function testReverseDestinations() {
   const app = shallow(<Application/>);
   app.state().destinations = Object.assign([], newDestinations);
-  let expected = Object.assign([], newDestinations).reverse();
+  let expected = Object.assign([],
+      newDestinations.slice(1)).reverse();
+
+  expected.splice(0, 0, newDestinations[0]);
 
   app.instance().reverseDestinations();
   let actual = Object.assign([], app.state().destinations);
