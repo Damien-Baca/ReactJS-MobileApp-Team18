@@ -20,6 +20,15 @@
       "type":"string",
       "pattern":"^[a-zA-z0-9 ]+$"
     },
+    "narrow": {
+      "description": "list of filters to add to the query",
+      "type": "array",
+      "items": {
+        "name": {"type": "string"},
+        "value": {"type":  "string"}
+      },
+      "minItems": 0
+    },
     "limit": {
       "description":"the maximum number of matching places that may be returned.",
       "type":"integer",
