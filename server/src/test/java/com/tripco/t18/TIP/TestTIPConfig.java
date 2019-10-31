@@ -27,7 +27,7 @@ public class TestTIPConfig {
   @Test
   public void testVersion() {
     int version = 4; //conf.getVersion();
-    assertEquals("config requestVersion", 3, version);
+    assertEquals("config requestVersion", 4, version);
   }
 
   @Test
