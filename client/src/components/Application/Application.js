@@ -158,6 +158,7 @@ export default class Application extends Component {
 
   processConfigResponse(config) {
     this.validateSchema(config);
+
     if (config.statusCode >= 200 && config.statusCode <= 299) {
       console.log("Switching to server ", this.state.clientSettings.serverPort);
       this.setState({
