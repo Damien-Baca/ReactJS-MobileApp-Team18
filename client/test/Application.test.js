@@ -120,7 +120,10 @@ test('Testing clearDestination.', testClearDestinationList);
 function testReverseDestinations() {
   const app = shallow(<Application/>);
   app.state().destinations = Object.assign([], newDestinations);
-  let expected = Object.assign([], newDestinations).reverse();
+  let expected = Object.assign([],
+      newDestinations.slice(1)).reverse();
+
+  expected.splice(0, 0, newDestinations[0]);
 
   app.instance().reverseDestinations();
   let actual = Object.assign([], app.state().destinations);
@@ -130,15 +133,22 @@ function testReverseDestinations() {
 
 test('Testing reverseDestinations.', testReverseDestinations);
 
-function testConvertCoordinates() {
+function testSetDestinations() {
   const app = shallow(<Application/>);
-  let expected = {latitude: "40",longitude: "110"};
-  let actual = app.instance().convertCoordinates("N 40","E 110");
-  expect(actual).toEqual(expected);
+  app.state().destinations = Object.assign([], newDestinations);
+  let expected = Object.assign([], newDestinations.reverse());
+  let names = [];
+  newDestinations.forEach((destination) => {
+    names.push(destination.name);
+  });
 
+  app.instance().setDestinations(names);
+  let actual = Object.assign([], app.state().destinations);
+
+  expect(actual).toEqual(expected);
 }
 
-test('Testing convertCoordinates', testConvertCoordinates);
+test('Testing setDestinations', testSetDestinations);
 
 function testSwapDestinations() {
   const app = shallow(<Application/>);
@@ -155,3 +165,33 @@ function testSwapDestinations() {
 }
 
 test('Testing swapDestinations', testSwapDestinations);
+
+function testValidationTrue() {
+  const app = shallow(<Application/>);
+  let expected = true;
+  let actual = app.instance().validation('longitude', '105');
+
+  expect(actual).toEqual(expected);
+}
+
+test('Testing true validation', testValidationTrue);
+
+function testValidationFalse() {
+  const app = shallow(<Application/>);
+  let expected = false;
+  let actual = app.instance().validation('30S', '105S');
+
+  expect(actual).toEqual(expected);
+}
+
+test('Testing false validation', testValidationFalse);
+
+function testConvertCoordinates() {
+  const app = shallow(<Application/>);
+  let expected = {latitude: "40",longitude: "110"};
+  let actual = app.instance().convertCoordinates("N 40","E 110");
+  expect(actual).toEqual(expected);
+
+}
+
+test('Testing convertCoordinates', testConvertCoordinates);
