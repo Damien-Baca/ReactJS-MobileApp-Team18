@@ -119,7 +119,10 @@ export default class DestinationQuery extends Component {
               )}
           classname={'csu-btn'}
           direction={'right'}>
-        <DropdownToggle caret>{'Filter by ' + name.slice(6).toLowerCase()
+        <DropdownToggle
+            key={`key_${name}_dropdown`}
+            name={`${name}_dropdown`}
+            caret>{'Filter by ' + name.slice(6).toLowerCase()
         + ':'}</DropdownToggle>
         <DropdownMenu>{this.generateDropdownItems(name, filters)}</DropdownMenu>
       </Dropdown>
