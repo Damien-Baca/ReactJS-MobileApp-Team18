@@ -9,6 +9,7 @@ export default class DestinationQuery extends Component {
 
     this.state = {
       match: '',
+      narrow: [],
       limit: 10,
       found: null,
       places: []
