@@ -1,7 +1,10 @@
 package com.tripco.t18.validation;
 //credit to 314 ta and instructor
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -20,70 +23,19 @@ public class SchemaValidator {
   private static final Logger log = LoggerFactory.getLogger(SchemaValidator.class);
 
   public static boolean validate(JSONObject jsonString, String schemaPath) {
-    JSONObject schemaString = parseJsonFile(schemaPath);
-
-    if (null == jsonString || null == schemaString) {
-      log.error("Failed to read JSON strings!");
-      return false;
-    }
-
-    log.trace(jsonString.toString());
-    log.trace(schemaString.toString());
-    log.trace("Starting validation");
-
-    boolean isValid = performValidation(jsonString, schemaString);
-    log.info("Was JSON body valid when checked against the schema?: {}", isValid);
-    return isValid;
-  }
-
-  private static JSONObject parseJsonFile(String path) {
-    // Here, we simply dump the contents of a file into a String (and then an object);
-    // there are other ways of creating a JSONObject, like from an InputStream...
-    // (https://github.com/everit-org/json-schema#quickstart)
-    JSONObject parsedObject = null;
     try {
-      byte[] jsonBytes = Files.readAllBytes(Paths.get(path));
-      parsedObject = new JSONObject(new String(jsonBytes));
-    }
-    catch (IOException e) {
-      log.error("Caught exception when reading files!");
-      e.printStackTrace();
-    }
-    catch (JSONException e) {
-      log.error("Caught exception when constructing JSON objects!");
-      e.printStackTrace();
-    }
-    finally {
-      return parsedObject;
-    }
-  }
+      Class cls = Class.forName("com.tripco.t18.validation.SchemaValidator");
 
-  private static boolean performValidation(JSONObject json, JSONObject jsonSchema) {
-    boolean validationResult = true;
-    try {
-      Schema schema = SchemaLoader.load(jsonSchema);
-      // This is the line that will throw a ValidationException 
-      // if anything doesn't conform to the schema!
-      schema.validate(json);
-    }
-    catch (SchemaException e) {
-      log.error("Caught a schema exception!");
-      e.printStackTrace();
-      validationResult = false;
-    }
-    catch (ValidationException e) {
-      log.error("Caught validation exception when validating schema! Root message: {}", 
-                e.getErrorMessage());
-      log.error("All messages from errors (including nested):");
-      // For now, messages are probably just good for debugging, to see why something failed
-      List<String> allMessages = e.getAllMessages();
-      for (String message : allMessages) {
-        log.error(message);
+      try (InputStream inputStream = cls.getClassLoader().getResourceAsStream(schemaPath)) {
+        assert inputStream != null;
+        JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
+        Schema schema = SchemaLoader.load(rawSchema);
+        schema.validate(jsonString);
+        return true;
       }
-      validationResult = false;
-    }
-    finally {
-      return validationResult;
+    } catch(Exception e) {
+      log.error("Exception: {}", e.getMessage());
+      return false;
     }
   }
 }
