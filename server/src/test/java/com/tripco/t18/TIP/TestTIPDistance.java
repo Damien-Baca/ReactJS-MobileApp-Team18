@@ -21,7 +21,7 @@ public class TestTIPDistance {
 
   private final float radiusMiles = 3958;
   private Map<String, Object> csu;
-  private final int version = 3;
+  private final int version = 4;
 
   @Before
   public void createLocationsForTestCases() {
