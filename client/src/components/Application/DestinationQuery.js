@@ -6,6 +6,11 @@ export default class DestinationQuery extends Component {
     super(props);
 
     this.setPlaces = this.setPlaces.bind(this);
+    this.generateDropdown = this.generateDropdown.bind(this);
+    this.generateDropdownItems = this.generateDropdownItems.bind(this);
+    this.renderMatchInput = this.renderMatchInput.bind(this);
+    this.renderSubmitButton = this.renderSubmitButton.bind(this);
+    this.renderConditionalPlaces = this.renderConditionalPlaces.bind(this);
 
     this.state = {
       match: '',
@@ -24,9 +29,7 @@ export default class DestinationQuery extends Component {
   render() {
     return (
         <Container>
-          <Row>
-            {this.renderMatchInput()}
-          </Row>
+            {this.renderRow(this.renderMatchInput)}
           <Row>
             {this.generateDropdown('activeType', Object.assign([],
                 this.state.typeFilter))} : {this.selectFilter(
@@ -37,13 +40,15 @@ export default class DestinationQuery extends Component {
                 this.state.countryFilter))} : {this.selectFilter(
                     this.state.activeCountry)}
           </Row>
-          <Row>
-            {this.renderSubmitButton()}
-          </Row>
-          <Row>
-            {this.renderConditionalPlaces()}
-          </Row>
+          {this.renderRow(this.renderSubmitButton)}
+          {this.renderRow(this.renderConditionalPlaces)}
       </Container>
+    );
+  }
+
+  renderRow(rFunction) {
+    return (
+      <Row>{rFunction()}</Row>
     );
   }
 
