@@ -298,9 +298,6 @@ export default class Application extends Component {
       requestType = requestType.slice(0, requestType.length - 1);
     }
 
-    console.log(requestType);
-    console.log(tipConfigRequest);
-
     sendServerRequestWithBody(requestType, tipConfigRequest,
         this.state.clientSettings.serverPort).then((response) => this.handleServerResponse(response, callback));
   }

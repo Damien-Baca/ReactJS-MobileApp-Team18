@@ -50,14 +50,7 @@ public class TIPLocations extends TIPHeader {
   @Override
   public void buildResponse() {
     SqlQuery query = new SqlQuery();
-    HashMap<String, String> testTypes = new HashMap<String, String>();
-    testTypes.put("name", "type");
-    testTypes.put("value", "airport");
-
-    ArrayList<Map<String, String>> testNarrow = new ArrayList<Map<String, String>>();
-    testNarrow.add(testTypes);
-
-    Map<String, String>[] result = query.sendQuery(match, (Map<String, String>[]) testNarrow.toArray(new Map[testNarrow.size()]), limit);
+    Map<String, String>[] result = query.sendQuery(match, narrow, limit);
     found = Integer.parseInt(result[0].get("found"));
 
     ArrayList<Map<String, String>> workingPlaces = new ArrayList<>(
