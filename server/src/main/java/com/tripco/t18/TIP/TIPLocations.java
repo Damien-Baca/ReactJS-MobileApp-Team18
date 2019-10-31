@@ -1,8 +1,10 @@
 package com.tripco.t18.TIP;
 
 import com.tripco.t18.misc.SqlQuery;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,21 +21,19 @@ import org.slf4j.LoggerFactory;
 
 public class TIPLocations extends TIPHeader {
   private String match;
+  private Map[] narrow;
   private Integer limit;
   private Integer found;
   private Map[] places;
 
   private final transient Logger log = LoggerFactory.getLogger(TIPLocations.class);
 
-  TIPLocations(Integer version, String match, Integer limit) {
+  TIPLocations(Integer version, String match, Map[] narrow, Integer limit) {
     this();
     this.requestVersion = version;
     this.match = match;
-    this.limit = limit;
-  }
-
-  TIPLocations(Integer version, String match) {
-    this(version, match, 100);
+    this.limit = (limit == null) ? 100 : limit;
+    this.narrow = (narrow.length == 0) ? null : narrow;
   }
 
   TIPLocations() { this.requestType = "location"; }
@@ -50,7 +50,14 @@ public class TIPLocations extends TIPHeader {
   @Override
   public void buildResponse() {
     SqlQuery query = new SqlQuery();
-    Map<String, String>[] result = query.sendQuery(match, limit);
+    HashMap<String, String> testTypes = new HashMap<String, String>();
+    testTypes.put("name", "type");
+    testTypes.put("value", "airport");
+
+    ArrayList<Map<String, String>> testNarrow = new ArrayList<Map<String, String>>();
+    testNarrow.add(testTypes);
+
+    Map<String, String>[] result = query.sendQuery(match, (Map<String, String>[]) testNarrow.toArray(new Map[testNarrow.size()]), limit);
     found = Integer.parseInt(result[0].get("found"));
 
     ArrayList<Map<String, String>> workingPlaces = new ArrayList<>(

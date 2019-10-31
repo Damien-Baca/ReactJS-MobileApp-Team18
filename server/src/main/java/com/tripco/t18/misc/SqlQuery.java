@@ -13,17 +13,18 @@ import java.util.Map;
  */
 public class SqlQuery {
   // db configuration information
-  private static final String myDriver = "com.mysql.jdbc.Driver";
-  private static String myUrl = "";
-  private static String user = "";
-  private static String pass = "";
-  private static boolean local;
-  private static final String[] identifiers = {"name","latitude","longitude",
+  private final String myDriver = "com.mysql.jdbc.Driver";
+  private String myUrl = "";
+  private String user = "";
+  private String pass = "";
+  private boolean local;
+  private final String[] identifiers = {"name","latitude","longitude",
       "id","altitude","municipality","type"};
+  private Map<String, String>[] filters = null;
 
   // fill in SQL queries to count the number of records and to retrieve the data
-  private static String count = "";
-  private static String search = "";
+  private String count = "";
+  private String search = "";
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseTesting.md
 
@@ -74,8 +75,15 @@ public class SqlQuery {
    * @param limit     The maximum number of results returned
    * @return A list of dictionaries containing the relevant results
    */
-  public Map[] sendQuery(String query, Integer limit) {
-    String cleanQuery = "'%" +query.replaceAll("[^A-Za-z0-9]","_") +"%'";
+  public Map[] sendQuery(String query, Map[] narrow, Integer limit) {
+    filters = narrow;
+    if (narrow != null) {
+      for (Map filter : filters) {
+        filter.replace("value", cleanTerm((String) filter.get("value")));
+      }
+    }
+
+    String cleanQuery = cleanTerm(query);
     count = addLimit(constructSearch(cleanQuery, true), limit);
     search = addLimit(constructSearch(cleanQuery, false), limit);
     Map[] returnValues;
@@ -100,6 +108,10 @@ public class SqlQuery {
     return returnValues;
   }
 
+  private String cleanTerm(String term) {
+    return "'%" + term.replaceAll("[^A-Za-z0-9]","_") +"%'";
+  }
+
   private String constructSearch(String query, Boolean count) {
     String searchQuery = "select ";
 
@@ -114,11 +126,23 @@ public class SqlQuery {
 
     searchQuery += "from colorado where ";
 
+    if (filters != null) {
+      for (Map filter : filters) {
+        searchQuery += filter.get("name") + " like " + filter.get("value") + " and ";
+      }
+    }
+
+    searchQuery += "(";
+
     for (String identifier : identifiers) {
       searchQuery += identifier + " like " + query + " or ";
     }
 
-    return searchQuery.substring(0, searchQuery.length() - 3);
+    searchQuery = searchQuery.substring(0, searchQuery.length() - 4) + ")";
+
+    System.out.println(searchQuery);
+
+    return searchQuery;
   }
 
   private String addLimit(String query, Integer limit) {
@@ -126,7 +150,7 @@ public class SqlQuery {
   }
 
   @SuppressWarnings("unchecked")
-  private static Map<String, String>[] constructResults(ResultSet countResult,
+  private Map<String, String>[] constructResults(ResultSet countResult,
       ResultSet queryResult) throws SQLException {
     countResult.next();
     Integer found = countResult.getInt(1);
