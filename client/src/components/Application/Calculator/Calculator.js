@@ -112,7 +112,7 @@ export default class Calculator extends Component {
         this.props.validation(this.state.destination.latitude, this.state.destination.longitude) ) {
       const tipRequest = {
         'requestType': 'distance',
-        'requestVersion': 3,
+        'requestVersion': 4,
         'origin': this.props.convertCoordinates(this.state.origin.latitude,
             this.state.origin.longitude),
         'destination': this.props.convertCoordinates(
