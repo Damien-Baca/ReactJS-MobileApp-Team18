@@ -230,7 +230,7 @@ export default class Home extends Component {
   handleExportFile() {
     let saveTrip = {
       "requestType"    : "trip",
-      "requestVersion" : 3,
+      "requestVersion" : 4,
       "options"        : {"optimization" : "none"},
       "places"         : this.props.destinations,
       "distances"      : this.state.distances
