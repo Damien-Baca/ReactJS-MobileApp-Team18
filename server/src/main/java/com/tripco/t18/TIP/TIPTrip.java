@@ -2,10 +2,11 @@ package com.tripco.t18.TIP;
 
 import com.tripco.t18.misc.GreatCircleDistance;
 import com.tripco.t18.misc.OptimizeTrip;
-import org.slf4j.Logger;
 import java.util.ArrayList;
-import org.slf4j.LoggerFactory;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /** Defines the TIP trip object.
