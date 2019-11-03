@@ -1,7 +1,8 @@
 package com.tripco.t18.misc;
 import java.util.Arrays;
-import java.util.Map;
 import com.tripco.t18.misc.GreatCircleDistance;
+import java.util.Map;
+
 
 public class OptimizeTrip {
   public static Map[] shortTrip(Map[] places, Double earthRadius) {
