@@ -3,8 +3,8 @@ package com.tripco.t18.TIP;
 import com.tripco.t18.misc.SqlQuery;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import org.slf4j.Logger;
+import java.util.Map;
 import org.slf4j.LoggerFactory;
 
 /** Defines the TIP locations object.
