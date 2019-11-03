@@ -228,9 +228,7 @@ export default class Home extends Component {
   }
 
   handleExportFile() {
-    let saveTrip = {
-      "requestType"    : "trip",
-      "requestVersion" : 4,
+    let saveTrip = { "requestType"    : "trip", "requestVersion" : 4,
       "options"        : {"optimization" : "none"},
       "places"         : this.props.destinations,
       "distances"      : this.state.distances
@@ -239,17 +237,14 @@ export default class Home extends Component {
     if(this.state.optimizations != null)
       saveTrip.options["optimization"] = this.state.optimizations;
 
-    let data = "";
-    let fileName = "default.txt";
+    let data = ""; let fileName = "default.txt";
 
     if(this.props.options.activeFileFormat == 'json') {
-      data = JSON.stringify(saveTrip);
-      fileName = "Trip.json";
+      data = JSON.stringify(saveTrip); fileName = "Trip.json";
     }
 
     if(this.props.options.activeFileFormat == 'csv') {
-      data = this.ExportCSV();
-      fileName = "Trip.csv";
+      data = this.ExportCSV(); fileName = "Trip.csv";
     }
     
     if (window.navigator && window.navigator.msSaveOrOpenBlob)  {
