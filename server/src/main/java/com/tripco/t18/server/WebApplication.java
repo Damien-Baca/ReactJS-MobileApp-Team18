@@ -1,8 +1,9 @@
 package com.tripco.t18.server;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.HashMap;
+import org.slf4j.LoggerFactory;
+
 
 /** The server for the single page web application. */
 public class WebApplication {
