@@ -39,7 +39,8 @@ public class TIPTrip extends TIPHeader {
     this.distances = new ArrayList<>();
   }
 
-  private TIPTrip() { this.requestType = "trip"; }
+  private TIPTrip() { this.requestType = "trip";
+  }
 
 
   @Override
