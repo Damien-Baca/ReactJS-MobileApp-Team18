@@ -237,7 +237,8 @@ export default class Home extends Component {
     if(this.state.optimizations != null)
       saveTrip.options["optimization"] = this.state.optimizations;
 
-    let data = ""; let fileName = "default.txt";
+    let data = "";
+    let fileName = "default.txt";
 
     if(this.props.options.activeFileFormat == 'json') {
       data = JSON.stringify(saveTrip);
