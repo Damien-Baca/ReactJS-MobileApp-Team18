@@ -67,10 +67,11 @@ export default class DestinationQuery extends Component {
   renderSubmitButton() {
     return (
       <Button
+          className='btn-csu'
           name='submit_query'
-          color='info'
           key='submit_query'
           onClick={() => this.handleServerSubmission()}
+          active={true}
           disabled={this.state.match === ''}
       >Submit Query</Button>
     );
@@ -105,10 +106,11 @@ export default class DestinationQuery extends Component {
     return (
       <ListGroupItem>
         <Button
-            color='danger'
+            className='btn-csu'
             name='clear_results'
             key='clear_results'
             onClick={() => this.setState({places: [], found: null})}
+            active={false}
             disabled={this.state.places === []}
         >Clear Results</Button>
       </ListGroupItem>
@@ -167,8 +169,7 @@ export default class DestinationQuery extends Component {
 
   generateAddDestinationButton(index) {
     return (
-        <Button className='h-5 w-10'
-                color='success'
+        <Button className='btn-csu h-5 w-10'
                 size={'sm'}
                 name={'add_query_' + index}
                 key={"button_add_" + index}

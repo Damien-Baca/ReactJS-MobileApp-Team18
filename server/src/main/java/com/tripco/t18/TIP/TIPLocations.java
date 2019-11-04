@@ -36,7 +36,8 @@ public class TIPLocations extends TIPHeader {
     this.narrow = (narrow.length == 0) ? null : narrow;
   }
 
-  TIPLocations() { this.requestType = "location"; }
+  TIPLocations() { this.requestType = "location";
+  }
 
   /*
    * This is where the SQL querying takes place. I'll probably create a class to

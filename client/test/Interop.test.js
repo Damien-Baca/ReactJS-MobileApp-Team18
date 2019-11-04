@@ -70,7 +70,7 @@ function mockConfigResponse() {
         body: {
           'placeAttributes': ["latitude", "longitude", "serverName"],
           'requestType': "config",
-          'requestVersion': 1,
+          'requestVersion': 4,
           'serverName': "t18"
         },
         type: 'basic',

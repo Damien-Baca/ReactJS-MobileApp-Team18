@@ -286,7 +286,7 @@ export default class Application extends Component {
   sendServerRequest(type, tipRequest, callback) {
     let tipConfigRequest = {
       requestType: type,
-      requestVersion: 3,
+      requestVersion: 4,
     };
 
     Object.entries(tipRequest).forEach((entry) => {
@@ -325,22 +325,16 @@ export default class Application extends Component {
   }
 
   validateSchema(response) {
-    let Ajv = require('ajv');
-    let ajv = new Ajv();
+    let Ajv = require('ajv'); let ajv = new Ajv();
     let TIPConSchema = require('../../../schemas/TIPConfigResponseSchema');
     let TIPDisSchema = require('../../../schemas/TIPDistanceResponseSchema');
     let TIPLocSchema = require('../../../schemas/TIPLocationsResponseSchema');
     let TIPTripSchema = require('../../../schemas/TIPTripResponseSchema');
-    let TIPType = response.body.requestType;
-    let valid = false;
-    if (TIPType === 'config') {
-      valid = ajv.validate(TIPConSchema, response.body);
-    } else if (TIPType === 'distance') {
-      valid = ajv.validate(TIPDisSchema, response.body);
-    } else if (TIPType === 'locations') {
-      valid = ajv.validate(TIPLocSchema, response.body);
-    } else if (TIPType === 'trip') {
-      valid = ajv.validate(TIPTripSchema, response.body);
+    let TIPType = response.body.requestType; let valid = false;
+    if (TIPType === 'config') { valid = ajv.validate(TIPConSchema, response.body);
+    } else if (TIPType === 'distance') { valid = ajv.validate(TIPDisSchema, response.body);
+    } else if (TIPType === 'locations') { valid = ajv.validate(TIPLocSchema, response.body);
+    } else if (TIPType === 'trip') { valid = ajv.validate(TIPTripSchema, response.body);
     }
     if(!valid){
       this.setState({
