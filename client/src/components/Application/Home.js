@@ -240,11 +240,13 @@ export default class Home extends Component {
     let data = ""; let fileName = "default.txt";
 
     if(this.props.options.activeFileFormat == 'json') {
-      data = JSON.stringify(saveTrip); fileName = "Trip.json";
+      data = JSON.stringify(saveTrip);
+      fileName = "Trip.json";
     }
 
     if(this.props.options.activeFileFormat == 'csv') {
-      data = this.ExportCSV(); fileName = "Trip.csv";
+      data = this.ExportCSV();
+      fileName = "Trip.csv";
     }
     
     if (window.navigator && window.navigator.msSaveOrOpenBlob)  {
