@@ -1,16 +1,34 @@
 package com.tripco.t18.misc;
 import java.util.Arrays;
+import java.util.Map;
 import com.tripco.t18.misc.GreatCircleDistance;
 
-import java.util.Map;
-
-
 public class OptimizeTrip {
-  public static Map[] shortTrip(Map[] places, Double earthRadius) {
-    int[] bestTrip = new int[places.length];
+  private Map[] places;
+  private Double earthRadius;
+  private int[] bestTrip;
+
+  public Map[] shortTrip(Map[] places, Double earthRadius) {
+    this.places = places;
+    this.earthRadius = earthRadius;
+    this.bestTrip = new int[places.length];
+
+    int zeroOffset = nearestNeighbor();
+
+    Map[] newPlaces = new Map[places.length];
+    int newIndex = 0;
+
+    for (int i = 0; i < places.length; ++i) {
+      newPlaces[newIndex++] = places[bestTrip[(i + zeroOffset) % places.length]];
+    }
+
+    return newPlaces;
+  }
+
+  private int nearestNeighbor() {
+    DistanceMatrix matrix = new DistanceMatrix(places, earthRadius);
     int bestDistance = Integer.MAX_VALUE;
     int bestZeroOffset = -1;
-    DistanceMatrix matrix = new DistanceMatrix(places, earthRadius);
 
     for (int i = 0; i < places.length; ++i) {
       boolean[] visited = new boolean[places.length];
@@ -21,8 +39,8 @@ public class OptimizeTrip {
       trip[0] = currentLocation;
       int zeroOffset = -1;
 
-      for (int j = 1; j < places.length; ++j) { 
-        if(currentLocation == 0) { 
+      for (int j = 1; j < places.length; ++j) {
+        if (currentLocation == 0) {
           zeroOffset = j - 1;
         }
         int localMinIndex = -1;
@@ -50,13 +68,6 @@ public class OptimizeTrip {
       }
     }
 
-    Map[] newPlaces = new Map[places.length];
-    int newIndex = 0;
-
-    for (int i = 0; i < places.length; ++i) {
-      newPlaces[newIndex++] = places[bestTrip[(i + bestZeroOffset) % places.length]];
-    }
-
-    return newPlaces;
+    return bestZeroOffset;
   }
 }

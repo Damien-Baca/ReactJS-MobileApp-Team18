@@ -45,7 +45,7 @@ public class TIPTrip extends TIPHeader {
     Double earthRadius = Double.parseDouble((String) options.get("earthRadius"));
 
     if (options.get("optimization").equals("short")) {
-      places = OptimizeTrip.shortTrip(places, earthRadius);
+      places = new OptimizeTrip().shortTrip(places, earthRadius);
     }
 
     for (int i = 0; i < this.places.length; ++i) {
