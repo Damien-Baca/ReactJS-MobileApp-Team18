@@ -1,9 +1,9 @@
 package com.tripco.t18.TIP;
 
-import org.slf4j.Logger;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
@@ -28,7 +28,7 @@ public class TIPConfig extends TIPHeader {
 
   public TIPConfig() {
     this.requestType = "config";
-    this.requestVersion = 3;
+    this.requestVersion = 4;
   }
 
   @Override
