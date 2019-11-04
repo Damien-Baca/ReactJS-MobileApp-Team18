@@ -293,7 +293,15 @@ export default class Application extends Component {
       tipConfigRequest[entry[0]] = entry[1];
     });
 
-    sendServerRequestWithBody(type, tipConfigRequest,
+    let requestType = type;
+    if (requestType === "locations") {
+      requestType = requestType.slice(0, requestType.length - 1);
+    }
+
+    console.log(requestType);
+    console.log(tipConfigRequest);
+
+    sendServerRequestWithBody(requestType, tipConfigRequest,
         this.state.clientSettings.serverPort).then((response) => this.handleServerResponse(response, callback));
   }
 
