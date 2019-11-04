@@ -21,7 +21,9 @@ public class OptimizeTrip {
       trip[0] = currentLocation;
       int zeroOffset = -1;
 
-      for (int j = 1; j < places.length; ++j) { if(currentLocation == 0) { zeroOffset = j - 1;
+      for (int j = 1; j < places.length; ++j) { 
+        if(currentLocation == 0) { 
+          zeroOffset = j - 1;
         }
         int localMinIndex = -1;
         int localMin = Integer.MAX_VALUE;
