@@ -11,6 +11,7 @@
 | Name | Preparation Time |
 | ---- | ---- |
 | Christopher Abelein | 00:30 |
+| James Lounsbury | 00:25 |
 |  |  |
 
 ### Problems found
@@ -18,4 +19,5 @@
 | file:line | problem | hi/med/low | who found | github#  |
 | --- | --- | :---: | :---: | --- |
 | Home.js:168 | function can be reduced to a list forEach | low | Abelein | |
+| Home.js:214-215 | two addition statments can be simplified to one | low | Jameslouns | |
 |  | | | | |
