@@ -75,25 +75,28 @@ export default class DestinationControls extends Component {
   renderCalculateDistances() {
     return (
         <Button
+            className='btn-csu'
             name='calculate'
-            color='info'
             style={{marginLeft: 'auto'}}
             onClick={() => this.props.calculateDistances('none')}
             disabled={this.props.destinations.length === 0}
+            active={true}
         >Calculate Trip Distances</Button>
     );
   }
 
   renderOptimizeDistances() {
       return (
-        <Button
-          name='optimize'
-          color='info'
-          style={{marginLeft: 'auto'}}
-          onClick={() => this.props.calculateDistances(this.props.optimization)}
-          disabled={this.props.destinations.length === 0 ||
-          this.props.optimization === 'none'}
-        >Optimize Trip Distances</Button>
+          <Button
+              className='btn-csu'
+              name='optimize'
+              style={{marginLeft: 'auto'}}
+              onClick={() => this.props.calculateDistances(
+                  this.props.optimization)}
+              disabled={this.props.destinations.length === 0 ||
+              this.props.optimization === 'none'}
+              active={true}
+          >Optimize Trip Distances</Button>
       );
   }
 
@@ -114,8 +117,7 @@ export default class DestinationControls extends Component {
   renderAddUserDestinationButton() {
     return (
         <Button
-            className='w-100 text-left'
-            color='success'
+            className='btn-csu w-100 text-left'
             name='add_user_destination'
             key='button_add_user_destination'
             active={true}
@@ -138,8 +140,7 @@ export default class DestinationControls extends Component {
   renderAddJSONButton() {
     return (
         <Button
-            className='w-100 text-left'
-            color='success'
+            className='btn-csu w-100 text-left'
             name='loadJSON'
             key='button_loadJSON'
             active={true}
