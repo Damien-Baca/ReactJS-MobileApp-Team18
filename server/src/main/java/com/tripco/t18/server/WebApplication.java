@@ -13,7 +13,8 @@ public class WebApplication {
   public static void main(String[] commandLineArguments) {
 
     if (commandLineArguments.length > 1) {
-      log.error("Too many command line. Expected 1 but found {}.", commandLineArguments.length);
+      log.error("Too many command line arguments given. Expected 1 but found {}.",
+                commandLineArguments.length);
       System.exit(1);
     }
 
