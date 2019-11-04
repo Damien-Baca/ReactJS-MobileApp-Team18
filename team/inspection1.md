@@ -20,4 +20,5 @@
 | --- | --- | :---: | :---: | --- |
 | Home.js:168 | function can be reduced to a list forEach | low | Abelein | |
 | Home.js:214-215 | two addition statments can be simplified to one | low | Jameslouns | |
-| Home.js: 112 | function has too many lines  | low | Long Chen | MEtoCS |
+| Home.js:230 | function can be pulled out and made into its own file | low | hgq970 | |
+| Home.js: 112 | function has too many lines  | low | MEtoCS | |
