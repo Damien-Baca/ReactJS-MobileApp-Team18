@@ -18,8 +18,15 @@ public class SqlQuery {
   private String user = "";
   private String pass = "";
   private boolean local;
+  private final String[] databaseIds = {"world.name","latitude","longitude",
+      "world.id","altitude","municipality","type","region.name","country.name","continent.name"};
   private final String[] identifiers = {"name","latitude","longitude",
-      "id","altitude","municipality","type"};
+      "id","altitude","municipality","type","region","country","continent"};
+  private final String[] joinTables = {"country", "region", "world"};
+  private final String[] joinIds = {"continent.id = country.continent",
+  "country.id = region.iso_country", "region.id = world.iso_region"};
+  private final String[] order = {"continent.name", "country.name", "region.name",
+      "world.municipality", "world.name"};
   private Map<String, String>[] filters = null;
 
   // fill in SQL queries to count the number of records and to retrieve the data
@@ -85,7 +92,9 @@ public class SqlQuery {
 
     String cleanQuery = cleanTerm(query);
     count = addLimit(constructSearch(cleanQuery, true), limit);
+    System.out.println(count);
     search = addLimit(constructSearch(cleanQuery, false), limit);
+    System.out.println(search);
     Map[] returnValues;
 
     // Arguments contain the username and password for the database
@@ -115,19 +124,25 @@ public class SqlQuery {
   private String constructSearch(String query, Boolean count) {
     String searchQuery = "select ";
 
-    searchQuery += constructStart(count) + "from colorado where ";
+    searchQuery += constructStart(count) + "\nfrom " + constructJoin() +"\nwhere ";
 
     if (filters != null) {
       searchQuery += constructFilters();
     }
 
-    searchQuery += constructWhere(query);
-
-    searchQuery = searchQuery.substring(0, searchQuery.length() - 4) + ")";
-
-    System.out.println(searchQuery);
+    searchQuery += constructWhere(query) + constructOrder();
 
     return searchQuery;
+  }
+
+  private String constructJoin() {
+    String returnString = "continent";
+
+    for (int i = 0; i < joinTables.length; ++i) {
+      returnString += "\ninner join " + joinTables[i] + " on " + joinIds[i];
+    }
+
+    return returnString;
   }
 
   private String constructStart(boolean count) {
@@ -135,7 +150,7 @@ public class SqlQuery {
     if (count) {
       returnString += "count(*) ";
     } else {
-      for (String identifier : identifiers) {
+      for (String identifier : databaseIds) {
         returnString += identifier + ",";
       }
       returnString = returnString.substring(0, returnString.length() - 1) + " ";
@@ -148,7 +163,7 @@ public class SqlQuery {
     String returnString = "";
 
     for (Map filter : filters) {
-      returnString += filter.get("name") + " like " + filter.get("value") + " and ";
+      returnString += filter.get("name") + " like " + filter.get("value") + "\nand ";
     }
 
     return returnString;
@@ -157,15 +172,29 @@ public class SqlQuery {
   private String constructWhere(String query) {
     String returnString = "(";
 
-    for (String identifier : identifiers) {
-      returnString += identifier + " like " + query + " or ";
+    for (String identifier : databaseIds) {
+      returnString += identifier + " like " + query + "\nor ";
     }
+
+    returnString = returnString.substring(0, returnString.length() - 4) + ")";
+
+    return returnString;
+  }
+
+  private String constructOrder() {
+    String returnString = "\norder by ";
+
+    for (String name : order) {
+      returnString += name + ", ";
+    }
+
+    returnString = returnString.substring(0, returnString.length() - 2) + " asc";
 
     return returnString;
   }
 
   private String addLimit(String query, Integer limit) {
-    return query  + "limit " + limit + ";";
+    return query  + "\nlimit " + limit + ";";
   }
 
   @SuppressWarnings("unchecked")
@@ -182,8 +211,8 @@ public class SqlQuery {
     while (queryResult.next()) {
       HashMap<String, String> nextResult = new HashMap<>();
 
-      for (String identifier : identifiers) {
-        nextResult.put(identifier, queryResult.getString(identifier));
+      for (int i = 0; i < identifiers.length; ++i) {
+        nextResult.put(identifiers[i], queryResult.getString(databaseIds[i]));
       }
 
       workingResults.add(nextResult);
