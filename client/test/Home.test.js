@@ -36,6 +36,8 @@ const buttonNamesInitial = [
   'exportFile',
   'calculate',
   'optimize',
+  'activeType_dropdown',
+  'activeCountry_dropdown',
   'submit_query',
   'clear_destinations',
   'reverse_destinations'

@@ -2,24 +2,22 @@ package com.tripco.t18.TIP;
 
 import com.tripco.t18.misc.GreatCircleDistance;
 import com.tripco.t18.misc.OptimizeTrip;
-import org.slf4j.Logger;
 import java.util.ArrayList;
-import org.slf4j.LoggerFactory;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /** Defines the TIP trip object.
- *
  * For use with restful API services,
  * An object is created from the request JSON by the MicroServer using GSON.
  * The buildResponse method is called to determine the distances.
  * The MicroServer constructs the response JSON from the object using GSON.
- *
  * For unit testing purposes,
  * An object is created using the constructor below with appropriate parameters.
  * The buildResponse method is called to determine the distances.
  * The getDistances method is called to obtain the distances value for comparisons.
- *
  */
 public class TIPTrip extends TIPHeader {
   private Map options;
@@ -38,7 +36,8 @@ public class TIPTrip extends TIPHeader {
     this.distances = new ArrayList<>();
   }
 
-  private TIPTrip() { this.requestType = "trip"; }
+  private TIPTrip() { this.requestType = "trip";
+  }
 
 
   @Override
@@ -46,7 +45,7 @@ public class TIPTrip extends TIPHeader {
     Double earthRadius = Double.parseDouble((String) options.get("earthRadius"));
 
     if (options.get("optimization").equals("short")) {
-      places = OptimizeTrip.shortTrip(places, earthRadius);
+      places = new OptimizeTrip().shortTrip(places, earthRadius);
     }
 
     for (int i = 0; i < this.places.length; ++i) {

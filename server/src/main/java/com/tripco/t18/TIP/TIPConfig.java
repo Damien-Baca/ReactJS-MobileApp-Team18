@@ -1,11 +1,14 @@
 package com.tripco.t18.TIP;
 
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import java.util.List;
-import java.util.Arrays;
 import org.slf4j.LoggerFactory;
+
 
 
 
@@ -63,4 +66,5 @@ public class TIPConfig extends TIPHeader {
   List<String> getPlaceAttributes() {
     return this.placeAttributes;
   }
+
 }
