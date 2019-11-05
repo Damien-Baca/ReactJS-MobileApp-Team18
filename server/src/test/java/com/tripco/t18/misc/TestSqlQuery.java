@@ -10,7 +10,7 @@ public class TestSqlQuery {
     SqlQuery testQuery = new SqlQuery();
     int expectedCount = (testQuery.localDatabase() ? 5 : 297);
 
-    Map<String, String>[] queryResult = testQuery.sendQuery("airport", 10);
+    Map<String, String>[] queryResult = testQuery.sendQuery("airport", null, 10);
     int actualCount = Integer.parseInt(queryResult[0].get("found"));
 
     assertEquals("Expect 5 results from \"airport\".", expectedCount, actualCount);
@@ -21,7 +21,7 @@ public class TestSqlQuery {
     SqlQuery testQuery = new SqlQuery();
     int expectedCount = (testQuery.localDatabase() ? 9 : 223);
 
-    Map<String, String>[] queryResult = testQuery.sendQuery("40", 10);
+    Map<String, String>[] queryResult = testQuery.sendQuery("40", null, 10);
     int actualCount = Integer.parseInt(queryResult[0].get("found"));
 
     assertEquals("Expect 9 results from \"40\".", expectedCount, actualCount);

@@ -12,6 +12,7 @@ import com.tripco.t18.validation.SchemaValidator;
 
 import java.lang.reflect.Type;
 
+import java.net.URL;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -71,7 +72,7 @@ class MicroServer {
     Spark.get("/api/config", this::processTIPconfigRequest);
     Spark.post("/api/distance", this::processTIPdistanceRequest);
     Spark.post("/api/trip", this::processTIPtripRequest);
-    Spark.post("/api/locations", this::processTIPlocationsRequest);
+    Spark.post("/api/location", this::processTIPlocationsRequest);
     Spark.get("/api/echo", this::echoHTTPrequest);
     log.trace("Restful configuration complete");
   }
@@ -90,7 +91,7 @@ class MicroServer {
       log.trace("TIP Config response: {}", responseBody);
       return responseBody;
     } catch (Exception e) {
-      log.error("Exception: {}", e);
+      log.error("Exception: {}", e.getMessage());
       response.status(500);
       return request.body();
     }
@@ -114,17 +115,18 @@ class MicroServer {
     response.type("application/json");
     response.header("Access-Control-Allow-Origin", "*");
     response.status(200);
+
     try {
       Gson jsonConverter = new Gson();
       //throw to schema on TIPtype (conditional)
       TIPHeader tipRequest = jsonConverter.fromJson(request.body(), tipType);
 
       JSONObject jsonRequestBody = new JSONObject(request.body());
-      String path = tipType.getTypeName();
-      path = path.substring(19);
-      path = "server/src/main/resources/"+path+"RequestSchema.json";
 
-      if(SchemaValidator.validate(jsonRequestBody , path) ) {
+      String path = tipType.getTypeName();
+      path = path.substring(19) + "RequestSchema.json";
+
+      if(SchemaValidator.validate(jsonRequestBody , path)) {
         tipRequest.buildResponse();
         String responseBody = jsonConverter.toJson(tipRequest);
         log.trace("TIP Response: {}", responseBody);
@@ -135,7 +137,7 @@ class MicroServer {
         return request.body();
       }
     } catch (Exception e) {
-      log.error("Exception: {}", e);
+      log.error("Exception: {}", e.getMessage());
       response.status(500);
       return request.body();
     }
