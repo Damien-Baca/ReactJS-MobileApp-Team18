@@ -29,10 +29,6 @@ public class SqlQuery {
       "world.municipality", "world.name"};
   private Map<String, String>[] filters = null;
 
-  // fill in SQL queries to count the number of records and to retrieve the data
-  private String count = "";
-  private String search = "";
-
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseTesting.md
 
   /**
@@ -72,6 +68,12 @@ public class SqlQuery {
     }
   }
 
+  public String[] configQuery() {
+    String fullQuery = "select distinct name from country";
+
+    return sendConfigQuery(fullQuery);
+  }
+
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseGuide.md
 
   /**
@@ -82,7 +84,7 @@ public class SqlQuery {
    * @param limit     The maximum number of results returned
    * @return A list of dictionaries containing the relevant results
    */
-  public Map[] sendQuery(String query, Map[] narrow, Integer limit) {
+  public Map[] locationQuery(String query, Map[] narrow, Integer limit) throws SQLException {
     filters = narrow;
     if (narrow != null) {
       for (Map filter : filters) {
@@ -91,13 +93,34 @@ public class SqlQuery {
     }
 
     String cleanQuery = cleanTerm(query);
-    count = addLimit(constructSearch(cleanQuery, true), limit);
-    System.out.println(count);
-    search = addLimit(constructSearch(cleanQuery, false), limit);
-    System.out.println(search);
-    Map[] returnValues;
+    String count = addLimit(constructSearch(cleanQuery, true), limit);
+    String search = addLimit(constructSearch(cleanQuery, false), limit);
 
-    // Arguments contain the username and password for the database
+    return sendLocationsQuery(count, search);
+  }
+  
+  private String[] sendConfigQuery(String fullQuery) {
+    String[] returnCountries;
+    
+    try {
+      Class.forName(myDriver);
+      // connect to the database and query
+      try (Connection conn = DriverManager.getConnection(myUrl, user, pass);
+          Statement stQuery = conn.createStatement();
+          ResultSet rsQuery = stQuery.executeQuery(fullQuery)
+      ) { returnCountries = configResult(rsQuery);
+      }
+    } catch (Exception e) {
+      System.err.println("Exception: " + e.getMessage());
+      returnCountries = null;
+    }
+    
+    return returnCountries;
+  }
+
+  private Map[] sendLocationsQuery(String count, String search) {
+    Map[] returnResults;
+
     try {
       Class.forName(myDriver);
       // connect to the database and query
@@ -106,15 +129,14 @@ public class SqlQuery {
           Statement stQuery = conn.createStatement();
           ResultSet rsCount = stCount.executeQuery(count);
           ResultSet rsQuery = stQuery.executeQuery(search)
-      ) {
-        returnValues = constructResults(rsCount, rsQuery);
+      ) { returnResults = locationsResult(rsCount, rsQuery);
       }
     } catch (Exception e) {
       System.err.println("Exception: " + e.getMessage());
-      returnValues = null;
+      returnResults = null;
     }
 
-    return returnValues;
+    return returnResults;
   }
 
   private String cleanTerm(String term) {
@@ -197,8 +219,18 @@ public class SqlQuery {
     return query  + "\nlimit " + limit + ";";
   }
 
+  private String[] configResult(ResultSet countryResult) throws SQLException {
+    ArrayList<String> returnCountries = new ArrayList<>();
+
+    while(countryResult.next()) {
+      returnCountries.add(countryResult.getString("name"));
+    }
+
+    return returnCountries.toArray(new String[returnCountries.size()]);
+  }
+
   @SuppressWarnings("unchecked")
-  private Map<String, String>[] constructResults(ResultSet countResult,
+  private Map<String, String>[] locationsResult(ResultSet countResult,
       ResultSet queryResult) throws SQLException {
     countResult.next();
     Integer found = countResult.getInt(1);
@@ -219,9 +251,5 @@ public class SqlQuery {
     }
 
     return (Map<String, String>[]) workingResults.toArray(new Map[workingResults.size()]);
-  }
-
-  public boolean localDatabase() {
-    return local;
   }
 }

@@ -1,10 +1,8 @@
 package com.tripco.t18.TIP;
 
 import com.tripco.t18.misc.SqlQuery;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +49,13 @@ public class TIPLocations extends TIPHeader {
   @Override
   public void buildResponse() {
     SqlQuery query = new SqlQuery();
-    Map<String, String>[] result = query.sendQuery(match, narrow, limit);
+    Map<String, String>[] result;
+    try {
+      result = query.locationQuery(match, narrow, limit);
+    } catch(Exception e) {
+      log.error(e.getMessage());
+      result = null;
+    }
     found = Integer.parseInt(result[0].get("found"));
 
     ArrayList<Map<String, String>> workingPlaces = new ArrayList<>(

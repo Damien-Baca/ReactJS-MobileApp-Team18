@@ -1,6 +1,7 @@
 package com.tripco.t18.TIP;
 
 
+import com.tripco.t18.misc.SqlQuery;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +53,8 @@ public class TIPConfig extends TIPHeader {
     JSONObject countries = new JSONObject();
     countries.put("name", "countries");
     // do SQL stuff instead of this
-    String[] countryValues = {"stop right there"};
+    SqlQuery query = new SqlQuery();
+    String[] countryValues = query.configQuery();
     countries.put("values", countryValues);
     filters.put(countries);
 
