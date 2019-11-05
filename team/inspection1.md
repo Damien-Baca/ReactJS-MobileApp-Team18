@@ -3,7 +3,7 @@
 | Inspection | Details |
 | ----- | ----- |
 | Subject | Home.js |
-| Meeting | *date, time, location* |
+| Meeting | *11/4/19, 10:20AM, in class* |
 | Checklist | *reference, URL, etc.* |
 
 ### Roles
@@ -18,7 +18,7 @@
 
 | file:line | problem | hi/med/low | who found | github#  |
 | --- | --- | :---: | :---: | --- |
-| Home.js:168 | function can be reduced to a list forEach | low | Abelein | |
+| Home.js:168 | function can be reduced to a list forEach | low | Abelein | #316 |
 | Home.js:214-215 | two addition statments can be simplified to one | low | Jameslouns | |
-| Home.js:230 | function can be pulled out and made into its own file | low | hgq970 | |
+| Home.js:230 | function can be pulled out and made into its own file | low | hgq970 | #317 |
 | Home.js: 112 | function has too many lines  | low | MEtoCS | |
