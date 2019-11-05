@@ -115,34 +115,53 @@ public class SqlQuery {
   private String constructSearch(String query, Boolean count) {
     String searchQuery = "select ";
 
-    if (count) {
-      searchQuery += "count(*) ";
-    } else {
-      for (String identifier : identifiers) {
-        searchQuery += identifier + ",";
-      }
-      searchQuery = searchQuery.substring(0, searchQuery.length() - 1) + " ";
-    }
-
-    searchQuery += "from colorado where ";
+    searchQuery += constructStart(count) + "from colorado where ";
 
     if (filters != null) {
-      for (Map filter : filters) {
-        searchQuery += filter.get("name") + " like " + filter.get("value") + " and ";
-      }
+      searchQuery += constructFilters();
     }
 
-    searchQuery += "(";
-
-    for (String identifier : identifiers) {
-      searchQuery += identifier + " like " + query + " or ";
-    }
+    searchQuery += constructWhere(query);
 
     searchQuery = searchQuery.substring(0, searchQuery.length() - 4) + ")";
 
     System.out.println(searchQuery);
 
     return searchQuery;
+  }
+
+  private String constructStart(boolean count) {
+    String returnString = "";
+    if (count) {
+      returnString += "count(*) ";
+    } else {
+      for (String identifier : identifiers) {
+        returnString += identifier + ",";
+      }
+      returnString = returnString.substring(0, returnString.length() - 1) + " ";
+    }
+
+    return returnString;
+  }
+
+  private String constructFilters() {
+    String returnString = "";
+
+    for (Map filter : filters) {
+      returnString += filter.get("name") + " like " + filter.get("value") + " and ";
+    }
+
+    return returnString;
+  }
+
+  private String constructWhere(String query) {
+    String returnString = "(";
+
+    for (String identifier : identifiers) {
+      returnString += identifier + " like " + query + " or ";
+    }
+
+    return returnString;
   }
 
   private String addLimit(String query, Integer limit) {
