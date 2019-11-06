@@ -6,40 +6,67 @@
   "type": "object",
   "properties": {
     "requestVersion": {
-      "description":"the TIP protocol version",
-      "type":"integer",
+      "description": "the TIP protocol version",
+      "type": "integer",
       "minimum": 1
     },
     "requestType": {
-      "description":"the TIP object type should be config",
-      "type":"string",
-      "pattern":"^config$"
+      "description": "the TIP object type should be config",
+      "type": "string",
+      "pattern": "^config$"
     },
     "serverName": {
-      "description":"identify the server instance",
-      "type":"string",
-      "minLength":3
+      "description": "identify the server instance",
+      "type": "string",
+      "minLength": 3
     },
     "placeAttributes": {
-      "description":"list of attributes used to described places",
-      "type":"array",
+      "description": "list of attributes used to described places",
+      "type": "array",
       "items": {
-        "type":"string"
+        "type": "string"
       },
-      "minItems":7,
+      "minItems": 7,
       "uniqueItems": true,
-      "required":["name", "latitude", "longitude", "id", "altitude", "municipality", "type"]
+      "required": [
+        "name",
+        "latitude",
+        "longitude",
+        "id",
+        "altitude",
+        "municipality",
+        "type"
+      ]
     },
     "optimizations": {
-      "description":"list of optimization levels available from the server",
-      "type":"array",
+      "description": "list of optimization levels available from the server",
+      "type": "array",
       "items": {
-        "type":"string",
-        "enum":["none", "short", "shorter"]
+        "type": "string",
+        "enum": [
+          "none",
+          "short"
+        ]
       },
-      "minItems":2,
+      "minItems": 2,
       "uniqueItems": true,
-      "required":["none"]
+      "required": [
+        "none"
+      ]
+    },
+    "filters": {
+      "description": "a list of dictionaries containing query filters",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "name": {"type": "string"},
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "required":["requestVersion","requestType","serverName","placeAttributes","optimizations"],

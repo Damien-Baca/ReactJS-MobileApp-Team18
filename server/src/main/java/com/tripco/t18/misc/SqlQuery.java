@@ -69,7 +69,7 @@ public class SqlQuery {
   }
 
   public String[] configQuery() {
-    String fullQuery = "select distinct name from country";
+    String fullQuery = "select distinct name from country order by name asc";
 
     return sendConfigQuery(fullQuery);
   }

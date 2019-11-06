@@ -19,9 +19,7 @@ export default class DestinationQuery extends Component {
       places: [],
       activeTypeOpen: false,
       activeCountryOpen: false,
-      typeFilter: ['', 'airport', 'heliport', 'balloonport', 'closed'],
       activeType: '',
-      countryFilter: ['', 'stop right there'],
       activeCountry: ''
     }
   }
@@ -32,12 +30,12 @@ export default class DestinationQuery extends Component {
             {this.renderRow(this.renderMatchInput)}
           <Row>
             {this.generateDropdown('activeType', Object.assign([],
-                this.state.typeFilter))} : {this.selectFilter(
+                this.props.typeFilter))} : {this.selectFilter(
                     this.state.activeType)}
           </Row>
           <Row>
             {this.generateDropdown('activeCountry', Object.assign([],
-                this.state.countryFilter))} : {this.selectFilter(
+                this.props.countryFilter))} : {this.selectFilter(
                     this.state.activeCountry)}
           </Row>
           {this.renderRow(this.renderSubmitButton)}
@@ -73,7 +71,7 @@ export default class DestinationQuery extends Component {
           onClick={() => this.handleServerSubmission()}
           active={true}
           disabled={this.state.match === ''}
-      >Submit Query</Button>
+      >Submit</Button>
     );
   }
 

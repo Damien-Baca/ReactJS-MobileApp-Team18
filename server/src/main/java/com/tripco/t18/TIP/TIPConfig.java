@@ -1,9 +1,11 @@
 package com.tripco.t18.TIP;
 
-
 import com.tripco.t18.misc.SqlQuery;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,7 +30,7 @@ public class TIPConfig extends TIPHeader {
   private String serverName;
   private List<String> placeAttributes;
   private List<String> optimizations;
-  private JSONArray filters = new JSONArray();
+  private List<Map<String, Object>> filters = new ArrayList<>();
 
   private final transient Logger log = LoggerFactory.getLogger(TIPConfig.class);
 
@@ -44,21 +46,24 @@ public class TIPConfig extends TIPHeader {
         "municipality","region","country","continent","type");
     this.optimizations = Arrays.asList("none", "short");
 
-    JSONObject types = new JSONObject();
-    types.put("name", "type");
-    String[] typeValues = {"airport","heliport","balloonport","closed"};
-    types.put("values", typeValues);
-    filters.put(types);
-
-    JSONObject countries = new JSONObject();
-    countries.put("name", "countries");
-    // do SQL stuff instead of this
-    SqlQuery query = new SqlQuery();
-    String[] countryValues = query.configQuery();
-    countries.put("values", countryValues);
-    filters.put(countries);
+    setFilters();
 
     log.trace("buildResponse -> {}", this);
+  }
+
+  private void setFilters() {
+    Map<String, Object> typeFilters = new HashMap<>();
+    String[] typeValues = {"airport","heliport","balloonport","closed"};
+    typeFilters.put("name", "type");
+    typeFilters.put("values", typeValues);
+    filters.add(typeFilters);
+
+    Map<String, Object> countryFilters = new HashMap<>();
+    SqlQuery query = new SqlQuery();
+    String[] countryValues = query.configQuery();
+    countryFilters.put("name", "countries");
+    countryFilters.put("values", countryValues);
+    filters.add(countryFilters);
   }
 
   String getServerName() {
