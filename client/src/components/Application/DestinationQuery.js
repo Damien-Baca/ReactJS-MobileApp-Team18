@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Container, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input, Row, ListGroup, ListGroupItem} from 'reactstrap'
+import Select from 'react-select'
 
 export default class DestinationQuery extends Component {
   constructor(props) {
@@ -19,8 +20,8 @@ export default class DestinationQuery extends Component {
       places: [],
       activeTypeOpen: false,
       activeCountryOpen: false,
-      activeType: '',
-      activeCountry: ''
+      activeTypes: [],
+      activeCountries: []
     }
   }
 
@@ -29,14 +30,12 @@ export default class DestinationQuery extends Component {
         <Container>
             {this.renderRow(this.renderMatchInput)}
           <Row>
-            {this.generateDropdown('activeType', Object.assign([],
-                this.props.typeFilter))} : {this.selectFilter(
-                    this.state.activeType)}
+            {this.generateDropdown('activeTypes', Object.assign([],
+                this.props.typeFilter))}
           </Row>
           <Row>
-            {this.generateDropdown('activeCountry', Object.assign([],
-                this.props.countryFilter))} : {this.selectFilter(
-                    this.state.activeCountry)}
+            {this.generateDropdown('activeCountries', Object.assign([],
+                this.props.countryFilter))}
           </Row>
           {this.renderRow(this.renderSubmitButton)}
           {this.renderRow(this.renderConditionalPlaces)}
@@ -116,21 +115,22 @@ export default class DestinationQuery extends Component {
   }
 
   generateDropdown(name, filters) {
+    let options = [];
+    const styles = {
+      input: base => ({
+        width: `${10 * this.state[name].length + 100}px`
+      })
+    };
+    Object.assign([], filters).forEach((value) => {
+        options.push({value: value, label: value});
+    });
+
     return (
-      <Dropdown
-          isOpen={this.state[name + 'Open']}
-          toggle={() => this.setState(
-              {[name + "Open"]: !this.state[name + 'Open']}
-              )}
-          classname={'csu-btn'}
-          direction={'right'}>
-        <DropdownToggle
-            key={`key_${name}_dropdown`}
-            name={`${name}_dropdown`}
-            caret>{'Filter by ' + name.slice(6).toLowerCase()
-        + ':'}</DropdownToggle>
-        <DropdownMenu>{this.generateDropdownItems(name, filters)}</DropdownMenu>
-      </Dropdown>
+        <Select options={options}
+                isMulti={true}
+                onChange={(value) => {this.setState({[name]:
+                      (value === null) ? [] : value})}}
+                styles={styles}/>
     );
   }
 
@@ -197,23 +197,30 @@ export default class DestinationQuery extends Component {
 
   handleServerSubmission() {
     let newNarrow = [];
-    if (!(this.state.activeType === '')) {
-      newNarrow.push({
-        'name': 'type',
-        'value': this.state.activeType
-      })
-    }
 
-    if (!(this.state.activeCountry === '')) {
-      newNarrow.push({
-        'name': 'country',
-        'value': this.state.activeCountry
-      });
-    }
+    newNarrow.push({
+      'name': 'type',
+      'values': []
+    });
+
+    newNarrow.push({
+      'name': 'country',
+      'values': []
+    });
+
+    Object.assign([], this.state.activeTypes.forEach(
+        (entry) => {
+          newNarrow[0].values.push(entry.value);
+        }));
+
+    Object.assign([], this.state.activeCountries.forEach(
+        (entry) => {
+          newNarrow[1].values.push(entry.value);
+        }));
 
     let query = {
       match: this.state.match,
-      narrow: newNarrow,
+      narrow: Object.assign([], newNarrow),
       limit: this.state.limit,
       found: 0,
       places: this.state.places

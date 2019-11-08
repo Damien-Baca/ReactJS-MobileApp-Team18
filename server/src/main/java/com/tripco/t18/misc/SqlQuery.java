@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Performs a simple matching query for a database of Colorado locations.
  */
@@ -27,7 +29,9 @@ public class SqlQuery {
   "country.id = region.iso_country", "region.id = world.iso_region"};
   private final String[] order = {"continent.name", "country.name", "region.name",
       "world.municipality", "world.name"};
-  private Map<String, String>[] filters = null;
+  private Map<String, String[]> cleanFilters = new HashMap<>();
+
+  private final transient Logger log = LoggerFactory.getLogger(SqlQuery.class);
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseTesting.md
 
@@ -56,7 +60,7 @@ public class SqlQuery {
       myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
       user = "cs314-db";
       pass = "eiK5liet1uej";
-      local = false;
+      local = false;new HashMap<>();
     }
 
     // Else, we must be running against the production database directly
@@ -85,10 +89,14 @@ public class SqlQuery {
    * @return A list of dictionaries containing the relevant results
    */
   public Map[] locationQuery(String query, Map[] narrow, Integer limit) throws SQLException {
-    filters = narrow;
-    if (narrow != null) {
-      for (Map filter : filters) {
-        filter.replace("value", cleanTerm((String) filter.get("value")));
+    for (int i = 0; i < narrow.length; ++i) {
+      ArrayList<String> cleaned = new ArrayList<>();
+      for (String word : (ArrayList<String>) narrow[i].get("values")) {
+        cleaned.add(cleanTerm(word));
+      }
+      if (cleaned.size() > 0) {
+        cleanFilters.put((String) narrow[i].get("name"),
+            cleaned.toArray(new String[cleaned.size()]));
       }
     }
 
@@ -98,10 +106,10 @@ public class SqlQuery {
 
     return sendLocationsQuery(count, search);
   }
-  
+
   private String[] sendConfigQuery(String fullQuery) {
     String[] returnCountries;
-    
+
     try {
       Class.forName(myDriver);
       // connect to the database and query
@@ -111,10 +119,10 @@ public class SqlQuery {
       ) { returnCountries = configResult(rsQuery);
       }
     } catch (Exception e) {
-      System.err.println("Exception: " + e.getMessage());
+      log.error("Exception: " + e.getMessage());
       returnCountries = null;
     }
-    
+
     return returnCountries;
   }
 
@@ -132,7 +140,7 @@ public class SqlQuery {
       ) { returnResults = locationsResult(rsCount, rsQuery);
       }
     } catch (Exception e) {
-      System.err.println("Exception: " + e.getMessage());
+      log.error("Exception: " + e.getMessage());
       returnResults = null;
     }
 
@@ -148,7 +156,7 @@ public class SqlQuery {
 
     searchQuery += constructStart(count) + "\nfrom " + constructJoin() +"\nwhere ";
 
-    if (filters != null) {
+    if (!cleanFilters.isEmpty()) {
       searchQuery += constructFilters();
     }
 
@@ -182,11 +190,16 @@ public class SqlQuery {
   }
 
   private String constructFilters() {
-    String returnString = "";
+    String returnString = "(";
 
-    for (Map filter : filters) {
-      returnString += filter.get("name") + " like " + filter.get("value") + "\nand ";
+    for (Map.Entry<String, String[]> filterSet : cleanFilters.entrySet()) {
+      for (String filter : filterSet.getValue()) {
+        returnString += filterSet.getKey() + (filterSet.getKey().equals("country") ? ".name" : "") +
+            " like " + filter + "\nor ";
+      }
     }
+
+    returnString = returnString.substring(0, returnString.length() - 4) + ")\nand ";
 
     return returnString;
   }

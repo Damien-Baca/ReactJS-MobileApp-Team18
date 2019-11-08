@@ -52,8 +52,8 @@ export default class Application extends Component {
       },
       destinations: [],
       filter: [''],
-      typeFilter: [''],
-      countryFilter: [''],
+      typeFilter: [],
+      countryFilter: [],
       errorMessage: null
     };
 
@@ -179,9 +179,6 @@ export default class Application extends Component {
           });
         }
       });
-
-      console.log(newTypes);
-      console.log(newCountries);
 
       this.setState({
         serverConfig: config.body,
