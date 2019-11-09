@@ -8,7 +8,6 @@ export default class DestinationQuery extends Component {
 
     this.setPlaces = this.setPlaces.bind(this);
     this.generateDropdown = this.generateDropdown.bind(this);
-    this.generateDropdownItems = this.generateDropdownItems.bind(this);
     this.renderMatchInput = this.renderMatchInput.bind(this);
     this.renderSubmitButton = this.renderSubmitButton.bind(this);
     this.renderConditionalPlaces = this.renderConditionalPlaces.bind(this);
@@ -115,6 +114,14 @@ export default class DestinationQuery extends Component {
   }
 
   generateDropdown(name, filters) {
+    const setValue = (value) => {
+      let newList = [];
+      value.forEach((item) => {
+        newList.push(item.value);
+      });
+      this.setState({[name]: newList});
+    };
+
     let options = [];
     const styles = {
       input: base => ({
@@ -128,21 +135,8 @@ export default class DestinationQuery extends Component {
     return (
         <Select options={options}
                 isMulti={true}
-                onChange={(value) => {this.setState({[name]:
-                      (value === null) ? [] : value})}}
+                onChange={(value) => {setValue(value)}}
                 styles={styles}/>
-    );
-  }
-
-  generateDropdownItems(name, items) {
-    return (
-        items.map((item) => {
-          return (
-              <DropdownItem
-                  onClick={() => this.setState({[name]: item})}
-              >{this.selectFilter(item)}</DropdownItem>
-          );
-        })
     );
   }
 
@@ -200,27 +194,19 @@ export default class DestinationQuery extends Component {
 
     newNarrow.push({
       'name': 'type',
-      'values': []
+      'values': Object.assign([], this.state.activeTypes)
     });
 
     newNarrow.push({
       'name': 'country',
-      'values': []
+      'values': Object.assign([], this.state.activeCountries)
     });
 
-    Object.assign([], this.state.activeTypes.forEach(
-        (entry) => {
-          newNarrow[0].values.push(entry.value);
-        }));
-
-    Object.assign([], this.state.activeCountries.forEach(
-        (entry) => {
-          newNarrow[1].values.push(entry.value);
-        }));
+      console.log(newNarrow);
 
     let query = {
       match: this.state.match,
-      narrow: Object.assign([], newNarrow),
+      narrow: newNarrow,
       limit: this.state.limit,
       found: 0,
       places: this.state.places
