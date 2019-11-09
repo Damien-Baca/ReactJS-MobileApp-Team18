@@ -44,7 +44,7 @@ public class TIPConfig extends TIPHeader {
     this.serverName = "T18 THE FIGHTING MONGOOSES";
     this.placeAttributes = Arrays.asList("name","id","latitude","longitude","altitude",
         "municipality","region","country","continent","type");
-    this.optimizations = Arrays.asList("none", "short");
+    this.optimizations = Arrays.asList("none", "short", "shorter");
 
     setFilters();
 
