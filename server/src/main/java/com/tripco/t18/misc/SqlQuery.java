@@ -88,15 +88,17 @@ public class SqlQuery {
    * @param limit     The maximum number of results returned
    * @return A list of dictionaries containing the relevant results
    */
-  public Map[] locationQuery(String query, Map[] narrow, Integer limit) throws SQLException {
-    for (int i = 0; i < narrow.length; ++i) {
-      ArrayList<String> cleaned = new ArrayList<>();
-      for (String word : (ArrayList<String>) narrow[i].get("values")) {
-        cleaned.add(cleanTerm(word));
-      }
-      if (cleaned.size() > 0) {
-        cleanFilters.put((String) narrow[i].get("name"),
-            cleaned.toArray(new String[cleaned.size()]));
+  public Map[] locationQuery(String query, Map[] narrow, Integer limit) {
+    if (narrow != null) {
+      for (int i = 0; i < narrow.length; ++i) {
+        ArrayList<String> cleaned = new ArrayList<>();
+        for (String word : (ArrayList<String>) narrow[i].get("values")) {
+          cleaned.add(cleanTerm(word));
+        }
+        if (cleaned.size() > 0) {
+          cleanFilters.put((String) narrow[i].get("name"),
+              cleaned.toArray(new String[cleaned.size()]));
+        }
       }
     }
 
@@ -190,16 +192,18 @@ public class SqlQuery {
   }
 
   private String constructFilters() {
-    String returnString = "(";
+    String returnString = "";
 
     for (Map.Entry<String, String[]> filterSet : cleanFilters.entrySet()) {
+      returnString += "(";
+
       for (String filter : filterSet.getValue()) {
         returnString += filterSet.getKey() + (filterSet.getKey().equals("country") ? ".name" : "") +
             " like " + filter + "\nor ";
       }
-    }
 
-    returnString = returnString.substring(0, returnString.length() - 4) + ")\nand ";
+      returnString = returnString.substring(0, returnString.length() - 4) + ")\nand ";
+    }
 
     return returnString;
   }
@@ -265,4 +269,6 @@ public class SqlQuery {
 
     return (Map<String, String>[]) workingResults.toArray(new Map[workingResults.size()]);
   }
+
+  public boolean localDatabase() { return local; }
 }

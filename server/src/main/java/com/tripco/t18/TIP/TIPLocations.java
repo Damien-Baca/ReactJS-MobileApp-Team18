@@ -50,12 +50,8 @@ public class TIPLocations extends TIPHeader {
   public void buildResponse() {
     SqlQuery query = new SqlQuery();
     Map<String, String>[] result;
-    try {
-      result = query.locationQuery(match, narrow, limit);
-    } catch(Exception e) {
-      log.error(e.getMessage());
-      result = null;
-    }
+    result = query.locationQuery(match, narrow, limit);
+
     found = Integer.parseInt(result[0].get("found"));
 
     ArrayList<Map<String, String>> workingPlaces = new ArrayList<>(
