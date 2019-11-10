@@ -16,34 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `country`
+-- Table structure for table `continent`
 --
 
-DROP TABLE IF EXISTS `country`;
+DROP TABLE IF EXISTS `continent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `country` (
-  `index` int(11) NOT NULL,
-  `id` varchar(10) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `continent` varchar(3) DEFAULT NULL,
+CREATE TABLE `continent` (
+  `index` int(8) NOT NULL,
+  `id` varchar(3) NOT NULL,
+  `name` varchar(15) DEFAULT NULL,
   `wikipedia_link` varchar(1000) DEFAULT NULL,
-  `keywords` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `countries_code_idx` (`id`),
-  FULLTEXT KEY `countries_name_idx` (`name`)
+  KEY `continents_id_idx` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `country`
+-- Dumping data for table `continent`
 --
 -- WHERE:  id in (select continent from world where municipality like '%denver%')
 
-LOCK TABLES `country` WRITE;
-/*!40000 ALTER TABLE `country` DISABLE KEYS */;
-INSERT INTO `country` VALUES (302591,'NA','Namibia','AF','http://en.wikipedia.org/wiki/Namibia',NULL);
-/*!40000 ALTER TABLE `country` ENABLE KEYS */;
+LOCK TABLES `continent` WRITE;
+/*!40000 ALTER TABLE `continent` DISABLE KEYS */;
+INSERT INTO `continent` VALUES (400005,'NA','North America','https://en.wikipedia.org/wiki/North_America');
+/*!40000 ALTER TABLE `continent` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-09 17:06:50
+-- Dump completed on 2019-11-09 17:40:57

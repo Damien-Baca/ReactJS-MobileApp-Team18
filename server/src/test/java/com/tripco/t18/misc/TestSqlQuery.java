@@ -8,7 +8,7 @@ public class TestSqlQuery {
   @Test
   public void testConfigQuery() {
     SqlQuery testQuery = new SqlQuery();
-    int expectedCount = (testQuery.localDatabase() ? 0 : 247);
+    int expectedCount = (testQuery.localDatabase() ? 2 : 247);
 
     int actualCount = testQuery.configQuery().length;
 
