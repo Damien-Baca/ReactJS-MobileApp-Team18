@@ -95,7 +95,7 @@ public class SqlQuery {
    * @return A list of dictionaries containing the relevant results
    */
   public Map[] locationQuery(String query, Map[] narrow, Integer limit) {
-    if (narro != null) {
+    if (narrow != null) {
       setFilter(narrow);
     }
 
