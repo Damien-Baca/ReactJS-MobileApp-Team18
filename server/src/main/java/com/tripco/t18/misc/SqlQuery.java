@@ -60,7 +60,7 @@ public class SqlQuery {
       myUrl = "jdbc:mysql://127.0.0.1:56247/cs314";
       user = "cs314-db";
       pass = "eiK5liet1uej";
-      local = false;new HashMap<>();
+      local = false;
     }
 
     // Else, we must be running against the production database directly
@@ -72,6 +72,12 @@ public class SqlQuery {
     }
   }
 
+   /**
+   * Constructs and sends an SQL query for client config.
+   * Precondition: client sends config request
+   *
+   * @return A list containing a list of country names in the current database
+   */
   public String[] configQuery() {
     String fullQuery = "select distinct name from country order by name asc";
 
@@ -89,7 +95,9 @@ public class SqlQuery {
    * @return A list of dictionaries containing the relevant results
    */
   public Map[] locationQuery(String query, Map[] narrow, Integer limit) {
-    setFilter(narrow);
+    if (narro != null) {
+      setFilter(narrow);
+    }
 
     String cleanQuery = cleanTerm(query);
     String count = addLimit(constructSearch(cleanQuery, true), limit);
@@ -99,16 +107,14 @@ public class SqlQuery {
   }
 
   private void setFilter(Map[] narrow) {
-    if (narrow != null) {
-      for (int i = 0; i < narrow.length; ++i) {
-        ArrayList<String> cleaned = new ArrayList<>();
-        for (String word : (ArrayList<String>) narrow[i].get("values")) {
-          cleaned.add(cleanTerm(word));
-        }
-        if (cleaned.size() > 0) {
-          cleanFilters.put((String) narrow[i].get("name"),
-              cleaned.toArray(new String[cleaned.size()]));
-        }
+    for (int i = 0; i < narrow.length; ++i) {
+      ArrayList<String> cleaned = new ArrayList<>();
+      for (String word : (ArrayList<String>) narrow[i].get("values")) {
+        cleaned.add(cleanTerm(word));
+      }
+      if (cleaned.size() > 0) {
+        cleanFilters.put((String) narrow[i].get("name"),
+            cleaned.toArray(new String[cleaned.size()]));
       }
     }
   }
@@ -202,8 +208,8 @@ public class SqlQuery {
       returnString += "(";
 
       for (String filter : filterSet.getValue()) {
-        returnString += filterSet.getKey() + (filterSet.getKey().equals("country") ? ".name" : "") +
-            " like " + filter + "\nor ";
+        returnString += filterSet.getKey() + (filterSet.getKey().equals("country") ? ".name" : "")
+            + " like " + filter + "\nor ";
       }
 
       returnString = returnString.substring(0, returnString.length() - 4) + ")\nand ";
@@ -274,5 +280,6 @@ public class SqlQuery {
     return (Map<String, String>[]) workingResults.toArray(new Map[workingResults.size()]);
   }
 
-  public boolean localDatabase() { return local; }
+  public boolean localDatabase() { return local;
+  }
 }
