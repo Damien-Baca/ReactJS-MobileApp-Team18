@@ -18,7 +18,7 @@ public class TestSqlQuery {
   @Test
   public void testLocationsNameQuery() {
     SqlQuery testQuery = new SqlQuery();
-    int expectedCount = (testQuery.localDatabase() ? 5 : 39114);
+    int expectedCount = (testQuery.localDatabase() ? 6 : 39114);
 
     Map<String, String>[] queryResult = testQuery.locationQuery("airport", null, 10);
     int actualCount = Integer.parseInt(queryResult[0].get("found"));
