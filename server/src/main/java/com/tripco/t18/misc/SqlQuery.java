@@ -89,6 +89,16 @@ public class SqlQuery {
    * @return A list of dictionaries containing the relevant results
    */
   public Map[] locationQuery(String query, Map[] narrow, Integer limit) {
+    setFilter(narrow);
+
+    String cleanQuery = cleanTerm(query);
+    String count = addLimit(constructSearch(cleanQuery, true), limit);
+    String search = addLimit(constructSearch(cleanQuery, false), limit);
+
+    return sendLocationsQuery(count, search);
+  }
+
+  private void setFilter(Map[] narrow) {
     if (narrow != null) {
       for (int i = 0; i < narrow.length; ++i) {
         ArrayList<String> cleaned = new ArrayList<>();
@@ -101,12 +111,6 @@ public class SqlQuery {
         }
       }
     }
-
-    String cleanQuery = cleanTerm(query);
-    String count = addLimit(constructSearch(cleanQuery, true), limit);
-    String search = addLimit(constructSearch(cleanQuery, false), limit);
-
-    return sendLocationsQuery(count, search);
   }
 
   private String[] sendConfigQuery(String fullQuery) {

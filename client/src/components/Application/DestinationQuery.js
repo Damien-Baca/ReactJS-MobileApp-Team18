@@ -136,9 +136,6 @@ export default class DestinationQuery extends Component {
         <Select options={options}
                 key={`id_select_${name}`}
                 name={`select_${name}`}
-                inputProps={{
-                  key: `id_select_input_${name}`,
-                  name: `select_input_${name}`}}
                 isMulti={true}
                 onChange={(value) => {setValue(value)}}
                 styles={styles}/>

@@ -165,27 +165,7 @@ export default class Application extends Component {
     this.validateSchema(config);
 
     if (config.statusCode >= 200 && config.statusCode <= 299) {
-      console.log("Switching to server ", this.state.clientSettings.serverPort);
-      let newTypes = Object.assign([], this.state.typeFilter);
-      let newCountries = Object.assign([], this.state.countryFilter);
-
-      Object.entries(config.body).forEach((entry) => {
-        if (entry[0] === "filters") {
-          Object.assign([], entry[1][0]["values"]).forEach((type) => {
-            newTypes.push(type);
-          });
-          Object.assign([], entry[1][1]["values"]).forEach((country) => {
-            newCountries.push(country);
-          });
-        }
-      });
-
-      this.setState({
-        serverConfig: config.body,
-        typeFilter: newTypes,
-        countryFilter: newCountries,
-        errorMessage: null
-      });
+      this.configSet(config);
     } else {
       this.setState({
         serverConfig: null,
@@ -196,6 +176,30 @@ export default class Application extends Component {
             </Container>
       });
     }
+  }
+
+  configSet(config) {
+    console.log("Switching to server ", this.state.clientSettings.serverPort);
+    let newTypes = Object.assign([], this.state.typeFilter);
+    let newCountries = Object.assign([], this.state.countryFilter);
+
+    Object.entries(config.body).forEach((entry) => {
+      if (entry[0] === "filters") {
+        Object.assign([], entry[1][0]["values"]).forEach((type) => {
+          newTypes.push(type);
+        });
+        Object.assign([], entry[1][1]["values"]).forEach((country) => {
+          newCountries.push(country);
+        });
+      }
+    });
+
+    this.setState({
+      serverConfig: config.body,
+      typeFilter: newTypes,
+      countryFilter: newCountries,
+      errorMessage: null
+    });
   }
 
   addDestinations(newDestinations, index = (this.state.destinations.length)) {
