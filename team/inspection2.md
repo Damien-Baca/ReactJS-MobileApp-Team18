@@ -3,7 +3,7 @@
 | Inspection | Details |
 | ----- | ----- |
 | Subject | Application.js |
-| Meeting | ** |
+| Meeting | 11/11/19 |
 | Checklist | *reference, URL, etc.* |
 
 ### Roles
@@ -12,7 +12,7 @@
 | ---- | ---- |
 | Christopher Abelein | 00:30 |
 | James Lounsbury |  |
-| Hayden Quintana |  |
+| Hayden Quintana | 00:30 |
 | Long Chen |  |
 
 ### Problems found
