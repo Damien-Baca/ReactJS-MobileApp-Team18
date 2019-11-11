@@ -20,3 +20,4 @@
 | file:line | problem | hi/med/low | who found | github#  |
 | --- | --- | :---: | :---: | --- |
 | Application.js: | validateSchema should be split up into 2 functions and made more abstract | low | Abelein |  |
+| Application.js: | validateSchema should utilize a "switch case" statement instead of many "if elses" | low | dbaca | |
