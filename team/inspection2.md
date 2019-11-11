@@ -22,3 +22,10 @@
 | Application.js: | validateSchema should be split up into 2 functions and made more abstract | low | Abelein |  |
 | Application.js: | validateSchema should utilize a "switch case" statement instead of many "if elses" | low | dbaca | |
 | Application.js: | validateSchema can be abstracted to utilize 1 let per name of schema | low | hgq970 |  |
+
+
+### Issues to be created
+
+| Issue Title | Issue Number |
+| --- | --- |
+| Refactor ValidateSchema | #333 |
