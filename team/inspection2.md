@@ -3,7 +3,7 @@
 | Inspection | Details |
 | ----- | ----- |
 | Subject | Application.js |
-| Meeting | ** |
+| Meeting | 11/11/19 |
 | Checklist | *reference, URL, etc.* |
 
 ### Roles
@@ -12,8 +12,9 @@
 | ---- | ---- |
 | Christopher Abelein | 00:30 |
 | James Lounsbury |  |
-| Hayden Quintana |  |
+| Hayden Quintana | 00:30 |
 | Long Chen | 00:20 |
+
 
 ### Problems found
 
@@ -24,3 +25,10 @@
 | Application.js: | validateSchema can be abstracted to utilize 1 let per name of schema | low | hgq970 |  |
 | Application.js: | The test for Application.js has some problem. Application.js needs to be fixed | low | Long Chen |  |
 | Application.js: | validateSchema should also handle TIPTripFileSchema | med | jameslouns | |
+
+### Issues to be created
+
+| Issue Title | Issue Number |
+| --- | --- |
+| Refactor ValidateSchema | #333 |
+
