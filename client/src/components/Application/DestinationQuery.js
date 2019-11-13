@@ -68,8 +68,9 @@ export default class DestinationQuery extends Component {
           key='submit_query'
           onClick={() => this.handleServerSubmission()}
           active={true}
-          disabled={this.state.match === '' || this.state.activeTypes.isEmpty()
-          || this.state.activeCountries.isEmpty()}
+          disabled={this.state.match === ''
+          && this.state.activeTypes.length === 0
+          && this.state.activeCountries.length === 0}
       >Submit</Button>
     );
   }
@@ -117,9 +118,11 @@ export default class DestinationQuery extends Component {
   generateDropdown(name, filters) {
     const setValue = (value) => {
       let newList = [];
-      value.forEach((item) => {
-        newList.push(item.value);
-      });
+      if (value !== null) {
+        value.forEach((item) => {
+          newList.push(item.value);
+        });
+      }
       this.setState({[name]: newList});
     };
 
@@ -153,6 +156,9 @@ export default class DestinationQuery extends Component {
           </Row>
           <Row>
             {entry.altitude}, {entry.id}, {entry.type}, {entry.municipality}
+          </Row>
+          <Row>
+            {entry.continent}, {entry.country}, {entry.region}
           </Row>
           <Row>
              {this.generateAddDestinationButton(index)}
@@ -216,10 +222,6 @@ export default class DestinationQuery extends Component {
     };
 
     this.props.sendServerRequest('locations', query, this.setPlaces)
-  }
-
-  selectFilter(filter) {
-    return (filter === '' ? 'no filter' : filter);
   }
 
   setPlaces(newPlaces) {
