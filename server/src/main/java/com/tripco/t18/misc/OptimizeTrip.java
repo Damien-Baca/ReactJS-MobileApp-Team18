@@ -19,12 +19,6 @@ public class OptimizeTrip {
     this.currentTrip = new int[places.length];
 
     int zeroOffset = nearestNeighbor();
-
-    for (int i : bestTrip) {
-      System.out.println(i);
-    }
-    System.out.println("z:" + zeroOffset);
-
     Map[] newPlaces = new Map[places.length];
 
     for (int i = 0; i < places.length; ++i) {
@@ -45,12 +39,10 @@ public class OptimizeTrip {
 
       if (currentDistance < bestDistance) {
         for (int n = 0; n < currentTrip.length; ++n) {
-          System.out.println(n);
           bestTrip[n] = currentTrip[n];
         }
         bestDistance = currentDistance;
         bestZeroOffset = zeroOffset;
-        System.out.println(bestZeroOffset + ":" + bestDistance + ":" + bestTrip[bestZeroOffset]);
       }
     }
 
