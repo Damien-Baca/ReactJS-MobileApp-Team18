@@ -24,7 +24,8 @@ export default class DestinationMap extends Component {
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           {this.generateDestinationMarkers()}
-          {this.renderPolyline()}
+          {this.renderPolyline('one')}
+          {this.renderPolyline('two')}
         </Map>
     )
   }
@@ -52,17 +53,22 @@ export default class DestinationMap extends Component {
     );
   }
 
-  renderPolyline() {
+  renderPolyline(side) {
     let polylineList = [];
-
+    let shift = -180;
+    let equalitySwitch = 1;
+    if (side === 'right') {
+      shift = 180;
+      equalitySwitch = -1;
+    }
     if (this.props.destinations.length > 1) {
       let origin = [];
       polylineList.splice(0, 1);
-
       this.props.destinations.map((destination, index) => {
         if (index === 0) {
-          origin = [parseFloat(destination.latitude),
-            parseFloat(destination.longitude)];
+          let originLat = parseFloat(destination.latitude);
+          let originLong = this.modifyLong(destination.longitude);
+          origin=[originLat,originLong];
         }
         polylineList.splice(polylineList.length, 0,
             [parseFloat(destination.latitude),
@@ -73,14 +79,24 @@ export default class DestinationMap extends Component {
       });
 
       polylineList.splice(polylineList.length, 0, origin);
-
       return (
-          <Polyline
-              color={'blue'}
-              positions={polylineList}
-          >Trip</Polyline>
-      );
+            <Polyline
+                color={'blue'}
+                positions={polylineList}
+            >Trip</Polyline>
+        );
     }
+  }
+
+  modifyLong(long){
+    let retLong=long;
+    if(long>180){
+      retLong=long-360;
+    }
+    else if (long < -180) {
+      retLong=long+360;
+    }
+    return retLong;
   }
 
   itineraryBounds() {
