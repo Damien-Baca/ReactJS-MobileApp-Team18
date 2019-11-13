@@ -68,7 +68,8 @@ export default class DestinationQuery extends Component {
           key='submit_query'
           onClick={() => this.handleServerSubmission()}
           active={true}
-          disabled={this.state.match === ''}
+          disabled={this.state.match === '' || this.state.activeTypes.isEmpty()
+          || this.state.activeCountries.isEmpty()}
       >Submit</Button>
     );
   }
