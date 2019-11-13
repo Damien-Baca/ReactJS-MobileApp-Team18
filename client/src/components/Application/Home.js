@@ -94,8 +94,10 @@ export default class Home extends Component {
 
   renderDestinationQuery() {
     return (
-      <Pane header={'Database Query'}
+      <Pane header={'Find a Location'}
             bodyJSX={<DestinationQuery
+                typeFilter={this.props.typeFilter}
+                countryFilter={this.props.countryFilter}
                 setErrorBanner={this.setErrorBanner}
                 addDestinations={this.props.addDestinations}
                 resetDistances={this.resetDistances}

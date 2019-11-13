@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$PORT" ]; then
-  PORT=8088
+  PORT=8150
 fi
 if [ -z "$LOGLEVEL" ]; then
   LOGLEVEL=info

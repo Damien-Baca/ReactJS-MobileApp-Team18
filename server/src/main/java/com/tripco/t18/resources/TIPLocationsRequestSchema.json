@@ -17,15 +17,20 @@
     },
     "match": {
       "description":"an alphanumeric pattern used to find geographic locations.",
-      "type":"string",
-      "pattern":"^[a-zA-z0-9 ]+$"
+      "type":"string"
     },
     "narrow": {
       "description": "list of filters to add to the query",
       "type": "array",
       "items": {
         "name": {"type": "string"},
-        "value": {"type":  "string"}
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minItems": 0
+          }
+        }
       },
       "minItems": 0
     },

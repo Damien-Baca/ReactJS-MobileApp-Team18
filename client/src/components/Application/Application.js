@@ -51,6 +51,9 @@ export default class Application extends Component {
         serverPort: getOriginalServerPort()
       },
       destinations: [],
+      filter: [''],
+      typeFilter: [],
+      countryFilter: [],
       errorMessage: null
     };
 
@@ -143,6 +146,8 @@ export default class Application extends Component {
         <Home options={this.state.planOptions}
               destinations={this.state.destinations}
               settings={this.state.clientSettings}
+              typeFilter={this.state.typeFilter}
+              countryFilter={this.state.countryFilter}
               swapDestinations={this.swapDestinations}
               addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
@@ -158,12 +163,9 @@ export default class Application extends Component {
 
   processConfigResponse(config) {
     this.validateSchema(config);
+
     if (config.statusCode >= 200 && config.statusCode <= 299) {
-      console.log("Switching to server ", this.state.clientSettings.serverPort);
-      this.setState({
-        serverConfig: config.body,
-        errorMessage: null
-      });
+      this.configSet(config);
     } else {
       this.setState({
         serverConfig: null,
@@ -174,6 +176,30 @@ export default class Application extends Component {
             </Container>
       });
     }
+  }
+
+  configSet(config) {
+    console.log("Switching to server ", this.state.clientSettings.serverPort);
+    let newTypes = Object.assign([], this.state.typeFilter);
+    let newCountries = Object.assign([], this.state.countryFilter);
+
+    Object.entries(config.body).forEach((entry) => {
+      if (entry[0] === "filters") {
+        Object.assign([], entry[1][0]["values"]).forEach((type) => {
+          newTypes.push(type);
+        });
+        Object.assign([], entry[1][1]["values"]).forEach((country) => {
+          newCountries.push(country);
+        });
+      }
+    });
+
+    this.setState({
+      serverConfig: config.body,
+      typeFilter: newTypes,
+      countryFilter: newCountries,
+      errorMessage: null
+    });
   }
 
   addDestinations(newDestinations, index = (this.state.destinations.length)) {

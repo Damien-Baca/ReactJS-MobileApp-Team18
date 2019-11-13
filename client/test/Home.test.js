@@ -27,7 +27,9 @@ const inputNames = [
   'latitude',
   'longitude',
   'json_file',
-  'query_match'
+  'query_match',
+   undefined,
+   undefined
 ];
 const buttonNamesInitial = [
   'add_new_destination',
@@ -36,8 +38,6 @@ const buttonNamesInitial = [
   'exportFile',
   'calculate',
   'optimize',
-  'activeType_dropdown',
-  'activeCountry_dropdown',
   'submit_query',
   'clear_destinations',
   'reverse_destinations'

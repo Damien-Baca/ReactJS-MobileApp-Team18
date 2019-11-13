@@ -19,6 +19,7 @@ public class OptimizeTrip {
     this.currentTrip = new int[places.length];
 
     int zeroOffset = nearestNeighbor();
+
     Map[] newPlaces = new Map[places.length];
 
     for (int i = 0; i < places.length; ++i) {

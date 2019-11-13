@@ -6,24 +6,34 @@ import static org.junit.Assert.assertEquals;
 
 public class TestSqlQuery {
   @Test
-  public void testNameQuery() {
+  public void testConfigQuery() {
     SqlQuery testQuery = new SqlQuery();
-    int expectedCount = (testQuery.localDatabase() ? 5 : 297);
+    int expectedCount = (testQuery.localDatabase() ? 2 : 247);
 
-    Map<String, String>[] queryResult = testQuery.sendQuery("airport", null, 10);
-    int actualCount = Integer.parseInt(queryResult[0].get("found"));
+    int actualCount = testQuery.configQuery().length;
 
-    assertEquals("Expect 5 results from \"airport\".", expectedCount, actualCount);
+    assertEquals("Expect 248 results for list of countries.", expectedCount, actualCount);
   }
 
   @Test
-  public void testLatitudeQuery() {
+  public void testLocationsNameQuery() {
     SqlQuery testQuery = new SqlQuery();
-    int expectedCount = (testQuery.localDatabase() ? 9 : 223);
+    int expectedCount = (testQuery.localDatabase() ? 6 : 39114);
 
-    Map<String, String>[] queryResult = testQuery.sendQuery("40", null, 10);
+    Map<String, String>[] queryResult = testQuery.locationQuery("airport", null, 10);
     int actualCount = Integer.parseInt(queryResult[0].get("found"));
 
-    assertEquals("Expect 9 results from \"40\".", expectedCount, actualCount);
+    assertEquals("Expect 39114 results from \"airport\".", expectedCount, actualCount);
+  }
+
+  @Test
+  public void testLocationsLatitudeQuery() {
+    SqlQuery testQuery = new SqlQuery();
+    int expectedCount = (testQuery.localDatabase() ? 9 : 12604);
+
+    Map<String, String>[] queryResult = testQuery.locationQuery("40", null, 10);
+    int actualCount = Integer.parseInt(queryResult[0].get("found"));
+
+    assertEquals("Expect 12604 results from \"40\".", expectedCount, actualCount);
   }
 }

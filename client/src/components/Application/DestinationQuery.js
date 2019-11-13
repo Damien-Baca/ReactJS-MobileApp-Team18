@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Container, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input, Row, ListGroup, ListGroupItem} from 'reactstrap'
+import Select from 'react-select'
 
 export default class DestinationQuery extends Component {
   constructor(props) {
@@ -7,7 +8,6 @@ export default class DestinationQuery extends Component {
 
     this.setPlaces = this.setPlaces.bind(this);
     this.generateDropdown = this.generateDropdown.bind(this);
-    this.generateDropdownItems = this.generateDropdownItems.bind(this);
     this.renderMatchInput = this.renderMatchInput.bind(this);
     this.renderSubmitButton = this.renderSubmitButton.bind(this);
     this.renderConditionalPlaces = this.renderConditionalPlaces.bind(this);
@@ -19,10 +19,8 @@ export default class DestinationQuery extends Component {
       places: [],
       activeTypeOpen: false,
       activeCountryOpen: false,
-      typeFilter: ['', 'airport', 'heliport', 'balloonport', 'closed'],
-      activeType: '',
-      countryFilter: ['', 'stop right there'],
-      activeCountry: ''
+      activeTypes: [],
+      activeCountries: []
     }
   }
 
@@ -31,14 +29,12 @@ export default class DestinationQuery extends Component {
         <Container>
             {this.renderRow(this.renderMatchInput)}
           <Row>
-            {this.generateDropdown('activeType', Object.assign([],
-                this.state.typeFilter))} : {this.selectFilter(
-                    this.state.activeType)}
+            {this.generateDropdown('activeTypes', Object.assign([],
+                this.props.typeFilter))}
           </Row>
           <Row>
-            {this.generateDropdown('activeCountry', Object.assign([],
-                this.state.countryFilter))} : {this.selectFilter(
-                    this.state.activeCountry)}
+            {this.generateDropdown('activeCountries', Object.assign([],
+                this.props.countryFilter))}
           </Row>
           {this.renderRow(this.renderSubmitButton)}
           {this.renderRow(this.renderConditionalPlaces)}
@@ -72,8 +68,10 @@ export default class DestinationQuery extends Component {
           key='submit_query'
           onClick={() => this.handleServerSubmission()}
           active={true}
-          disabled={this.state.match === ''}
-      >Submit Query</Button>
+          disabled={this.state.match === ''
+          && this.state.activeTypes.length === 0
+          && this.state.activeCountries.length === 0}
+      >Submit</Button>
     );
   }
 
@@ -118,33 +116,33 @@ export default class DestinationQuery extends Component {
   }
 
   generateDropdown(name, filters) {
-    return (
-      <Dropdown
-          isOpen={this.state[name + 'Open']}
-          toggle={() => this.setState(
-              {[name + "Open"]: !this.state[name + 'Open']}
-              )}
-          classname={'csu-btn'}
-          direction={'right'}>
-        <DropdownToggle
-            key={`key_${name}_dropdown`}
-            name={`${name}_dropdown`}
-            caret>{'Filter by ' + name.slice(6).toLowerCase()
-        + ':'}</DropdownToggle>
-        <DropdownMenu>{this.generateDropdownItems(name, filters)}</DropdownMenu>
-      </Dropdown>
-    );
-  }
+    const setValue = (value) => {
+      let newList = [];
+      if (value !== null) {
+        value.forEach((item) => {
+          newList.push(item.value);
+        });
+      }
+      this.setState({[name]: newList});
+    };
 
-  generateDropdownItems(name, items) {
+    let options = [];
+    const styles = {
+      input: base => ({
+        width: `${10 * this.state[name].length + 100}px`
+      })
+    };
+    Object.assign([], filters).forEach((value) => {
+        options.push({value: value, label: value});
+    });
+
     return (
-        items.map((item) => {
-          return (
-              <DropdownItem
-                  onClick={() => this.setState({[name]: item})}
-              >{this.selectFilter(item)}</DropdownItem>
-          );
-        })
+        <Select options={options}
+                key={`id_select_${name}`}
+                name={`select_${name}`}
+                isMulti={true}
+                onChange={(value) => {setValue(value)}}
+                styles={styles}/>
     );
   }
 
@@ -158,6 +156,9 @@ export default class DestinationQuery extends Component {
           </Row>
           <Row>
             {entry.altitude}, {entry.id}, {entry.type}, {entry.municipality}
+          </Row>
+          <Row>
+            {entry.continent}, {entry.country}, {entry.region}
           </Row>
           <Row>
              {this.generateAddDestinationButton(index)}
@@ -199,19 +200,16 @@ export default class DestinationQuery extends Component {
 
   handleServerSubmission() {
     let newNarrow = [];
-    if (!(this.state.activeType === '')) {
-      newNarrow.push({
-        'name': 'type',
-        'value': this.state.activeType
-      })
-    }
 
-    if (!(this.state.activeCountry === '')) {
-      newNarrow.push({
-        'name': 'country',
-        'value': this.state.activeCountry
-      });
-    }
+    newNarrow.push({
+      'name': 'type',
+      'values': Object.assign([], this.state.activeTypes)
+    });
+
+    newNarrow.push({
+      'name': 'country',
+      'values': Object.assign([], this.state.activeCountries)
+    });
 
     let query = {
       match: this.state.match,
@@ -222,10 +220,6 @@ export default class DestinationQuery extends Component {
     };
 
     this.props.sendServerRequest('locations', query, this.setPlaces)
-  }
-
-  selectFilter(filter) {
-    return (filter === '' ? 'no filter' : filter);
   }
 
   setPlaces(newPlaces) {
