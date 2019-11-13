@@ -139,9 +139,6 @@ public class SqlQuery {
     }
 
     searchQuery = searchQuery.substring(0, searchQuery.length() - 4) + ")";
-
-    System.out.println(searchQuery);
-
     return searchQuery;
   }
 
