@@ -211,8 +211,6 @@ export default class DestinationQuery extends Component {
       'values': Object.assign([], this.state.activeCountries)
     });
 
-      console.log(newNarrow);
-
     let query = {
       match: this.state.match,
       narrow: newNarrow,
