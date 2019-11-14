@@ -124,9 +124,9 @@ export default class DestinationMap extends Component {
     return (
         polylineList.map((line) => (
             <Polyline
-                color={'blue'}
-                positions={line}
-            >Trip</Polyline>
+              color={'blue'}
+              positions={line}
+            />
         ))
     );
   }
