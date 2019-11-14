@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import {Button, Container, Row} from "reactstrap";
 
 /*
  * Renders a Leaflet Map with Markers and a Polyline.
@@ -10,6 +11,10 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 export default class DestinationMap extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      markerFlag: true,
+      polylineFlag: true
+    }
   }
 
   render() {
@@ -18,6 +23,7 @@ export default class DestinationMap extends Component {
 
   renderLeafletMap() {
     return (
+      <Container>
         <Map bounds={this.itineraryBounds()}
              style={{height: 500, maxwidth: 700}}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -26,60 +32,110 @@ export default class DestinationMap extends Component {
           {this.generateDestinationMarkers()}
           {this.renderPolyline()}
         </Map>
+        <Row>
+          {this.renderMarkerToggleButton()}
+          {this.renderPolylineToggleButton()}
+        </Row>
+      </Container>
     )
   }
 
+  renderMarkerToggleButton(){
+    return(
+              <Button
+                  className='btn-csu w-10 text-left'
+                  name='toggleAllMarkers'
+                  key='button_toggleAllMarkers'
+                  active={true}
+                  onClick={() => this.handleMarkerToggle()}>
+                Toggle All Markers
+              </Button>
+    )
+  }
+  renderPolylineToggleButton(){
+    return(
+          <Button
+              className='btn-csu w-10 text-left'
+              name='togglePolyline'
+              key='button_togglePolyline'
+              active={true}
+              onClick={() => this.handlePolylineToggle()}>
+            Toggle Polyline
+          </Button>
+    )
+  }
+  handleMarkerToggle() {
+    //setstate for all markers
+    this.setState({
+      markerFlag: !this.state.markerFlag
+    });
+
+  }
+  handlePolylineToggle() {
+    //setstate for polylines
+    this.setState({
+      polylineFlag: !this.state.polylineFlag
+    });
+  }
+
+
+
+
   generateDestinationMarkers() {
-    let markerList = [this.props.userLocation];
-    if (this.props.destinations.length > 0) {
-      markerList = [];
+    if(this.state.markerFlag) {
+      let markerList = [this.props.userLocation];
+      if (this.props.destinations.length > 0) {
+        markerList = [];
 
-      this.props.destinations.forEach((destination) => (
-          markerList.push(Object.assign({}, destination))
-      ));
+        this.props.destinations.forEach((destination) => (
+            markerList.push(Object.assign({}, destination))
+        ));
+      }
+
+      return (
+          markerList.map((marker, index) => (
+              <Marker
+                  key={`marker_${index}`}
+                  position={L.latLng(marker.latitude, marker.longitude)}
+                  icon={this.generateMarkerIcon()}>
+                < Popup
+                    className="font-weight-extrabold">{marker.name}</Popup>
+              </Marker>
+          ))
+      );
     }
-
-    return (
-        markerList.map((marker, index) => (
-            <Marker
-                key={`marker_${index}`}
-                position={L.latLng(marker.latitude, marker.longitude)}
-                icon={this.generateMarkerIcon()}>
-              < Popup
-                  className="font-weight-extrabold">{marker.name}</Popup>
-            </Marker>
-        ))
-    );
   }
 
   renderPolyline() {
-    let polylineList = [];
+    if(this.state.polylineFlag) {
+      let polylineList = [];
 
-    if (this.props.destinations.length > 1) {
-      let origin = [];
-      polylineList.splice(0, 1);
+      if (this.props.destinations.length > 1) {
+        let origin = [];
+        polylineList.splice(0, 1);
 
-      this.props.destinations.map((destination, index) => {
-        if (index === 0) {
-          origin = [parseFloat(destination.latitude),
-            parseFloat(destination.longitude)];
-        }
-        polylineList.splice(polylineList.length, 0,
-            [parseFloat(destination.latitude),
-              parseFloat(destination.longitude)]);
-        //} else {
-        //  previous = [destination.latitude, destination.longitude];
-        //}
-      });
+        this.props.destinations.map((destination, index) => {
+          if (index === 0) {
+            origin = [parseFloat(destination.latitude),
+              parseFloat(destination.longitude)];
+          }
+          polylineList.splice(polylineList.length, 0,
+              [parseFloat(destination.latitude),
+                parseFloat(destination.longitude)]);
+          //} else {
+          //  previous = [destination.latitude, destination.longitude];
+          //}
+        });
 
-      polylineList.splice(polylineList.length, 0, origin);
+        polylineList.splice(polylineList.length, 0, origin);
 
-      return (
-          <Polyline
-              color={'blue'}
-              positions={polylineList}
-          >Trip</Polyline>
-      );
+        return (
+            <Polyline
+                color={'blue'}
+                positions={polylineList}
+            >Trip</Polyline>
+        );
+      }
     }
   }
 
