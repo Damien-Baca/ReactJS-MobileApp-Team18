@@ -63,14 +63,17 @@ export default class DestinationMap extends Component {
       shift = 360;
     }
     if (this.props.destinations.length > 1) {
+
       let origin = [];
       polylineList.splice(0, 1);
+
       this.props.destinations.map((destination, index) => {
         if (index === 0) {
           let originLat = parseFloat(destination.latitude);
           let originLong = this.modifyLong(parseFloat(destination.longitude))+shift;
           origin=[originLat,originLong];
           polylineList.splice(polylineList.length,0,origin);
+
         }else {
           let destLong = this.modifyLong(parseFloat(destination.longitude))+shift;
           if(Math.abs(destLong-polylineList[polylineList.length-1][1])>180){
@@ -136,14 +139,14 @@ export default class DestinationMap extends Component {
             latitude: Math.max(boundaries[field].latitude,
                 parseFloat(destination.latitude)),
             longitude: Math.max(boundaries[field].longitude,
-                parseFloat(destination.longitude))
+                this.modifyLong(parseFloat(destination.longitude)))
           };
         } else {
           boundaries[field] = {
             latitude: Math.min(boundaries[field].latitude,
                 parseFloat(destination.latitude)),
             longitude: Math.min(boundaries[field].longitude,
-                parseFloat(destination.longitude))
+                this.modifyLong(parseFloat(destination.longitude)))
           };
         }
       })
