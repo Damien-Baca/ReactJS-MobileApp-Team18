@@ -36,7 +36,7 @@ public class OptimizeTrip {
       newPlaces[i] = places[bestTrip[(i + zeroOffset) % places.length]];
     }
 
-	while(improvement)
+	while(improvement) {
 	    for (int i = 0; i <= newPlaces.length - 3; ++i) {
 	    	for(int k = i + 2; k <= newPlaces.length - 1; k++) {
 	    		delta1 = matrix.get(currentTrip[i],currentTrip[k])   + matrix.get(currentTrip[i+1],currentTrip[k+1]) 
