@@ -66,17 +66,15 @@ export default class DestinationMap extends Component {
   }
   handleMarkerToggle() {
     //setstate for all markers
-    let inv = Object.assign({}, this.state.markerFlag)
     this.setState({
-      markerFlag: !(inv)
+      markerFlag: !this.state.markerFlag
     });
 
   }
   handlePolylineToggle() {
     //setstate for polylines
-    let inv = Object.assign({}, this.state.polylineFlag)
     this.setState({
-      polylineFlag: !(inv)
+      polylineFlag: !this.state.polylineFlag
     });
   }
 
