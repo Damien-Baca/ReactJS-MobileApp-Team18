@@ -12,17 +12,17 @@ public class OptimizeTrip {
   private int currentLocation;
   private int currentDistance;
 
-  public void inplaceReverse(places, i1, i2) { // reverse in place
+  public int inplaceReverse(Map[] places, int i1, int i2) {
     while(i1 < i2) {
-      temp = places[i1]
-      places[i1] = places[i2]
-      places[i2] = temp
-      i1++; i2--
+      Object temp = places[i1];
+      places[i1] = places[i2];
+      places[i2] = temp;
+      i1++; i2--;
     }
+    return 0;
   }
 
   public Map[] shortTrip(Map[] places, Double earthRadius) {
-  	var improvement = false;
     this.places = places;
     this.earthRadius = earthRadius;
     this.bestTrip = new int[places.length];
@@ -36,23 +36,41 @@ public class OptimizeTrip {
       newPlaces[i] = places[bestTrip[(i + zeroOffset) % places.length]];
     }
 
-	while(improvement) {
+    return newPlaces;
+  }
+
+  public Map[] shorterTrip(Map[] places, Double earthRadius) {
+    this.places = places;
+    this.earthRadius = earthRadius;
+    this.bestTrip = new int[places.length];
+    this.currentTrip = new int[places.length];
+
+	boolean improvement = false;
+    int zeroOffset = nearestNeighbor();
+
+    Map[] newPlaces = new Map[places.length];
+
+	for (int i = 0; i < places.length; ++i) {
+      newPlaces[i] = places[i];
+    }
+
+    while(improvement) {
 	    for (int i = 0; i <= newPlaces.length - 3; ++i) {
 	    	for(int k = i + 2; k <= newPlaces.length - 1; k++) {
-	    		delta1 = matrix.get(currentTrip[i],currentTrip[k])   + matrix.get(currentTrip[i+1],currentTrip[k+1]) 
-	        		   - matrix.get(currentTrip[i],currentTrip[i+1]) - matrix.get(currentTrip[k],currentTrip[k+1]);
+	    		double delta = matrix.get(i,k)   + matrix.get(i+1,k+1) - matrix.get(i,i+1) - matrix.get(k  ,k+1);
 	        	if(delta < 0)
 	        	{
 	        		inplaceReverse(newPlaces, i+1, k);
 	        		improvement = true;
 	        	}
-	
 	    	}
 		}
 	}
 
     return newPlaces;
   }
+
+  
 
   private int nearestNeighbor() {
     DistanceMatrix matrix = new DistanceMatrix(places, earthRadius);
