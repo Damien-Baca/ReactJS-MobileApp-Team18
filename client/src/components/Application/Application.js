@@ -363,6 +363,8 @@ export default class Application extends Component {
     } else if (TIPType === 'trip') { valid = ajv.validate(TIPTripSchema, response.body);
     }
     if(!valid){
+      console.log(ajv.errors);
+      console.log(response.body);
       this.setState({
         errorMessage: this.createErrorBanner(
             "Server Response Error",
