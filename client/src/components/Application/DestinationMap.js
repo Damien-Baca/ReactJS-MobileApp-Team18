@@ -158,7 +158,7 @@ export default class DestinationMap extends Component {
         );
         if (Math.abs(origin[1] - previousLatLong[1]) > 180) {
           if (origin[1] > previousLatLong[1]) {
-            console.log(origin[1] > previousLatLong);
+
             polyline = [previousLatLong, [origin[0], origin[1] - 360]];
             polylineList.push(polyline);
             polyline = [[previousLatLong[0], previousLatLong[1] + 360], origin];
@@ -175,7 +175,6 @@ export default class DestinationMap extends Component {
         }
         polylineList.splice(0,1);
       }
-      console.log(polylineList);
       return (
           polylineList.map((line) => (
               <Polyline
