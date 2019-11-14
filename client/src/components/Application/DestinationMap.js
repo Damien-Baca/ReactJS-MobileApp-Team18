@@ -11,6 +11,10 @@ import {Button, Container, Row} from "reactstrap";
 export default class DestinationMap extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      markerFlag: true,
+      polylineFlag: true
+    }
   }
 
   render() {
@@ -62,66 +66,78 @@ export default class DestinationMap extends Component {
   }
   handleMarkerToggle() {
     //setstate for all markers
+    let inv = Object.assign({}, this.state.markerFlag)
+    this.setState({
+      markerFlag: !(inv)
+    });
 
   }
   handlePolylineToggle() {
     //setstate for polylines
+    let inv = Object.assign({}, this.state.polylineFlag)
+    this.setState({
+      polylineFlag: !(inv)
+    });
   }
 
 
 
 
   generateDestinationMarkers() {
-    let markerList = [this.props.userLocation];
-    if (this.props.destinations.length > 0) {
-      markerList = [];
+    if(this.state.markerFlag) {
+      let markerList = [this.props.userLocation];
+      if (this.props.destinations.length > 0) {
+        markerList = [];
 
-      this.props.destinations.forEach((destination) => (
-          markerList.push(Object.assign({}, destination))
-      ));
+        this.props.destinations.forEach((destination) => (
+            markerList.push(Object.assign({}, destination))
+        ));
+      }
+
+      return (
+          markerList.map((marker, index) => (
+              <Marker
+                  key={`marker_${index}`}
+                  position={L.latLng(marker.latitude, marker.longitude)}
+                  icon={this.generateMarkerIcon()}>
+                < Popup
+                    className="font-weight-extrabold">{marker.name}</Popup>
+              </Marker>
+          ))
+      );
     }
-
-    return (
-        markerList.map((marker, index) => (
-            <Marker
-                key={`marker_${index}`}
-                position={L.latLng(marker.latitude, marker.longitude)}
-                icon={this.generateMarkerIcon()}>
-              < Popup
-                  className="font-weight-extrabold">{marker.name}</Popup>
-            </Marker>
-        ))
-    );
   }
 
   renderPolyline() {
-    let polylineList = [];
+    if(this.state.polylineFlag) {
+      let polylineList = [];
 
-    if (this.props.destinations.length > 1) {
-      let origin = [];
-      polylineList.splice(0, 1);
+      if (this.props.destinations.length > 1) {
+        let origin = [];
+        polylineList.splice(0, 1);
 
-      this.props.destinations.map((destination, index) => {
-        if (index === 0) {
-          origin = [parseFloat(destination.latitude),
-            parseFloat(destination.longitude)];
-        }
-        polylineList.splice(polylineList.length, 0,
-            [parseFloat(destination.latitude),
-              parseFloat(destination.longitude)]);
-        //} else {
-        //  previous = [destination.latitude, destination.longitude];
-        //}
-      });
+        this.props.destinations.map((destination, index) => {
+          if (index === 0) {
+            origin = [parseFloat(destination.latitude),
+              parseFloat(destination.longitude)];
+          }
+          polylineList.splice(polylineList.length, 0,
+              [parseFloat(destination.latitude),
+                parseFloat(destination.longitude)]);
+          //} else {
+          //  previous = [destination.latitude, destination.longitude];
+          //}
+        });
 
-      polylineList.splice(polylineList.length, 0, origin);
+        polylineList.splice(polylineList.length, 0, origin);
 
-      return (
-          <Polyline
-              color={'blue'}
-              positions={polylineList}
-          >Trip</Polyline>
-      );
+        return (
+            <Polyline
+                color={'blue'}
+                positions={polylineList}
+            >Trip</Polyline>
+        );
+      }
     }
   }
 
