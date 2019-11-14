@@ -45,7 +45,8 @@
         "type": "string",
         "enum": [
           "none",
-          "short"
+          "short",
+          "shorter"
         ]
       },
       "minItems": 2,
