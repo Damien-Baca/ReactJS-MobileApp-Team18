@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import {Button} from "reactstrap";
+import Pane from "./Pane";
 
 /*
  * Renders a Leaflet Map with Markers and a Polyline.
@@ -18,16 +20,60 @@ export default class DestinationMap extends Component {
 
   renderLeafletMap() {
     return (
+
         <Map bounds={this.itineraryBounds()}
              style={{height: 500, maxwidth: 700}}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
-          {this.generateDestinationMarkers()}
-          {this.renderPolyline()}
+          {this.renderMarkerToggleButton()}
+          {this.renderPolylineToggleButton()}
+
         </Map>
+
     )
   }
+
+  renderMarkerToggleButton(){
+    return(
+    <Pane>
+      <Button
+          className='btn-csu w-100 text-left'
+          name='toggleAllMarkers'
+          key='button_toggleAllMarkers'
+          active={true}
+          onClick={() => this.handleMarkerToggle()}>
+        Handle
+      </Button>
+    </Pane>
+    )
+  }
+  renderPolylineToggleButton(){
+    return(
+        <Pane>
+          <Button
+              className='btn-csu w-100 text-left'
+              name='togglePolyline'
+              key='button_togglePolyline'
+              active={true}
+              onClick={() => this.handlePolylineToggle()}>
+            Handle
+          </Button>
+        </Pane>
+    )
+  }
+  handleMarkerToggle() {
+    //needs to switch on and off all markers
+        {this.generateDestinationMarkers()}
+
+  }
+  handlePolylineToggle() {
+    //needs to switch on and off all markers
+    {this.renderPolyline()}
+  }
+
+
+
 
   generateDestinationMarkers() {
     let markerList = [this.props.userLocation];
