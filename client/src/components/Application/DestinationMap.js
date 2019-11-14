@@ -24,8 +24,7 @@ export default class DestinationMap extends Component {
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           {this.generateDestinationMarkers()}
-          {this.renderPolyline('left')}
-          {this.renderPolyline('right')}
+          {this.renderPolyline()}
         </Map>
     )
   }
@@ -56,44 +55,80 @@ export default class DestinationMap extends Component {
     );
   }
 
-  renderPolyline(side) {
+  renderPolyline() {
     let polylineList = [];
-    let shift = 0;
-    if (side === 'right') {
-      shift = 360;
-    }
-    if (this.props.destinations.length > 1) {
+    let polyline = [];
+    let origin = [];
+    let previousLatLong = [];
+    let index = 0;
+    let currentLong = 0;
+    if(this.props.destinations.length>1) {
+      this.props.destinations.forEach((destination) => {
+            if (index === 0) {
+              origin = [parseFloat(destination.latitude),
+                this.modifyLong(parseFloat(destination.longitude))];
+              index++;
+            }
+            if (previousLatLong === []) {
+              previousLatLong = origin;
+            } else {
+              currentLong = this.modifyLong(parseFloat(destination.longitude));
+              if (Math.abs(currentLong - previousLatLong[1]) > 180) {
+                if (currentLong > previousLatLong[1]) {
+                  polyline = [[previousLatLong[0], previousLatLong[1]],
+                    [parseFloat(destination.latitude), currentLong - 360]];
+                  polylineList.push(polyline);
 
-      let origin = [];
-      polylineList.splice(0, 1);
+                  polyline = [[previousLatLong[0], previousLatLong[1] + 360],
+                    [parseFloat(destination.latitude), currentLong]];
+                  polylineList.push(polyline);
+                } else {
+                  polyline = [[previousLatLong[0], previousLatLong[1]],
+                    [parseFloat(destination.latitude), currentLong + 360]];
+                  polylineList.push(polyline);
 
-      this.props.destinations.map((destination, index) => {
-        if (index === 0) {
-          let originLat = parseFloat(destination.latitude);
-          let originLong = this.modifyLong(parseFloat(destination.longitude))+shift;
-          origin=[originLat,originLong];
-          polylineList.splice(polylineList.length,0,origin);
-
-        }else {
-          let destLong = this.modifyLong(parseFloat(destination.longitude))+shift;
-          if(Math.abs(destLong-polylineList[polylineList.length-1][1])>180){
-            destLong -= 360;
+                  polyline = [[previousLatLong[0], previousLatLong[1] - 360],
+                    [parseFloat(destination.latitude), currentLong]];
+                  polylineList.push(polyline);
+                }
+                previousLatLong = [parseFloat(destination.latitude), currentLong];
+              } else {
+                polyline = [previousLatLong, [parseFloat(destination.latitude),
+                  this.modifyLong(parseFloat(destination.longitude))]];
+                previousLatLong = polyline[1];
+                polylineList.push(polyline);
+              }
+            }
           }
-          polylineList.splice(polylineList.length, 0,
-              [parseFloat(destination.latitude), destLong]);
+      );
+      if (Math.abs(origin[1] - previousLatLong[1]) > 180) {
+        if (origin[1] > previousLatLong[1]) {
+          console.log(origin[1] > previousLatLong);
+          polyline = [previousLatLong, [origin[0], origin[1] - 360]];
+          polylineList.push(polyline);
+          polyline = [[previousLatLong[0], previousLatLong[1] + 360], origin];
+          polylineList.push(polyline);
+        } else {
+          polyline = [previousLatLong, [origin[0], origin[1] + 360]];
+          polylineList.push(polyline);
+          polyline = [[previousLatLong[0], previousLatLong[1] - 360], origin];
+          polylineList.push(polyline);
         }
-      });
-      if(Math.abs(origin[1]-polylineList[polylineList.length-1][1])>180){
-        origin[1] -= 360;
+      } else {
+        polyline = [previousLatLong, origin];
+        polylineList.push(polyline);
       }
-      polylineList.splice(polylineList.length, 0, origin);
-      return (
+      polylineList.splice(0,1);
+    }
+    console.log(polylineList);
+    return (
+        polylineList.map((line) => (
             <Polyline
                 color={'blue'}
-                positions={polylineList}
+                positions={line}
             >Trip</Polyline>
-        );
-    }
+        ))
+    );
   }
 
   modifyLong(long){
