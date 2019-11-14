@@ -24,8 +24,8 @@ export default class DestinationMap extends Component {
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           {this.generateDestinationMarkers()}
-          {this.renderPolyline('one')}
-          {this.renderPolyline('two')}
+          {this.renderPolyline('left')}
+          {this.renderPolyline('right')}
         </Map>
     )
   }
@@ -55,11 +55,9 @@ export default class DestinationMap extends Component {
 
   renderPolyline(side) {
     let polylineList = [];
-    let shift = -180;
-    let equalitySwitch = 1;
+    let shift = 0;
     if (side === 'right') {
-      shift = 180;
-      equalitySwitch = -1;
+      shift = 360;
     }
     if (this.props.destinations.length > 1) {
       let origin = [];
@@ -67,17 +65,21 @@ export default class DestinationMap extends Component {
       this.props.destinations.map((destination, index) => {
         if (index === 0) {
           let originLat = parseFloat(destination.latitude);
-          let originLong = this.modifyLong(destination.longitude);
+          let originLong = this.modifyLong(parseFloat(destination.longitude))+shift;
           origin=[originLat,originLong];
+          polylineList.splice(polylineList.length,0,origin);
+        }else {
+          let destLong = this.modifyLong(parseFloat(destination.longitude))+shift;
+          if(Math.abs(destLong-polylineList[polylineList.length-1][1])>180){
+            destLong -= 360;
+          }
+          polylineList.splice(polylineList.length, 0,
+              [parseFloat(destination.latitude), destLong]);
         }
-        polylineList.splice(polylineList.length, 0,
-            [parseFloat(destination.latitude),
-              parseFloat(destination.longitude)]);
-        //} else {
-        //  previous = [destination.latitude, destination.longitude];
-        //}
       });
-
+      if(Math.abs(origin[1]-polylineList[polylineList.length-1][1])>180){
+        origin[1] -= 360;
+      }
       polylineList.splice(polylineList.length, 0, origin);
       return (
             <Polyline
