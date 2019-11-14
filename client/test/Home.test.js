@@ -5,7 +5,7 @@ import {mount} from 'enzyme'
 
 const destinations = [];
 const options = {
-  units: {'miles': 3958.8, 'kilometers': 6371},
+  units: {'miles': 3958.8, 'kilometers': 6371, 'nautical miles': 3440.1},
   activeUnit: 'miles',
   optimizations: ['none', 'short'],
   activeOptimization: 'none',
@@ -32,6 +32,8 @@ const inputNames = [
    undefined
 ];
 const buttonNamesInitial = [
+  'toggleAllMarkers',
+  'togglePolyline',
   'add_new_destination',
   'add_user_destination',
   'loadJSON',
@@ -40,7 +42,8 @@ const buttonNamesInitial = [
   'optimize',
   'submit_query',
   'clear_destinations',
-  'reverse_destinations'
+  'reverse_destinations',
+
 ];
 const validationDummy = () => {
   return true;
