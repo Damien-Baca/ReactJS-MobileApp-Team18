@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import {Button} from "reactstrap";
-import Pane from "./Pane";
+import {Button, Container, Row} from "reactstrap";
 
 /*
  * Renders a Leaflet Map with Markers and a Polyline.
@@ -20,56 +19,53 @@ export default class DestinationMap extends Component {
 
   renderLeafletMap() {
     return (
-
+      <Container>
         <Map bounds={this.itineraryBounds()}
              style={{height: 500, maxwidth: 700}}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
+          {this.generateDestinationMarkers()}
+          {this.renderPolyline()}
+        </Map>
+        <Row>
           {this.renderMarkerToggleButton()}
           {this.renderPolylineToggleButton()}
-
-        </Map>
-
+        </Row>
+      </Container>
     )
   }
 
   renderMarkerToggleButton(){
     return(
-    <Pane>
-      <Button
-          className='btn-csu w-100 text-left'
-          name='toggleAllMarkers'
-          key='button_toggleAllMarkers'
-          active={true}
-          onClick={() => this.handleMarkerToggle()}>
-        Handle
-      </Button>
-    </Pane>
+              <Button
+                  className='btn-csu w-100 text-left'
+                  name='toggleAllMarkers'
+                  key='button_toggleAllMarkers'
+                  active={true}
+                  onClick={() => this.handleMarkerToggle()}>
+                Toggle All Markers
+              </Button>
     )
   }
   renderPolylineToggleButton(){
     return(
-        <Pane>
           <Button
               className='btn-csu w-100 text-left'
               name='togglePolyline'
               key='button_togglePolyline'
               active={true}
               onClick={() => this.handlePolylineToggle()}>
-            Handle
+            Toggle Polyline
           </Button>
-        </Pane>
     )
   }
   handleMarkerToggle() {
-    //needs to switch on and off all markers
-        {this.generateDestinationMarkers()}
+    //setstate for all markers
 
   }
   handlePolylineToggle() {
-    //needs to switch on and off all markers
-    {this.renderPolyline()}
+    //setstate for polylines
   }
 
 
