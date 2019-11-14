@@ -87,10 +87,13 @@ export default class DestinationMap extends Component {
       if (this.props.destinations.length > 0) {
         markerList = [];
 
-        this.props.destinations.forEach((destination) => (
-            markerList.push(Object.assign({}, destination))
-        ));
-      }
+      this.props.destinations.forEach((destination) => (
+          markerList.push(Object.assign({}, {
+            latitude: destination.latitude,
+            name: destination.name,
+            longitude: this.modifyLong(destination.longitude)}))
+      ));
+    }
 
       return (
           markerList.map((marker, index) => (
@@ -107,36 +110,91 @@ export default class DestinationMap extends Component {
   }
 
   renderPolyline() {
-    if(this.state.polylineFlag) {
+    if(this.state.polylineFlag){
       let polylineList = [];
+      let polyline = [];
+      let origin = [];
+      let previousLatLong = [];
+      let index = 0;
+      let currentLong = 0;
+      if(this.props.destinations.length>1) {
+        this.props.destinations.forEach((destination) => {
+              if (index === 0) {
+                origin = [parseFloat(destination.latitude),
+                  this.modifyLong(parseFloat(destination.longitude))];
+                index++;
+              }
+              if (previousLatLong === []) {
+                previousLatLong = origin;
+              } else {
+                currentLong = this.modifyLong(parseFloat(destination.longitude));
+                if (Math.abs(currentLong - previousLatLong[1]) > 180) {
+                  if (currentLong > previousLatLong[1]) {
+                    polyline = [[previousLatLong[0], previousLatLong[1]],
+                      [parseFloat(destination.latitude), currentLong - 360]];
+                    polylineList.push(polyline);
 
-      if (this.props.destinations.length > 1) {
-        let origin = [];
-        polylineList.splice(0, 1);
+                    polyline = [[previousLatLong[0], previousLatLong[1] + 360],
+                      [parseFloat(destination.latitude), currentLong]];
+                    polylineList.push(polyline);
+                  } else {
+                    polyline = [[previousLatLong[0], previousLatLong[1]],
+                      [parseFloat(destination.latitude), currentLong + 360]];
+                    polylineList.push(polyline);
 
-        this.props.destinations.map((destination, index) => {
-          if (index === 0) {
-            origin = [parseFloat(destination.latitude),
-              parseFloat(destination.longitude)];
-          }
-          polylineList.splice(polylineList.length, 0,
-              [parseFloat(destination.latitude),
-                parseFloat(destination.longitude)]);
-          //} else {
-          //  previous = [destination.latitude, destination.longitude];
-          //}
-        });
-
-        polylineList.splice(polylineList.length, 0, origin);
-
-        return (
-            <Polyline
-                color={'blue'}
-                positions={polylineList}
-            >Trip</Polyline>
+                    polyline = [[previousLatLong[0], previousLatLong[1] - 360],
+                      [parseFloat(destination.latitude), currentLong]];
+                    polylineList.push(polyline);
+                  }
+                  previousLatLong = [parseFloat(destination.latitude), currentLong];
+                } else {
+                  polyline = [previousLatLong, [parseFloat(destination.latitude),
+                    this.modifyLong(parseFloat(destination.longitude))]];
+                  previousLatLong = polyline[1];
+                  polylineList.push(polyline);
+                }
+              }
+            }
         );
+        if (Math.abs(origin[1] - previousLatLong[1]) > 180) {
+          if (origin[1] > previousLatLong[1]) {
+
+            polyline = [previousLatLong, [origin[0], origin[1] - 360]];
+            polylineList.push(polyline);
+            polyline = [[previousLatLong[0], previousLatLong[1] + 360], origin];
+            polylineList.push(polyline);
+          } else {
+            polyline = [previousLatLong, [origin[0], origin[1] + 360]];
+            polylineList.push(polyline);
+            polyline = [[previousLatLong[0], previousLatLong[1] - 360], origin];
+            polylineList.push(polyline);
+          }
+        } else {
+          polyline = [previousLatLong, origin];
+          polylineList.push(polyline);
+        }
+        polylineList.splice(0,1);
       }
+      return (
+          polylineList.map((line) => (
+              <Polyline
+                  color={'blue'}
+                  positions={line}
+              />
+          ))
+      );
     }
+  }
+
+  modifyLong(long){
+    let retLong=long;
+    if(long>180){
+      retLong=long-360;
+    }
+    else if (long < -180) {
+      retLong=long+360;
+    }
+    return retLong;
   }
 
   itineraryBounds() {
@@ -171,19 +229,20 @@ export default class DestinationMap extends Component {
             latitude: Math.max(boundaries[field].latitude,
                 parseFloat(destination.latitude)),
             longitude: Math.max(boundaries[field].longitude,
-                parseFloat(destination.longitude))
+                this.modifyLong(parseFloat(destination.longitude)))
           };
         } else {
           boundaries[field] = {
             latitude: Math.min(boundaries[field].latitude,
                 parseFloat(destination.latitude)),
             longitude: Math.min(boundaries[field].longitude,
-                parseFloat(destination.longitude))
+                this.modifyLong(parseFloat(destination.longitude)))
           };
         }
       })
     });
   }
+
 
   generateMarkerIcon() {
     // react-leaflet does not currently handle default marker icons correctly,
