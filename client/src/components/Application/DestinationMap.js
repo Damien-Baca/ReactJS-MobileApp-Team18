@@ -43,7 +43,7 @@ export default class DestinationMap extends Component {
   renderMarkerToggleButton(){
     return(
               <Button
-                  className='btn-csu w-100 text-left'
+                  className='btn-csu w-10 text-left'
                   name='toggleAllMarkers'
                   key='button_toggleAllMarkers'
                   active={true}
@@ -55,7 +55,7 @@ export default class DestinationMap extends Component {
   renderPolylineToggleButton(){
     return(
           <Button
-              className='btn-csu w-100 text-left'
+              className='btn-csu w-10 text-left'
               name='togglePolyline'
               key='button_togglePolyline'
               active={true}
