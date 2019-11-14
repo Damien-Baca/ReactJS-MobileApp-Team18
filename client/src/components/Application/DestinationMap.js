@@ -181,7 +181,7 @@ export default class DestinationMap extends Component {
               <Polyline
                   color={'blue'}
                   positions={line}
-              >Trip</Polyline>
+              />
           ))
       );
     }
