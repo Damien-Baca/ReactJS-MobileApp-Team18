@@ -36,7 +36,10 @@ export default class DestinationMap extends Component {
       markerList = [];
 
       this.props.destinations.forEach((destination) => (
-          markerList.push(Object.assign({}, destination))
+          markerList.push(Object.assign({}, {
+            latitude: destination.latitude,
+            name: destination.name,
+            longitude: this.modifyLong(destination.longitude)}))
       ));
     }
 
