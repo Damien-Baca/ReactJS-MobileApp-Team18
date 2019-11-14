@@ -188,11 +188,11 @@ export default class DestinationQuery extends Component {
   }
 
   handleAddDestination(index) {
-    let newDestination = {
-      name: this.state.places[index].name,
-      latitude: this.state.places[index].latitude,
-      longitude: this.state.places[index].longitude
-    };
+    let newDestination = {};
+
+    Object.keys(this.state.places[index]).forEach((key) => {
+      newDestination[key] = this.state.places[index][key]
+    });
 
     this.props.addDestinations([newDestination]);
     this.props.resetDistances();

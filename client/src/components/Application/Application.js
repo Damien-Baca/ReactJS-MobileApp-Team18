@@ -207,11 +207,7 @@ export default class Application extends Component {
       let newDestinationList = Object.assign([], this.state.destinations);
 
       newDestinations.forEach((destination, offset) => {
-        newDestinationList.splice(index + offset, 0, {
-          name: String(destination.name),
-          latitude: String(destination.latitude),
-          longitude: String(destination.longitude)
-        });
+        newDestinationList.splice(index + offset, 0, destination);
       });
 
       this.setState({
