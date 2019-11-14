@@ -99,7 +99,7 @@ export default class DestinationMap extends Component {
                   position={L.latLng(marker.latitude, marker.longitude)}
                   icon={this.generateMarkerIcon()}>
                 < Popup
-                    className="font-weight-extrabold">{marker.name}</Popup>
+                    className="font-weight-extrabold">{marker.name+'\n'+marker.latitude+' '+marker.longitude}</Popup>
               </Marker>
           ))
       );
