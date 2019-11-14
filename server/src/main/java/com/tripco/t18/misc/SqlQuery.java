@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Performs a simple matching query for a database of Colorado locations.
  */
@@ -18,13 +20,18 @@ public class SqlQuery {
   private String user = "";
   private String pass = "";
   private boolean local;
+  private final String[] databaseIds = {"world.name","latitude","longitude",
+      "world.id","altitude","municipality","type","region.name","country.name","continent.name"};
   private final String[] identifiers = {"name","latitude","longitude",
-      "id","altitude","municipality","type"};
-  private Map<String, String>[] filters = null;
+      "id","altitude","municipality","type","region","country","continent"};
+  private final String[] joinTables = {"country", "region", "world"};
+  private final String[] joinIds = {"continent.id = country.continent",
+  "country.id = region.iso_country", "region.id = world.iso_region"};
+  private final String[] order = {"continent.name", "country.name", "region.name",
+      "world.municipality", "world.name"};
+  private Map<String, String[]> cleanFilters = new HashMap<>();
 
-  // fill in SQL queries to count the number of records and to retrieve the data
-  private String count = "";
-  private String search = "";
+  private final transient Logger log = LoggerFactory.getLogger(SqlQuery.class);
 
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseTesting.md
 
@@ -65,6 +72,18 @@ public class SqlQuery {
     }
   }
 
+   /**
+   * Constructs and sends an SQL query for client config.
+   * Precondition: client sends config request
+   *
+   * @return A list containing a list of country names in the current database
+   */
+  public String[] configQuery() {
+    String fullQuery = "select distinct name from country order by name asc";
+
+    return sendConfigQuery(fullQuery);
+  }
+
   // Code Source: https://github.com/csucs314f19/tripco/blob/master/guides/database/DatabaseGuide.md
 
   /**
@@ -75,20 +94,53 @@ public class SqlQuery {
    * @param limit     The maximum number of results returned
    * @return A list of dictionaries containing the relevant results
    */
-  public Map[] sendQuery(String query, Map[] narrow, Integer limit) {
-    filters = narrow;
+  public Map[] locationQuery(String query, Map[] narrow, Integer limit) {
     if (narrow != null) {
-      for (Map filter : filters) {
-        filter.replace("value", cleanTerm((String) filter.get("value")));
-      }
+      setFilter(narrow);
     }
 
     String cleanQuery = cleanTerm(query);
-    count = addLimit(constructSearch(cleanQuery, true), limit);
-    search = addLimit(constructSearch(cleanQuery, false), limit);
-    Map[] returnValues;
+    String count = addLimit(constructSearch(cleanQuery, true), limit);
+    String search = addLimit(constructSearch(cleanQuery, false), limit);
 
-    // Arguments contain the username and password for the database
+    return sendLocationsQuery(count, search);
+  }
+
+  private void setFilter(Map[] narrow) {
+    for (int i = 0; i < narrow.length; ++i) {
+      ArrayList<String> cleaned = new ArrayList<>();
+      for (String word : (ArrayList<String>) narrow[i].get("values")) {
+        cleaned.add(cleanTerm(word));
+      }
+      if (cleaned.size() > 0) {
+        cleanFilters.put((String) narrow[i].get("name"),
+            cleaned.toArray(new String[cleaned.size()]));
+      }
+    }
+  }
+
+  private String[] sendConfigQuery(String fullQuery) {
+    String[] returnCountries;
+
+    try {
+      Class.forName(myDriver);
+      // connect to the database and query
+      try (Connection conn = DriverManager.getConnection(myUrl, user, pass);
+          Statement stQuery = conn.createStatement();
+          ResultSet rsQuery = stQuery.executeQuery(fullQuery)
+      ) { returnCountries = configResult(rsQuery);
+      }
+    } catch (Exception e) {
+      log.error("Exception: " + e.getMessage());
+      returnCountries = null;
+    }
+
+    return returnCountries;
+  }
+
+  private Map[] sendLocationsQuery(String count, String search) {
+    Map[] returnResults;
+
     try {
       Class.forName(myDriver);
       // connect to the database and query
@@ -97,15 +149,14 @@ public class SqlQuery {
           Statement stQuery = conn.createStatement();
           ResultSet rsCount = stCount.executeQuery(count);
           ResultSet rsQuery = stQuery.executeQuery(search)
-      ) {
-        returnValues = constructResults(rsCount, rsQuery);
+      ) { returnResults = locationsResult(rsCount, rsQuery);
       }
     } catch (Exception e) {
-      System.err.println("Exception: " + e.getMessage());
-      returnValues = null;
+      log.error("Exception: " + e.getMessage());
+      returnResults = null;
     }
 
-    return returnValues;
+    return returnResults;
   }
 
   private String cleanTerm(String term) {
@@ -115,42 +166,98 @@ public class SqlQuery {
   private String constructSearch(String query, Boolean count) {
     String searchQuery = "select ";
 
-    if (count) {
-      searchQuery += "count(*) ";
-    } else {
-      for (String identifier : identifiers) {
-        searchQuery += identifier + ",";
-      }
-      searchQuery = searchQuery.substring(0, searchQuery.length() - 1) + " ";
+    searchQuery += constructStart(count) + "\nfrom " + constructJoin() +"\nwhere ";
+
+    if (!cleanFilters.isEmpty()) {
+      searchQuery += constructFilters();
     }
 
-    searchQuery += "from colorado where ";
-
-    if (filters != null) {
-      for (Map filter : filters) {
-        searchQuery += filter.get("name") + " like " + filter.get("value") + " and ";
-      }
-    }
-
-    searchQuery += "(";
-
-    for (String identifier : identifiers) {
-      searchQuery += identifier + " like " + query + " or ";
-    }
-
-    searchQuery = searchQuery.substring(0, searchQuery.length() - 4) + ")";
-
-    System.out.println(searchQuery);
+    searchQuery += constructWhere(query) + constructOrder();
 
     return searchQuery;
   }
 
+  private String constructJoin() {
+    String returnString = "continent";
+
+    for (int i = 0; i < joinTables.length; ++i) {
+      returnString += "\ninner join " + joinTables[i] + " on " + joinIds[i];
+    }
+
+    return returnString;
+  }
+
+  private String constructStart(boolean count) {
+    String returnString = "";
+    if (count) {
+      returnString += "count(*) ";
+    } else {
+      for (String identifier : databaseIds) {
+        returnString += identifier + ",";
+      }
+      returnString = returnString.substring(0, returnString.length() - 1) + " ";
+    }
+
+    return returnString;
+  }
+
+  private String constructFilters() {
+    String returnString = "";
+
+    for (Map.Entry<String, String[]> filterSet : cleanFilters.entrySet()) {
+      returnString += "(";
+
+      for (String filter : filterSet.getValue()) {
+        returnString += filterSet.getKey() + (filterSet.getKey().equals("country") ? ".name" : "")
+            + " like " + filter + "\nor ";
+      }
+
+      returnString = returnString.substring(0, returnString.length() - 4) + ")\nand ";
+    }
+
+    return returnString;
+  }
+
+  private String constructWhere(String query) {
+    String returnString = "(";
+
+    for (String identifier : databaseIds) {
+      returnString += identifier + " like " + query + "\nor ";
+    }
+
+    returnString = returnString.substring(0, returnString.length() - 4) + ")";
+
+    return returnString;
+  }
+
+  private String constructOrder() {
+    String returnString = "\norder by ";
+
+    for (String name : order) {
+      returnString += name + ", ";
+    }
+
+    returnString = returnString.substring(0, returnString.length() - 2) + " asc";
+
+    return returnString;
+  }
+
   private String addLimit(String query, Integer limit) {
-    return query  + "limit " + limit + ";";
+    return query  + "\nlimit " + limit + ";";
+  }
+
+  private String[] configResult(ResultSet countryResult) throws SQLException {
+    ArrayList<String> returnCountries = new ArrayList<>();
+
+    while(countryResult.next()) {
+      returnCountries.add(countryResult.getString("name"));
+    }
+
+    return returnCountries.toArray(new String[returnCountries.size()]);
   }
 
   @SuppressWarnings("unchecked")
-  private Map<String, String>[] constructResults(ResultSet countResult,
+  private Map<String, String>[] locationsResult(ResultSet countResult,
       ResultSet queryResult) throws SQLException {
     countResult.next();
     Integer found = countResult.getInt(1);
@@ -163,8 +270,8 @@ public class SqlQuery {
     while (queryResult.next()) {
       HashMap<String, String> nextResult = new HashMap<>();
 
-      for (String identifier : identifiers) {
-        nextResult.put(identifier, queryResult.getString(identifier));
+      for (int i = 0; i < identifiers.length; ++i) {
+        nextResult.put(identifiers[i], queryResult.getString(databaseIds[i]));
       }
 
       workingResults.add(nextResult);
@@ -173,7 +280,6 @@ public class SqlQuery {
     return (Map<String, String>[]) workingResults.toArray(new Map[workingResults.size()]);
   }
 
-  public boolean localDatabase() {
-    return local;
+  public boolean localDatabase() { return local;
   }
 }

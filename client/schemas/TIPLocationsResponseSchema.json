@@ -30,6 +30,23 @@
       "type":"integer",
       "minimum":0
     },
+    "narrow": {
+      "description": "list of elements to focus the search",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+
     "places": {
       "description": "list of places places found",
       "type":"array",
