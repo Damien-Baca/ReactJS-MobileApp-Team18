@@ -26,6 +26,7 @@ const inputNames = [
   'name',
   'latitude',
   'longitude',
+  'altitude',
   'json_file',
   'query_match',
    undefined,
@@ -40,10 +41,10 @@ const buttonNamesInitial = [
   'exportFile',
   'calculate',
   'optimize',
+  'save_kml',
   'submit_query',
   'clear_destinations',
   'reverse_destinations',
-
 ];
 const validationDummy = () => {
   return true;
