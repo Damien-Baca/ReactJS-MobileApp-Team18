@@ -88,7 +88,7 @@ Diagrams
 
 ## Review (focus on solution and technology)
 
-In this sprint, we were unable to finish all of the epics but 
+In this sprint, we were unable to finish all of the epics but Map Clutter and Save Map. We also stuggled with the implimentation of many of the features we tried to add. 
 
 #### Completed epics in Sprint Backlog 
 
@@ -104,37 +104,36 @@ These Epics were completed.
 
 These Epics were not completed.
 
-* *#269 Map Clutter*: we were able to complete some of the Map Clutter Epic but we were unable to change color of markers
-                      and toggle individual markers on and off. 
-* *#265 Save Map*: Save map for use in Google Maps and offline
+* *#269 Map Clutter*: we were able to complete most of the Map Clutter Epic but we were unable toggle individual markers on and off. 
+* *#265 Save Map*: we were unable to get to the Save map Epic 
 
 
 #### What went well
 
-This sprint we 
+This sprint we were able to find abstract solutions to problems that were nebulous to begin with. We came together as a team in order to finish issues which were larger than what an individual could take upon themselves.
 
 
 #### Problems encountered and resolutions
 
-The larges
+The problems which we encountered were being able to actively take on other classes while maintaining the process. The resolution was coming together as a team for the final push to the product we have currently.
 
 
 ## Retrospective (focus on people, process, tools)
 
-In this sprint, ...
+In this sprint, we've found that we were able to better count on eachother to help solve the problems that the individual could not accomplish alone. We were able to actively find humor in our collective suffering, and thus were able to bolster eachother's resolve to move forward.
 
 #### What we changed this sprint
 
-Our changes for this sprint included ...
+Our changes for this sprint included how we communicate as a team, how we've chosen to divvy up the issues themselves, and how we know what each person is good at respectively.
 
 #### What we did well
 
-We ...
+We bonded as a team and were able to help those others which were struggling, as well as shore up the shortcomings we all have with the experience the other teammates have acquired.
 
 #### What we need to work on
 
-We could improve ...
+We underestimated the difficulty of many of the tasks and need to improve on starting early as a team.
 
 #### What we will change next sprint 
 
-We will change ...
+We will be more effective at splitting up epics into more tasks that are of low difficulty and starting earlier. 
