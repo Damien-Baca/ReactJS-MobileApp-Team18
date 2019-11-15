@@ -240,13 +240,11 @@ export default class DestinationControls extends Component {
 
 
   kmlWrite () {
-    console.log("00000000000000000",this.props.destinations)
-
 
     let file = " ";
     var start = "<?xml version=" + "\"1.0\"" + " encoding=" + "\"UTF-8\"" + "?> \n\
 <kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
-    
+
     var j = "<Document>\n\
 \
 "
