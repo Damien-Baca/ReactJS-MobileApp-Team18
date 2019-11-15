@@ -244,10 +244,7 @@ export default class DestinationControls extends Component {
 
 
     let file = " ";
-    // var location = ["Colorado", "Denver", "Fort Collins", "Loveland", "Boulder", "California", "New York", "China", "Bangladesh"]
-    // var latitude = ["40.5749824", "105.0838675 ", "940.5749824", "1805.0838675 ", "840.5749824", "1805.0838675", "480.574984", "8105.083675", "480.574824"]
-    // var longitude = ["1805.083875", "040.574924", "1905.03865", "460.54984", "8105.08375", "440.574824", "7105.088675 ", "450.5749824", "205.0838675"]
-    // var altitude = ["40.5749824", "105.0838675 ", "940.5749824", "1805.0838675 ", "840.5749824", "1805.0838675", "480.574984", "8105.083675", "480.574824"]
+ 
 
     // var location = this.props.destinations.name()
     // var latitude = this.props.destinations.latitude()
