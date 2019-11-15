@@ -242,16 +242,16 @@ export default class DestinationControls extends Component {
   kmlWrite () {
 
     let file = " ";
-    var start = "<?xml version=" + "\"1.0\"" + " encoding=" + "\"UTF-8\"" + "?> \n\
+    var header = "<?xml version=" + "\"1.0\"" + " encoding=" + "\"UTF-8\"" + "?> \n\
 <kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
 
-    var j = "<Document>\n\
+    var body = "<Document>\n\
 \
 "
     var list="";
     for (var i = 0; i < this.props.destinations.length; i++) {
 
-      j = j.concat("\t<Placemark>\n\
+      body = body.concat("\t<Placemark>\n\
  \t\t<name>" + this.props.destinations[i].name+"</name>\n\
 \t\t<Point>\n\
 \t\t\t<coordinates>"+"\n\t\t\t" +this.props.destinations[i].latitude + "," + this.props.destinations[i].longitude + ","+this.props.destinations[i].altitude + "\n\t\t\t</coordinates>\n\
@@ -261,7 +261,7 @@ export default class DestinationControls extends Component {
       list=list.concat( "\n\t\t\t"+this.props.destinations[i].latitude + "," + this.props.destinations[i].longitude + ","+this.props.destinations[i].altitude )
     }
 
-    var bcd = "\
+    var footer = "\
 \t<Placemark>\n\
 \t\t<name>trip lines</name>>\n\
 \t\t<LineSring>\n\
@@ -270,7 +270,7 @@ export default class DestinationControls extends Component {
 \t</Placemark>\n\
 </Document>\n" + "</kml>";
 
-    file = start + j + bcd;
+    file = header + body + footer;
     console.log(file);
 
     var data = new Blob([file], { type: 'text/plain' });
