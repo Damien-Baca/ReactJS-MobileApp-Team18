@@ -244,13 +244,6 @@ export default class DestinationControls extends Component {
 
 
     let file = " ";
- 
-
-    // var location = this.props.destinations.name()
-    // var latitude = this.props.destinations.latitude()
-    // var longitude = this.props.destinations.longitude()
-    // var altitude = 'none'
-
     var start = "<?xml version=" + "\"1.0\"" + " encoding=" + "\"UTF-8\"" + "?> \n\
 <kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
 
