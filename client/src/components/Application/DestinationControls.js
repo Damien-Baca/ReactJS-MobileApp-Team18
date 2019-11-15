@@ -27,6 +27,7 @@ export default class DestinationControls extends Component {
           {this.renderCalculateDistances()}
           {this.renderOptimizeDistances()}
           {<Button className='btn-csu h-5 w-10'
+                   name="save_kml"
                    size={'sm'}
                    value='MKL'
                    active={true}
