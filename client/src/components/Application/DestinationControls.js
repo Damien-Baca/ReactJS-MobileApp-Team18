@@ -259,7 +259,6 @@ export default class DestinationControls extends Component {
 \t</Placemark>\n\
 ");
       list=list.concat( "\n\t\t\t"+this.props.destinations[i].latitude + "," + this.props.destinations[i].longitude + ","+this.props.destinations[i].altitude )
-      console.log(list)
     }
 
     var bcd = "\
