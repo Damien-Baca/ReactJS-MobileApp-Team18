@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
+import icon2 from 'leaflet/dist/images/marker-icon-2x.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import {Button, Container, Row} from "reactstrap";
 
@@ -12,8 +13,10 @@ export default class DestinationMap extends Component {
   constructor(props) {
     super(props);
     this.state={
-      markerFlag: true,
-      polylineFlag: true
+      markerFlag: false,
+      polylineFlag: true,
+      prevInd: -1,
+      markerSize: []
     }
   }
 
@@ -83,16 +86,19 @@ export default class DestinationMap extends Component {
 
   generateDestinationMarkers() {
     if(this.state.markerFlag) {
+      this.markerSize = [];
       let markerList = [this.props.userLocation];
       if (this.props.destinations.length > 0) {
         markerList = [];
 
-      this.props.destinations.forEach((destination) => (
-          markerList.push(Object.assign({}, {
-            latitude: destination.latitude,
-            name: destination.name,
-            longitude: this.modifyLong(destination.longitude)}))
-      ));
+      this.props.destinations.forEach((destination) => {
+        this.markerSize.push(false);
+        markerList.push(Object.assign({}, {
+          latitude: destination.latitude,
+          name: destination.name,
+          longitude: this.modifyLong(destination.longitude)
+        }))
+      });
     }
 
       return (
@@ -100,7 +106,17 @@ export default class DestinationMap extends Component {
               <Marker
                   key={`marker_${index}`}
                   position={L.latLng(marker.latitude, marker.longitude)}
-                  icon={this.generateMarkerIcon()}>
+                  onClick={ () => {
+                    let inv = Object.assign( [], this.markerSize);
+                    if(index !== this.state.prevInd){
+                      inv[index] = !inv[index];
+                      this.state.prevInd = index;
+                    } else {
+                      this.state.prevInd = -1;
+                    }
+                    this.setState( {markerSize: inv}) }
+                  }
+                  icon={this.generateMarkerIcon(index)}>
                 < Popup
                     className="font-weight-extrabold">{marker.name+'\n'+marker.latitude+' '+marker.longitude}</Popup>
               </Marker>
@@ -108,6 +124,7 @@ export default class DestinationMap extends Component {
       );
     }
   }
+
 
   renderPolyline() {
     if(this.state.polylineFlag){
@@ -244,13 +261,24 @@ export default class DestinationMap extends Component {
   }
 
 
-  generateMarkerIcon() {
+  generateMarkerIcon(index) {
     // react-leaflet does not currently handle default marker icons correctly,
     // so we must create our own
-    return L.icon({
-      iconUrl: icon,
-      shadowUrl: iconShadow,
-      iconAnchor: [12, 40]  // for proper placement
-    })
+    console.log(this.state.markerSize[index]);
+    console.log(index);
+    if (!this.state.markerSize[index]) {
+      return L.icon({
+        iconUrl: icon,
+        shadowUrl: iconShadow,
+        iconAnchor: [12, 40]  // for proper placement
+      })
+    } else {
+      return L.icon({
+        iconUrl: icon2,
+        shadowUrl: iconShadow,
+        iconAnchor: [26, 80]  // for proper placement
+      })
+    }
   }
+
 }
