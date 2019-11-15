@@ -39,13 +39,16 @@ public class TIPTrip extends TIPHeader {
   private TIPTrip() { this.requestType = "trip";
   }
 
-
   @Override
   public void buildResponse() {
     Double earthRadius = Double.parseDouble((String) options.get("earthRadius"));
 
     if (options.get("optimization").equals("short")) {
       places = new OptimizeTrip().shortTrip(places, earthRadius);
+    }
+
+    if (options.get("optimization").equals("shorter")) {
+      places = new OptimizeTrip().shorterTrip(places, earthRadius);
     }
 
     for (int i = 0; i < this.places.length; ++i) {

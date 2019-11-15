@@ -12,14 +12,22 @@ public class OptimizeTrip {
   private int currentLocation;
   private int currentDistance;
 
-  public int inplaceReverse(Map[] places, int i1, int i2) {
+  public void inplaceReverse(int[] newTrip, int i1, int i2) {
     while(i1 < i2) {
-      Object temp = places[i1];
-      places[i1] = places[i2];
-      places[i2] = temp;
+      int temp   = newTrip[i1];
+      newTrip[i1] = newTrip[i2];
+      newTrip[i2] = temp;
       i1++; i2--;
     }
-    return 0;
+  }
+
+  public Map[] reorderPlaces(int[] newTrip, int zeroOffset)
+  {
+  	Map[] newPlaces = new Map[places.length];
+	for (int i = 0; i < places.length; ++i) {
+      newPlaces[i] = places[newTrip[(i + zeroOffset) % places.length]];
+    }
+    return newPlaces;
   }
 
   public Map[] shortTrip(Map[] places, Double earthRadius) {
@@ -29,45 +37,40 @@ public class OptimizeTrip {
     this.currentTrip = new int[places.length];
 
     int zeroOffset = nearestNeighbor();
-
-    Map[] newPlaces = new Map[places.length];
-
-    for (int i = 0; i < places.length; ++i) {
-      newPlaces[i] = places[bestTrip[(i + zeroOffset) % places.length]];
-    }
-
-    return newPlaces;
+    return reorderPlaces(bestTrip, zeroOffset);
   }
 
+
+
   public Map[] shorterTrip(Map[] places, Double earthRadius) {
+  	DistanceMatrix matrix = new DistanceMatrix(places, earthRadius);
     this.places = places;
     this.earthRadius = earthRadius;
     this.bestTrip = new int[places.length];
     this.currentTrip = new int[places.length];
 
-	boolean improvement = false;
+	boolean improvement = true;
     int zeroOffset = nearestNeighbor();
 
-    Map[] newPlaces = new Map[places.length];
-
-	for (int i = 0; i < places.length; ++i) {
-      newPlaces[i] = places[i];
-    }
-
+    int[] newTrip = new int[bestTrip.length + 1];
+    for(int i : bestTrip)
+    	newTrip[i] = bestTrip[(i + zeroOffset) % places.length];
+    newTrip[newTrip.length - 1] = newTrip[0];
+    
     while(improvement) {
-	    for (int i = 0; i <= newPlaces.length - 3; ++i) {
-	    	for(int k = i + 2; k <= newPlaces.length - 1; k++) {
-	    		double delta = matrix.get(i,k)   + matrix.get(i+1,k+1) - matrix.get(i,i+1) - matrix.get(k  ,k+1);
-	        	if(delta < 0)
-	        	{
-	        		inplaceReverse(newPlaces, i+1, k);
+    	improvement = false;
+	    for (int i = 0; i <= newTrip.length - 3; ++i) {
+	    	for(int k = i + 2; k <= newTrip.length - 1; k++) {
+	    		double delta = matrix.get(i,k) + matrix.get(i+1,k+1) - matrix.get(i,i+1) - matrix.get(k,k+1);
+	        	if(delta < 0) {
+	        		inplaceReverse(newTrip, i+1, k);
 	        		improvement = true;
 	        	}
 	    	}
 		}
 	}
 
-    return newPlaces;
+    return reorderPlaces(newTrip, zeroOffset);
   }
 
   
