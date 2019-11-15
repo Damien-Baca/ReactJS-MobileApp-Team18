@@ -11,6 +11,7 @@ public class OptimizeTrip {
   private int bestDistance = Integer.MAX_VALUE;
   private int currentLocation;
   private int currentDistance;
+  private int bestZeroOffset;
 
   public void inplaceReverse(int[] newTrip, int i1, int i2) {
     while(i1 < i2) {
@@ -36,32 +37,33 @@ public class OptimizeTrip {
     this.bestTrip = new int[places.length];
     this.currentTrip = new int[places.length];
 
-    int zeroOffset = nearestNeighbor();
+    int zeroOffset = nearestNeighbor(false);
     return reorderPlaces(bestTrip, zeroOffset);
   }
 
-
-
   public Map[] shorterTrip(Map[] places, Double earthRadius) {
-  	DistanceMatrix matrix = new DistanceMatrix(places, earthRadius);
     this.places = places;
     this.earthRadius = earthRadius;
     this.bestTrip = new int[places.length];
     this.currentTrip = new int[places.length];
 
-	boolean improvement = true;
-    int zeroOffset = nearestNeighbor();
+    int zeroOffset = nearestNeighbor(true);
+    return reorderPlaces(bestTrip, bestZeroOffset);
+  }
 
-    int[] newTrip = new int[bestTrip.length + 1];
-    for(int i : bestTrip)
-    	newTrip[i] = bestTrip[(i + zeroOffset) % places.length];
-    newTrip[newTrip.length - 1] = newTrip[0];
-    
-    while(improvement) {
+  public void twoOpt(int[] trip, DistanceMatrix matrix, int zeroOffset)
+  {
+	boolean improvement = true;
+
+	int[] newTrip = new int[trip.length];
+    for(int i : trip)
+    	newTrip[i] = trip[(i + zeroOffset) % places.length];
+
+  	while(improvement) {
     	improvement = false;
-	    for (int i = 0; i <= newTrip.length - 3; ++i) {
-	    	for(int k = i + 2; k <= newTrip.length - 1; k++) {
-	    		double delta = matrix.get(i,k) + matrix.get(i+1,k+1) - matrix.get(i,i+1) - matrix.get(k,k+1);
+	    for (int i = 0; i <= newTrip.length - 4; i++) {
+	    	for(int k = i + 2; k <= newTrip.length - 2; k++) {
+	    		double delta = matrix.get(newTrip[i],newTrip[k]) + matrix.get(newTrip[i+1],newTrip[k+1]) - matrix.get(newTrip[i],newTrip[i+1]) - matrix.get(newTrip[k],newTrip[k+1]);
 	        	if(delta < 0) {
 	        		inplaceReverse(newTrip, i+1, k);
 	        		improvement = true;
@@ -69,27 +71,46 @@ public class OptimizeTrip {
 	    	}
 		}
 	}
+	for(int i = 0; i < newTrip.length; i++) {
+		if(newTrip[i] == 0) {
+			zeroOffset = i;
+			break;
+		}
+	}
 
-    return reorderPlaces(newTrip, zeroOffset);
+	int tripDistance = 0;
+	for(int i = 0; i < newTrip.length; i++) {
+		tripDistance += matrix.get(newTrip[i], (i == newTrip.length -1) ? newTrip[0] : newTrip[i+1]);
+	}
+
+	if(tripDistance < bestDistance)
+	{
+		for (int n = 0; n < newTrip.length; ++n) {
+          bestTrip[n] = newTrip[n];
+        }
+        bestDistance = tripDistance;
+        bestZeroOffset = zeroOffset;
+	}
+
   }
 
-  
-
-  private int nearestNeighbor() {
+  private int nearestNeighbor(boolean shorter) {
     DistanceMatrix matrix = new DistanceMatrix(places, earthRadius);
-    int bestZeroOffset = -1;
+    bestZeroOffset = -1;
 
     for (int i = 0; i < places.length; ++i) {
       currentLocation = i;
       currentDistance = 0;
       int zeroOffset = calculateFromCurrentLocation(matrix);
 
-      if (currentDistance < bestDistance) {
+      if (currentDistance < bestDistance && !shorter) {
         for (int n = 0; n < currentTrip.length; ++n) {
           bestTrip[n] = currentTrip[n];
         }
         bestDistance = currentDistance;
         bestZeroOffset = zeroOffset;
+      } else {
+      	twoOpt(currentTrip, matrix, zeroOffset);
       }
     }
 
