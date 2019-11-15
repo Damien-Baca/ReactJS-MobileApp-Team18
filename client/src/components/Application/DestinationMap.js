@@ -258,7 +258,7 @@ export default class DestinationMap extends Component {
   generateMarkerIcon(index) {
     // react-leaflet does not currently handle default marker icons correctly,
     // so we must create our own
-    console.log(index);
+
     if (!this.state.markerSize[index]) {
       return L.icon({
         iconUrl: icon,
