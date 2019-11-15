@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Container, Form, FormGroup, Input, Label, Row} from "reactstrap";
-// import { kmlWrite } from './Kml'
+
 
 export default class DestinationControls extends Component {
   constructor (props) {
