@@ -75,35 +75,48 @@ Diagrams
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *10/30/19* | ** | *#264,#268,#285,* | *none* | 
+| *10/30/19* | ** | *#298,#305* | *none* | 
+| *11/1/19* | *#298,#305* | *none* | *none* | 
+| *11/4/19* | *none* | *#296* | *none* | 
+| *11/6/19* | *#296* | *#297,#321* | *none* | 
+| *11/8/19* | *#297,#321* | *#309* | *none* | 
+| *11/11/19* | *#309* | *#268,#270,#271,#301,#302,#311,#326* | *none* | 
+| *11/13/19* | *#268,#270,#271,#301,#302,#311,#326* | *#264,#282,#283,#284,#285,#286,#325,#345* | *none* | 
+| *11/14/19* | *#264,#282,#283,#284,#285,#286,#325,#345* | ** | *none* | 
+ 
 
 
 ## Review (focus on solution and technology)
 
-In this sprint, ...
+In this sprint, we were unable to finish all of the epics but 
 
 #### Completed epics in Sprint Backlog 
 
 These Epics were completed.
 
-* *# epic title*: comments
-* 
+* *#263 TIP v4*: Update client and server to be compliant with tip.md v4.0
+* *#262 World Wide*: Update SQL Querying to support queries across the world
+* *#277 Shorter Trip*: Add a new algorithm to get a shorter trip than the nearest neighbor algorithm
+* *#77 Distance Units*: Add new distances for calculations
+
 
 #### Incomplete epics in Sprint Backlog 
 
 These Epics were not completed.
 
-* *# epic title: explanation*
-*
+* *#269 Map Clutter*: we were able to complete some of the Map Clutter Epic but we were unable to change color of markers
+                      and toggle individual markers on and off. 
+* *#265 Save Map*: Save map for use in Google Maps and offline
+
 
 #### What went well
 
-The ...
+This sprint we 
 
 
 #### Problems encountered and resolutions
 
-The ...
+The larges
 
 
 ## Retrospective (focus on people, process, tools)
