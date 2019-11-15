@@ -246,13 +246,7 @@ export default class DestinationControls extends Component {
     let file = " ";
     var start = "<?xml version=" + "\"1.0\"" + " encoding=" + "\"UTF-8\"" + "?> \n\
 <kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
-
-    // const fs = require('fs')
-    //fs.appendFile('trip.kml', start, (err) => {if (err) throw err;})
-
-    // var j;
-    // for (i = 0; i < location.length; i++) {
-
+    
     var j = "<Document>\n\
 \
 "
