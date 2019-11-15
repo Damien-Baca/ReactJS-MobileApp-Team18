@@ -32,8 +32,10 @@ const inputNames = [
    undefined
 ];
 const buttonNamesInitial = [
+
   'toggleAllMarkers',
   'togglePolyline',
+  'toggleIconColors',
   'add_new_destination',
   'add_user_destination',
   'loadJSON',

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import icon2 from 'leaflet/dist/images/marker-icon-2x.png';
+import iconY from './About/images/marker-iconY.png';
+import icon2Y from './About/images/marker-icon-2xY.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import {Button, Container, Row} from "reactstrap";
 
@@ -15,6 +17,7 @@ export default class DestinationMap extends Component {
     this.state={
       markerFlag: false,
       polylineFlag: true,
+      iconColor: false,
       prevInd: -1,
       markerSize: []
     }
@@ -38,8 +41,21 @@ export default class DestinationMap extends Component {
         <Row>
           {this.renderMarkerToggleButton()}
           {this.renderPolylineToggleButton()}
+          {this.renderIconColorButton()}
         </Row>
       </Container>
+    )
+  }
+  renderIconColorButton() {
+    return(
+        <Button
+            className='btn-csu w-10 text-left'
+            name='toggleIconColors'
+            key='button_toggleIconColors'
+            active={true}
+            onClick={() => this.handleColorToggle()}>
+          Toggle Icon Colors
+        </Button>
     )
   }
 
@@ -80,7 +96,11 @@ export default class DestinationMap extends Component {
       polylineFlag: !this.state.polylineFlag
     });
   }
-
+  handleColorToggle() {
+    this.setState({
+      iconColor: !this.state.iconColor
+    });
+  }
 
 
 
@@ -264,17 +284,28 @@ export default class DestinationMap extends Component {
   generateMarkerIcon(index) {
     // react-leaflet does not currently handle default marker icons correctly,
     // so we must create our own
-    console.log(this.state.markerSize[index]);
-    console.log(index);
-    if (!this.state.markerSize[index]) {
+    //lol kill me
+    if (!this.state.markerSize[index] && !this.state.iconColor) {
       return L.icon({
         iconUrl: icon,
         shadowUrl: iconShadow,
         iconAnchor: [12, 40]  // for proper placement
       })
-    } else {
+    } else if(this.state.markerSize[index] && !this.state.iconColor) {
       return L.icon({
         iconUrl: icon2,
+        shadowUrl: iconShadow,
+        iconAnchor: [26, 80]  // for proper placement
+      })
+    } else if (!this.state.markerSize[index] && this.state.iconColor) {
+      return L.icon({
+        iconUrl: iconY,
+        shadowUrl: iconShadow,
+        iconAnchor: [12, 40]  // for proper placement
+      })
+    } else  {
+      return L.icon({
+        iconUrl: icon2Y,
         shadowUrl: iconShadow,
         iconAnchor: [26, 80]  // for proper placement
       })
