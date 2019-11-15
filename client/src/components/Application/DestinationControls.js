@@ -248,7 +248,7 @@ export default class DestinationControls extends Component {
     var body = "<Document>\n\
 \
 "
-    var list="";
+    var tripLines="";
     for (var i = 0; i < this.props.destinations.length; i++) {
 
       body = body.concat("\t<Placemark>\n\
@@ -258,7 +258,7 @@ export default class DestinationControls extends Component {
 \t\t</Point>\n\
 \t</Placemark>\n\
 ");
-      list=list.concat( "\n\t\t\t"+this.props.destinations[i].latitude + "," + this.props.destinations[i].longitude + ","+this.props.destinations[i].altitude )
+      tripLines=tripLines.concat( "\n\t\t\t"+this.props.destinations[i].latitude + "," + this.props.destinations[i].longitude + ","+this.props.destinations[i].altitude )
     }
 
     var footer = "\
