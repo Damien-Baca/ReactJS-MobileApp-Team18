@@ -34,6 +34,7 @@ function testListButtonRendering() {
     'remove_2',
     'set_origin_2',
     'move_down_2'
+
   ];
 
   let dlist = mount((<DestinationList
