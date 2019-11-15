@@ -15,6 +15,7 @@ export default class DestinationMap extends Component {
     this.state={
       markerFlag: false,
       polylineFlag: true,
+      prevInd: -1,
       markerSize: []
     }
   }
@@ -107,7 +108,12 @@ export default class DestinationMap extends Component {
                   position={L.latLng(marker.latitude, marker.longitude)}
                   onClick={ () => {
                     let inv = Object.assign( [], this.markerSize);
-                    inv[index] = !inv[index];
+                    if(index !== this.state.prevInd){
+                      inv[index] = !inv[index];
+                      this.state.prevInd = index;
+                    } else {
+                      this.state.prevInd = -1;
+                    }
                     this.setState( {markerSize: inv}) }
                   }
                   icon={this.generateMarkerIcon(index)}>
@@ -259,7 +265,7 @@ export default class DestinationMap extends Component {
     // react-leaflet does not currently handle default marker icons correctly,
     // so we must create our own
     console.log(this.state.markerSize[index]);
-    console.log(index)
+    console.log(index);
     if (!this.state.markerSize[index]) {
       return L.icon({
         iconUrl: icon,
@@ -270,7 +276,7 @@ export default class DestinationMap extends Component {
       return L.icon({
         iconUrl: icon2,
         shadowUrl: iconShadow,
-        iconAnchor: [18, 10]  // for proper placement
+        iconAnchor: [26, 80]  // for proper placement
       })
     }
   }
