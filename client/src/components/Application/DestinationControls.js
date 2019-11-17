@@ -23,17 +23,15 @@ export default class DestinationControls extends Component {
         <Row>
           {this.renderAddDestination()}
         </Row>
+        <Row>
+          {this.renderSaveKML()}
+        </Row>
         <Row style={{ display: "flex" }}>
           {this.renderCalculateDistances()}
           {this.renderOptimizeDistances()}
-          {<Button className='btn-csu h-5 w-10'
-                   name="save_kml"
-                   size={'sm'}
-                   value='MKL'
-                   active={true}
-                   onClick={() => this.kmlWrite()}
-          >Save Kml</Button>}
+
         </Row>
+
       </Container>
     );
   }
@@ -105,6 +103,18 @@ export default class DestinationControls extends Component {
         this.props.optimization === 'none'}
         active={true}
       >Optimize Trip Distances</Button>
+    );
+  }
+
+  renderSaveKML(){
+    return(
+      <Button className='btn-csu h-5 w-10'
+              name="save_kml"
+              size={{ marginLeft: 'auto' }}
+              value='MKL'
+              active={true}
+              onClick={() => this.kmlWrite()}
+      >Save KML</Button>
     );
   }
 
