@@ -250,17 +250,34 @@ export default class DestinationControls extends Component {
 \
 "
     var list="";
-    for (var i = 0; i < this.props.destinations.length; i++) {
+    if (typeof this.props.destinations.altitude==='undefined'){
+
+      for (var i = 0; i < this.props.destinations.length; i++) {
+
+        body = body.concat("\t<Placemark>\n\
+   \t\t<name>" + this.props.destinations[i].name+"</name>\n\
+  \t\t<Point>\n\
+  \t\t\t<coordinates>"+"\n\t\t\t" +this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+0 + "\n\t\t\t</coordinates>\n\
+  \t\t</Point>\n\
+  \t</Placemark>\n\
+  ");
+        list=list.concat( "\n\t\t\t"+this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+0 )
+      }
+    }
+    else{
+      for (var i = 0; i < this.props.destinations.length; i++) {
 
       body = body.concat("\t<Placemark>\n\
- \t\t<name>" + this.props.destinations[i].name+"</name>\n\
-\t\t<Point>\n\
-\t\t\t<coordinates>"+"\n\t\t\t" +this.props.destinations[i].latitude + "," + this.props.destinations[i].longitude + ","+this.props.destinations[i].altitude + "\n\t\t\t</coordinates>\n\
-\t\t</Point>\n\
-\t</Placemark>\n\
-");
-      list=list.concat( "\n\t\t\t"+this.props.destinations[i].latitude + "," + this.props.destinations[i].longitude + ","+this.props.destinations[i].altitude )
-    }
+   \t\t<name>" + this.props.destinations[i].name+"</name>\n\
+  \t\t<Point>\n\
+  \t\t\t<coordinates>"+"\n\t\t\t" +this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+this.props.destinations[i].altitude + "\n\t\t\t</coordinates>\n\
+  \t\t</Point>\n\
+  \t</Placemark>\n\
+  ");
+      list=list.concat( "\n\t\t\t"+this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+this.props.destinations[i].altitude )
+    }}
+
+
 
     var footer = "\
 \t<Placemark>\n\
@@ -272,7 +289,7 @@ export default class DestinationControls extends Component {
 </Document>\n" + "</kml>";
 
     file = header + body + footer;
-    console.log(file);
+
 
     var data = new Blob([file], { type: 'text/plain' });
     var URL = window.URL.createObjectURL(data);
