@@ -3,7 +3,7 @@
 ## Goal
 
 ### Mobile release with a beautiful user experience!
-### Sprint Leader: *firstname lastname*
+### Sprint Leader: Damien Baca
 
 ## Definition of Done
 
@@ -42,8 +42,11 @@
 
 This sprint will complete the following Epics.
 
-* *#0 epic title: description*
-*
+* #358 Ease of Use: Make the application easier to use.
+* #359 Auto Optimization: Let the system automatically optimize trips, as long as the response time is very fast.
+* #265 Save Map: Save the map to KML and SVG
+* #360 Shortest Trip: Optimize for the shortest possible trips.
+* #269 Map Clutter: Implement features that make the map easier to understand.
 
 ***(Include a discussion of you plan with key diagrams here and remove this!)***
 
@@ -52,9 +55,9 @@ This sprint will complete the following Epics.
 
 | Statistic | # Planned | # Completed |
 | --- | ---: | ---: |
-| Epics | *count* | *count* |
-| Tasks |  *count*   | *count* | 
-| Story Points |  *count*  | *count* | 
+| Epics | 5 | 0 |
+| Tasks |  17   | 0 | 
+| Story Points |  27  | 0 | 
 
 
 ## Scrums
