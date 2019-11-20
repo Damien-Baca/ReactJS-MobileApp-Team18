@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, ListGroup, ListGroupItem, Row} from "reactstrap";
+import ReactMaterialTable from "react-material-table";
 
 export default class DestinationList extends Component {
   constructor(props) {

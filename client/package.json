@@ -20,6 +20,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-leaflet": "^2.2.0",
+    "react-material-table": "^1.0.1",
     "react-select": "^3.0.8",
     "reactstrap": "^7.0.2",
     "style-loader": "^0.23.1",
