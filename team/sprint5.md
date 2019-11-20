@@ -47,8 +47,9 @@ This sprint will complete the following Epics.
 * #265 Save Map: Save the map to KML and SVG
 * #360 Shortest Trip: Optimize for the shortest possible trips.
 * #269 Map Clutter: Implement features that make the map easier to understand.
+* #370 TIP V5: Update version info and json schemas.
 
-***(Include a discussion of you plan with key diagrams here and remove this!)***
+
 
 
 ## Metrics
