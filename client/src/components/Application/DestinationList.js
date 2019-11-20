@@ -16,7 +16,7 @@ export default class DestinationList extends Component {
         <ListGroup>
           {this.renderClearDestinations()}
           {this.renderReverseDestinations()}
-          {this.generateList()}
+          {this.renderMaterialTable()}
         </ListGroup>
     );
   }
@@ -67,6 +67,14 @@ export default class DestinationList extends Component {
           Distances not yet calculated.
         </Row>
     )
+  }
+
+  renderMaterialTable() {
+    return (
+      <ReactMaterialTable
+          data={this.props.destinations}
+          columns={this.props.placeAttributes}/>
+    );
   }
 
   generateList() {

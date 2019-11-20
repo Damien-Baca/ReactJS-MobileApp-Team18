@@ -149,6 +149,7 @@ export default class Application extends Component {
               settings={this.state.clientSettings}
               typeFilter={this.state.typeFilter}
               countryFilter={this.state.countryFilter}
+              placeAttributes={this.state.placeAttributes}
               swapDestinations={this.swapDestinations}
               addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
