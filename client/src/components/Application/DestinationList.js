@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
 import {Button, ListGroup, ListGroupItem, Row} from "reactstrap";
 import ReactMaterialTable from "react-material-table";
+import {delete_forever} from "react-icons"
 
 export default class DestinationList extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      listColumns: ['name', 'latitude', 'longitude',
+        'leg distance', 'cumulative distance']
+    }
   }
 
   render() {
@@ -72,9 +78,52 @@ export default class DestinationList extends Component {
   renderMaterialTable() {
     return (
       <ReactMaterialTable
-          data={this.props.destinations}
-          columns={this.props.placeAttributes}/>
+          columns={this.constructColumns()}
+          actions={this.constructActions()}
+          data={this.constructData()}
+          />
     );
+  }
+
+  constructColumns() {
+    let columnFields = [];
+
+    this.state.listColumns.forEach((column) => {
+      columnFields.push({
+        name: column.charAt(0).toUpperCase() + column.slice(1),
+        field: column
+      })
+    });
+
+    return columnFields;
+  }
+
+  constructActions() {
+    let actionList = [{
+      icon: delete_forever,
+      tooltip: 'Remove Location',
+      onClick: (event, rowIndex) => this.handleRemoveDestination(rowIndex)
+    }];
+
+    return actionList;
+  }
+
+  constructData() {
+    let dataFields = [];
+
+    this.props.destinations.forEach((destination, index) => {
+      dataFields.push({
+        name: destination.name,
+        latitude: destination.latitude,
+        longitude: destination.longitude
+      });
+
+      if (this.props.distances.length == this.props.) {
+
+      }
+    });
+
+    return dataFields;
   }
 
   generateList() {
