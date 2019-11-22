@@ -53,8 +53,13 @@ export default class Home extends Component {
         <Container>
           {this.state.errorMessage}
           <Row>
-            {this.generateColumn(this.renderMapPane, this.renderDestinationControls)}
-            {this.generateColumn(this.renderDestinationQuery, this.renderDestinations)}
+            <Col>
+              {this.renderMapPane()}
+            </Col>
+              {this.generateColumn(this.renderDestinationControls, this.renderDestinationQuery)}
+            <Col>
+              {this.renderDestinations()}
+            </Col>
           </Row>
         </Container>
     );
