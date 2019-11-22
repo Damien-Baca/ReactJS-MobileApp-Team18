@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, ListGroup, ListGroupItem, Row} from "reactstrap";
 import MaterialTable from "material-table";
-import {MdDeleteForever, MdArrowDownward, MdArrowUpward} from "react-icons/md"
+import {MdDeleteForever, MdArrowDownward, MdArrowUpward, MdVerticalAlignTop} from "react-icons/md"
 
 export default class DestinationList extends Component {
   constructor(props) {
@@ -10,17 +10,25 @@ export default class DestinationList extends Component {
     let actionList = [{
       icon: MdDeleteForever,
       tooltip: 'Remove Location',
-      onClick: (event, rowIndex) => this.handleRemoveDestination(rowIndex)
+      onClick: (event, rowData) =>
+          this.handleRemoveDestination(rowData.tableData.id)
+    }, {
+      icon: MdVerticalAlignTop,
+      toolTip: 'Start Here',
+      onClick: (event, rowData) => this.handleSwapDestinations(
+          rowData.tableData.id)
     }, {
       icon: MdArrowDownward,
       toolTip: 'Move Down',
-      onClick: (event, rowIndex) =>
-          this.handleSwapDestinations(rowIndex, rowIndex + 1)
+      onClick: (event, rowData) =>
+          this.handleSwapDestinations(rowData.tableData.id,
+              rowData.tableData.id + 1)
     }, {
       icon: MdArrowUpward,
       tooltip: 'Move Up',
-      onClick: (event, rowIndex) =>
-          this.handleSwapDestinations(rowIndex, rowIndex - 1)
+      onClick: (event, rowData) =>
+          this.handleSwapDestinations(rowData.tableData.id,
+              rowData.tableData.id - 1)
     }];
 
     this.state = {
@@ -87,15 +95,13 @@ export default class DestinationList extends Component {
           latitude: destination.latitude,
           longitude: destination.longitude,
           legDistance: setDistances ? this.props.distances[index] : '',
-          cumulativeDistance: setDistances ? this.props.sumDistances(index) :
-              'Not Calculated'
+          cumulativeDistance: setDistances ?
+              this.props.sumDistances(index) : 'Not Calculated'
         });
       });
 
       return data;
     };
-
-    console.log(this.state.columns);
 
     return (
       <MaterialTable
@@ -127,6 +133,4 @@ export default class DestinationList extends Component {
     this.props.swapDestinations(index1, index2);
     this.props.resetDistances();
   }
-
-
 }
