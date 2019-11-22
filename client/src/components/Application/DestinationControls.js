@@ -7,9 +7,9 @@ export default class DestinationControls extends Component {
     super(props);
 
     this.state = {
-      newDestination: { name: '', latitude: '', longitude: '' ,altitude:''},
-      valid: { name: false, latitude: false, longitude: false ,altidude:false  },
-      invalid: { name: false, latitude: false, longitude: false ,altidude:false},
+      newDestination: { name: '', latitude: '', longitude: '' },
+      valid: { name: false, latitude: false, longitude: false  },
+      invalid: { name: false, latitude: false, longitude: false },
       fileContents: null
     };
   }
@@ -126,7 +126,7 @@ export default class DestinationControls extends Component {
         key='button_add_destination'
         active={true}
         onClick={() => this.handleNewDestination()}
-        disabled={!(this.state.valid.latitude && this.state.valid.longitude&& this.state.valid.altidude)
+        disabled={!(this.state.valid.latitude && this.state.valid.longitude)
         || (this.state.newDestination.name === '')}
       >Add New Destination</Button>
     );
@@ -195,11 +195,11 @@ export default class DestinationControls extends Component {
   }
 
   handleNewDestination () {
-    if (this.props.validation(this.state.newDestination.latitude, this.state.newDestination.longitude,this.state.newDestination.altitude)) {
+    if (this.props.validation(this.state.newDestination.latitude, this.state.newDestination.longitude)) {
       this.props.addDestinations([Object.assign({}, this.state.newDestination)]);
-      let superFalse = { latitude: false, longitude: false ,altidude:false};
+      let superFalse = { latitude: false, longitude: false };
       this.setState({
-        newDestination: { name: '', latitude: '', longitude: '' , altitude: ''},
+        newDestination: { name: '', latitude: '', longitude: '' },
         valid: superFalse,
         invalid: superFalse
       });
@@ -260,6 +260,7 @@ export default class DestinationControls extends Component {
 \
 "
     var list="";
+    var endOflist='';
     if (typeof this.props.destinations.altitude==='undefined'){
 
       for (var i = 0; i < this.props.destinations.length; i++) {
@@ -272,6 +273,7 @@ export default class DestinationControls extends Component {
   \t</Placemark>\n\
   ");
         list=list.concat( "\n\t\t\t"+this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+0 )
+        endOflist="\n\t\t\t"+this.props.destinations[0].longitude + "," + this.props.destinations[0].latitude + ","+0
       }
     }
     else{
@@ -285,16 +287,17 @@ export default class DestinationControls extends Component {
   \t</Placemark>\n\
   ");
       list=list.concat( "\n\t\t\t"+this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+this.props.destinations[i].altitude )
-    }}
+       endOflist="\n\t\t\t"+this.props.destinations[0].longitude + "," + this.props.destinations[0].latitude + ","+this.props.destinations[0].altitude
+      }}
 
 
 
     var footer = "\
 \t<Placemark>\n\
-\t\t<name>trip lines</name>>\n\
-\t\t<LineSring>\n\
-\t\t\t<coordinates>" + list+ "\n\t\t\t</coordinates>\n\
-\t\t</LineSring>\n\
+\t\t<name>trip lines</name>\n\
+\t\t<LineString>\n\
+\t\t\t<coordinates>" + list+ endOflist+"\n\t\t\t</coordinates>\n\
+\t\t</LineString>\n\
 \t</Placemark>\n\
 </Document>\n" + "</kml>";
 
@@ -305,7 +308,7 @@ export default class DestinationControls extends Component {
     var URL = window.URL.createObjectURL(data);
     var tempLink = document.createElement('a');
     tempLink.href = URL;
-    tempLink.setAttribute('download', 'Trip.KML');
+    tempLink.setAttribute('download', 'Trip.kml');
     tempLink.click();
 
   }
