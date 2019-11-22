@@ -26,7 +26,6 @@ const inputNames = [
   'name',
   'latitude',
   'longitude',
-  'altitude',
   'json_file',
   'query_match',
    undefined,
