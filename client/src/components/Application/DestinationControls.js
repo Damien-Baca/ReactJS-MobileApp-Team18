@@ -264,9 +264,16 @@ export default class DestinationControls extends Component {
     if (typeof this.props.destinations.altitude==='undefined'){
 
       for (var i = 0; i < this.props.destinations.length; i++) {
-
+        var name='';
+        name=this.props.destinations[i].name;
+        if ( name.includes('&')){
+          name= name.replace(/&/g,'&amp;');
+        }
+        if ( name.includes('\'')){
+          name= name.replace('\'','&apos;');
+        }
         body = body.concat("\t<Placemark>\n\
-   \t\t<name>" + this.props.destinations[i].name+"</name>\n\
+   \t\t<name>" + name+"</name>\n\
   \t\t<Point>\n\
   \t\t\t<coordinates>"+"\n\t\t\t" +this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+0 + "\n\t\t\t</coordinates>\n\
   \t\t</Point>\n\
@@ -278,9 +285,16 @@ export default class DestinationControls extends Component {
     }
     else{
       for (var i = 0; i < this.props.destinations.length; i++) {
-
-      body = body.concat("\t<Placemark>\n\
-   \t\t<name>" + this.props.destinations[i].name+"</name>\n\
+        var name='';
+        name=this.props.destinations[i].name;
+        if ( name.includes('&')){
+          name= name.replace(/&/g,'&amp;');
+        }
+        if ( name.includes('\'')){
+          name= name.replace('\'','&apos;');
+        }
+        body = body.concat("\t<Placemark>\n\
+   \t\t<name>" + name+"</name>\n\
   \t\t<Point>\n\
   \t\t\t<coordinates>"+"\n\t\t\t" +this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+this.props.destinations[i].altitude + "\n\t\t\t</coordinates>\n\
   \t\t</Point>\n\
@@ -289,8 +303,6 @@ export default class DestinationControls extends Component {
       list=list.concat( "\n\t\t\t"+this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude + ","+this.props.destinations[i].altitude )
        endOflist="\n\t\t\t"+this.props.destinations[0].longitude + "," + this.props.destinations[0].latitude + ","+this.props.destinations[0].altitude
       }}
-
-
 
     var footer = "\
 \t<Placemark>\n\
