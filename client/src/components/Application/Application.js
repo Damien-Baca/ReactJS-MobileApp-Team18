@@ -308,7 +308,7 @@ export default class Application extends Component {
   sendServerRequest(type, tipRequest, callback) {
     let tipConfigRequest = {
       requestType: type,
-      requestVersion: 4,
+      requestVersion: 5,
     };
 
     Object.entries(tipRequest).forEach((entry) => {
