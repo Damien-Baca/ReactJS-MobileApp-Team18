@@ -1,30 +1,30 @@
 import React, {Component} from 'react';
-import {Button, ListGroup, ListGroupItem, Row} from "reactstrap";
+import {Button, ListGroup, ListGroupItem} from "reactstrap";
 import MaterialTable from "material-table";
-import {MdDeleteForever, MdArrowDownward, MdArrowUpward, MdVerticalAlignTop} from "react-icons/md"
+import {Search, Clear, FirstPage, LastPage, ArrowForward, ArrowBack, ArrowUpward, ArrowDownward, VerticalAlignTop, DeleteForever, Info} from "@material-ui/icons";
 
 export default class DestinationList extends Component {
   constructor(props) {
     super(props);
 
     let actionList = [{
-      icon: MdDeleteForever,
+      icon: DeleteForever,
       tooltip: 'Remove Location',
       onClick: (event, rowData) =>
           this.handleRemoveDestination(rowData.tableData.id)
     }, {
-      icon: MdVerticalAlignTop,
+      icon: VerticalAlignTop,
       toolTip: 'Start Here',
       onClick: (event, rowData) => this.handleSwapDestinations(
           rowData.tableData.id)
     }, {
-      icon: MdArrowDownward,
+      icon: ArrowDownward,
       toolTip: 'Move Down',
       onClick: (event, rowData) =>
           this.handleSwapDestinations(rowData.tableData.id,
               rowData.tableData.id + 1)
     }, {
-      icon: MdArrowUpward,
+      icon: ArrowUpward,
       tooltip: 'Move Up',
       onClick: (event, rowData) =>
           this.handleSwapDestinations(rowData.tableData.id,
@@ -109,7 +109,18 @@ export default class DestinationList extends Component {
           columns={this.state.columns}
           actions={this.state.actions}
           data={setData()}
-          options={{search: true}}
+          icons={{
+            Search: Search,
+            ResetSearch: Clear,
+            FirstPage: FirstPage,
+            LastPage: LastPage,
+            PreviousPage: ArrowBack,
+            NextPage: ArrowForward
+          }}
+          options={{
+            search: true
+
+          }}
           />
     );
   }
