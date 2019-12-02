@@ -29,6 +29,10 @@ export default class DestinationList extends Component {
       onClick: (event, rowData) =>
           this.handleSwapDestinations(rowData.tableData.id,
               rowData.tableData.id - 1)
+    }, {
+      icon: Info,
+      tooltip: 'Info',
+      onClick: (event, rowData) => {}
     }];
 
     this.state = {
