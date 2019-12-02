@@ -50,6 +50,7 @@ export default class Application extends Component {
       clientSettings: {
         serverPort: getOriginalServerPort()
       },
+      placeAttributes: [],
       destinations: [],
       filter: [''],
       typeFilter: [],
@@ -148,6 +149,7 @@ export default class Application extends Component {
               settings={this.state.clientSettings}
               typeFilter={this.state.typeFilter}
               countryFilter={this.state.countryFilter}
+              placeAttributes={this.state.placeAttributes}
               swapDestinations={this.swapDestinations}
               addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
@@ -182,6 +184,7 @@ export default class Application extends Component {
     console.log("Switching to server ", this.state.clientSettings.serverPort);
     let newTypes = Object.assign([], this.state.typeFilter);
     let newCountries = Object.assign([], this.state.countryFilter);
+    let newPlaceAttributes = [];
 
     Object.entries(config.body).forEach((entry) => {
       if (entry[0] === "filters") {
@@ -191,11 +194,16 @@ export default class Application extends Component {
         Object.assign([], entry[1][1]["values"]).forEach((country) => {
           newCountries.push(country);
         });
+      } else if (entry[0] === 'placeAttributes') {
+        Object.assign([], entry[1]).forEach((attribute) => {
+          newPlaceAttributes.push(attribute);
+        });
       }
     });
 
     this.setState({
       serverConfig: config.body,
+      placeAttributes: newPlaceAttributes,
       typeFilter: newTypes,
       countryFilter: newCountries,
       errorMessage: null
