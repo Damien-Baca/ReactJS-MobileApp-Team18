@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Container} from 'reactstrap';
 
-import Home from './Home';
+import Home from './Home/Home';
 import Options from './Options/Options';
 import Calculator from './Calculator/Calculator';
 import About from './About/About';

@@ -1,6 +1,6 @@
 import './enzyme.config.js'
 import React from 'react'
-import DestinationControls from "../src/components/Application/DestinationControls";
+import DestinationControls from "../src/components/Application/Home/DestinationControls";
 import {mount} from 'enzyme'
 
 const destinations = [];

@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import icon2 from 'leaflet/dist/images/marker-icon-2x.png';
-import iconY from './About/images/marker-iconY.png';
-import icon2Y from './About/images/marker-icon-2xY.png';
+import iconY from '../About/images/marker-iconY.png';
+import icon2Y from '../About/images/marker-icon-2xY.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import {Button, Container, Row} from "reactstrap";
 

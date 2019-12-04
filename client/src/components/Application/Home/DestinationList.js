@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, ListGroup, ListGroupItem} from "reactstrap";
 import MaterialTable from "material-table";
 import {Search, Clear, FirstPage, LastPage, ArrowForward, ArrowBack, ArrowUpward, ArrowDownward, VerticalAlignTop, DeleteForever, Info} from "@material-ui/icons";
+import InfoPopup from './InfoPopup';
 
 export default class DestinationList extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ export default class DestinationList extends Component {
     }, {
       icon: Info,
       tooltip: 'Info',
-      onClick: (event, rowData) => {}
+      onClick: (event, rowData) => { this.displayInfo(rowData.tableData.id) }
     }];
 
     this.state = {
@@ -147,5 +148,14 @@ export default class DestinationList extends Component {
   handleSwapDestinations(index1, index2) {
     this.props.swapDestinations(index1, index2);
     this.props.resetDistances();
+  }
+
+  displayInfo(index) {
+    return (
+        <InfoPopup
+            index={index}
+            destination={this.props.destinations[index]}
+            distance={this.props.distances[index]}/>
+    );
   }
 }

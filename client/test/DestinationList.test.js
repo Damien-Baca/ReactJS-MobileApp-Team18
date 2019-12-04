@@ -1,6 +1,6 @@
 import './enzyme.config.js'
 import React from 'react'
-import DestinationList from "../src/components/Application/DestinationList";
+import DestinationList from "../src/components/Application/Home/DestinationList";
 import {mount} from 'enzyme'
 
 const newDestinations = [{
