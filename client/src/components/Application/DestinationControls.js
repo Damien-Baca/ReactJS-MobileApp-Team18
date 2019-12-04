@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
 import {Button, Container, Form, FormGroup, Input, Label, Row} from "reactstrap";
+// import worldMap from './image/worldmap.svg';
+// import {worldMapTail} from "./baseWorldMap";
+// import worldmap from "./worldmap.svg"
+
 
 
 export default class DestinationControls extends Component {
@@ -24,7 +28,7 @@ export default class DestinationControls extends Component {
           {this.renderAddDestination()}
         </Row>
         <Row>
-          {this.renderSaveKML()}
+          {this.renderSaveKML()} {this.renderSaveSVG()}
         </Row>
         <Row style={{ display: "flex" }}>
           {this.renderCalculateDistances()}
@@ -115,6 +119,18 @@ export default class DestinationControls extends Component {
               active={true}
               onClick={() => this.kmlWrite()}
       >Save KML</Button>
+    );
+  }
+
+  renderSaveSVG(){
+    return(
+      <Button className='btn-csu h-5 w-10'
+              name="save_SVG"
+              size={{ marginLeft: 'auto' }}
+              value='MKL'
+              active={true}
+              onClick={() => this.saveSVG()}
+      >Save SVG</Button>
     );
   }
 
@@ -315,15 +331,63 @@ export default class DestinationControls extends Component {
 
     file = header + body + footer;
 
-
     var data = new Blob([file], { type: 'text/plain' });
     var URL = window.URL.createObjectURL(data);
     var tempLink = document.createElement('a');
     tempLink.href = URL;
     tempLink.setAttribute('download', 'Trip.kml');
     tempLink.click();
+  }
 
+  // getworldmap(){
+  //   InputStream in= getClass().getResourceAsStream("./worldmap.svg");}
+  //   try {
+  //     BufferedReader br=new BufferedReader(new inputStreamReader(in));
+  //     StringBuilder sb=new StringBuilder();
+  //     String str;
+  //     while((str=br.readline())!=null){
+  //       sb.append(str);
+  //     }
+  //     coloMap=new StringBuilder(sb);
+  //   }catch(Exception){
+  //     System.err.println("SVG Constructer ERROR:\n"+e.toString());
+  //     coloMap=new StringBuilder();
+  //   }
+  // }
+
+
+
+
+  saveSVG(){
+    let file="";
+    var list=" ";
+
+    for (var i = 0; i < this.props.destinations.length; i++) {
+      list=list.concat(this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude)
+    }
+
+    var polylines="<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100% \" viewBox=\"-90 -90 180 180\">\n"+
+      "<g transfrom=\"scale(1,-1)\">\n"+
+      "<polyline points=\""+list +"\"\n"+
+      "style=\"fill:none;stroke:#5d00ff;stoke-width:.1;\"/>\n"+
+      "</g>\n"+
+      "</svg>";
+
+
+    file=polylines;
+    var data = new Blob([file], { type: 'text/plain' });
+    var URL = window.URL.createObjectURL(data);
+    var tempLink = document.createElement('a');
+    tempLink.href = URL;
+    tempLink.setAttribute('download', 'MyTrip.SVG');
+    tempLink.click();
   }
 }
+
+
+
+
+
+
 
 
