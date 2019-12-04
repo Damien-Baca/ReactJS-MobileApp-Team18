@@ -40,12 +40,12 @@ const buttonNamesInitial = [
   'add_user_destination',
   'loadJSON',
   'exportFile',
+  'save_kml',
   'calculate',
   'optimize',
   'submit_query',
   'clear_destinations',
   'reverse_destinations',
-
 ];
 const validationDummy = () => {
   return true;
