@@ -53,8 +53,13 @@ export default class Home extends Component {
         <Container>
           {this.state.errorMessage}
           <Row>
-            {this.generateColumn(this.renderMapPane, this.renderDestinationControls)}
-            {this.generateColumn(this.renderDestinationQuery, this.renderDestinations)}
+            <Col>
+              {this.renderMapPane()}
+            </Col>
+              {this.generateColumn(this.renderDestinationControls, this.renderDestinationQuery)}
+            <Col>
+              {this.renderDestinations()}
+            </Col>
           </Row>
         </Container>
     );
@@ -115,6 +120,7 @@ export default class Home extends Component {
                 reverseDestinations={this.props.reverseDestinations}
                 swapDestinations={this.props.swapDestinations}
                 distances={this.state.distances}
+                placeAttributes={this.props.placeAttributes}
                 resetDistances={this.resetDistances}
                 sumDistances={this.sumDistances}/>
               }/>
