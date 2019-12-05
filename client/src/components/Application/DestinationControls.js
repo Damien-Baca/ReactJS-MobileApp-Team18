@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Container, Form, FormGroup, Input, Label, Row} from "reactstrap";
-// import worldMap from './image/worldmap.svg';
+
 // import {worldMapTail} from "./baseWorldMap";
 import worldMapBackground from './worldmap.js';
 // import worldmap from './worldmap.txt';
