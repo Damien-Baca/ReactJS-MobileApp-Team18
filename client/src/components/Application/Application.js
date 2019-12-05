@@ -355,17 +355,25 @@ export default class Application extends Component {
   }
 
   validateSchema(response) {
-    let Ajv = require('ajv'); let ajv = new Ajv();
-    let TIPConSchema = require('../../../schemas/TIPConfigResponseSchema');
-    let TIPDisSchema = require('../../../schemas/TIPDistanceResponseSchema');
-    let TIPLocSchema = require('../../../schemas/TIPLocationsResponseSchema');
-    let TIPTripSchema = require('../../../schemas/TIPTripResponseSchema');
-    let TIPType = response.body.requestType; let valid = false;
-    if (TIPType === 'config') { valid = ajv.validate(TIPConSchema, response.body);
-    } else if (TIPType === 'distance') { valid = ajv.validate(TIPDisSchema, response.body);
-    } else if (TIPType === 'locations') { valid = ajv.validate(TIPLocSchema, response.body);
-    } else if (TIPType === 'trip') { valid = ajv.validate(TIPTripSchema, response.body);
+    let Ajv = require('ajv');
+    let ajv = new Ajv();
+    let TIPType = response.body.requestType;
+    let TIPSchema;
+    switch (TIPType) {
+      case 'config':
+        TIPSchema = require('../../../schemas/TIPConfigResponseSchema');
+        break;
+      case 'distance':
+        TIPSchema = require('../../../schemas/TIPDistanceResponseSchema');
+        break;
+      case 'trip':
+        TIPSchema = require('../../../schemas/TIPTripFileSchema');
+        break;
+      case 'locations':
+        TIPSchema = require('../../../schemas/TIPLocationsResponseSchema');
+        break;
     }
+    let valid = ajv.validate(TIPSchema,response.body);
     if(!valid){
       console.log(ajv.errors);
       console.log(response.body);
@@ -373,7 +381,7 @@ export default class Application extends Component {
         errorMessage: this.createErrorBanner(
             "Server Response Error",
             0,
-            `Response from server does not match ${response.body.requestType} schema`
+            `Response from server does not match schema`
         )
       });
     }else{

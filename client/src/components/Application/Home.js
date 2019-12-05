@@ -6,6 +6,7 @@ import DestinationMap from "./DestinationMap";
 import DestinationControls from "./DestinationControls";
 import DestinationList from "./DestinationList";
 import DestinationQuery from "./DestinationQuery";
+import 'ajv'
 
 /*
  * Renders the home page.
@@ -270,6 +271,7 @@ export default class Home extends Component {
   }
 
   handleLoadJSON(fileContents) {
+
     if (fileContents) {
       try {
         let newTrip = JSON.parse(fileContents);
