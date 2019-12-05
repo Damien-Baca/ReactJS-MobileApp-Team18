@@ -264,7 +264,6 @@ export default class DestinationControls extends Component {
 
 
   kmlWrite () {
-
     let file = " ";
     var header = "<?xml version=" + "\"1.0\"" + " encoding=" + "\"UTF-8\"" + "?> \n\
 <kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
@@ -335,7 +334,6 @@ export default class DestinationControls extends Component {
     tempLink.setAttribute('download', 'Trip.kml');
     tempLink.click();
   }
-
 
   saveSVG(){
     let file="";
