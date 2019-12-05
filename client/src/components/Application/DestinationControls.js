@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Container, Form, FormGroup, Input, Label, Row} from "reactstrap";
-
-
 import worldMapBackground from './worldmap.js';
-
-
 
 
 export default class DestinationControls extends Component {
