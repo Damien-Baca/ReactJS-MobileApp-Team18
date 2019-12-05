@@ -4,7 +4,6 @@ import {Button, Container, Form, FormGroup, Input, Label, Row} from "reactstrap"
 
 import worldMapBackground from './worldmap.js';
 
-// import styles,{assets} from './worldmap';
 
 
 
