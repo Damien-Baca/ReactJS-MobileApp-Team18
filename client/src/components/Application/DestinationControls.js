@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {Button, Container, Form, FormGroup, Input, Label, Row} from "reactstrap";
 // import worldMap from './image/worldmap.svg';
 // import {worldMapTail} from "./baseWorldMap";
-// import worldmap from "./worldmap.svg"
+import worldMapBackground from './worldmap.js';
+// import worldmap from './worldmap.txt';
+// import styles,{assets} from './worldmap';
 
 
 
@@ -339,43 +341,23 @@ export default class DestinationControls extends Component {
     tempLink.click();
   }
 
-  // getworldmap(){
-  //   InputStream in= getClass().getResourceAsStream("./worldmap.svg");}
-  //   try {
-  //     BufferedReader br=new BufferedReader(new inputStreamReader(in));
-  //     StringBuilder sb=new StringBuilder();
-  //     String str;
-  //     while((str=br.readline())!=null){
-  //       sb.append(str);
-  //     }
-  //     coloMap=new StringBuilder(sb);
-  //   }catch(Exception){
-  //     System.err.println("SVG Constructer ERROR:\n"+e.toString());
-  //     coloMap=new StringBuilder();
-  //   }
-  // }
-
-
-
 
   saveSVG(){
     let file="";
-    var list=" ";
-
+    var coords=" ";
     for (var i = 0; i < this.props.destinations.length; i++) {
-      list=list.concat(this.props.destinations[i].longitude + "," + this.props.destinations[i].latitude)
+      coords=coords.concat(this.props.destinations[i].longitude.toString() + "," + this.props.destinations[i].latitude.toString()+" ")
     }
 
     var polylines="<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100% \" viewBox=\"-90 -90 180 180\">\n"+
-      "<g transfrom=\"scale(1,-1)\">\n"+
-      "<polyline points=\""+list +"\"\n"+
+      "<g transform=\"scale(1,-1)\">\n"+
+      "<polyline points=\""+coords +"\"\n"+
       "style=\"fill:none;stroke:#5d00ff;stoke-width:.1;\"/>\n"+
       "</g>\n"+
-      "</svg>";
+      "</svg></svg>";
 
-
-    file=polylines;
-    var data = new Blob([file], { type: 'text/plain' });
+    file=worldMapBackground+polylines;
+    var data = new Blob([file], { type: 'image/svg+xml' });
     var URL = window.URL.createObjectURL(data);
     var tempLink = document.createElement('a');
     tempLink.href = URL;
