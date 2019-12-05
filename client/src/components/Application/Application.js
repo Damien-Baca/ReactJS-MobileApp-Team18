@@ -373,17 +373,13 @@ export default class Application extends Component {
         TIPSchema = require('../../../schemas/TIPLocationsResponseSchema');
         break;
     }
-    let valid = ajv.validate(TIPSchema,response.body);
-    if(!valid){
-      console.log(ajv.errors);
-      console.log(response.body);
+    if(!ajv.validate(TIPSchema,response.body)){
       this.setState({
         errorMessage: this.createErrorBanner(
             "Server Response Error",
             0,
             `Response from server does not match schema`
-        )
-      });
+        )});
     }else{
       this.setState({
         errorMessage: null
