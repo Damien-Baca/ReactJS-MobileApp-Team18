@@ -6,6 +6,7 @@ import DestinationMap from "./DestinationMap";
 import DestinationControls from "./DestinationControls";
 import DestinationList from "./DestinationList";
 import DestinationQuery from "./DestinationQuery";
+import 'ajv'
 
 /*
  * Renders the home page.
@@ -270,24 +271,26 @@ export default class Home extends Component {
   }
 
   handleLoadJSON(fileContents) {
-    if (fileContents) {
-      try {
-        let newTrip = JSON.parse(fileContents);
+    let AJV = require('ajv');
+    let ajv = new AJV();
+    let schema = require('../../../schemas/TIPTripFileSchema');
+    try {
+      let newTrip = JSON.parse(fileContents);
+      if (ajv.validate(schema, newTrip)) {
         this.addJsonValues(newTrip);
-
-      } catch (e) {
-        this.setErrorBanner( this.props.createErrorBanner(
-              "File Error",
-              0,
-              "File has invalid JSON TIP Trip format."
-          ));
-      }
-    } else {
-      this.setErrorBanner( this.props.createErrorBanner(
+      } else {
+        this.setErrorBanner(this.props.createErrorBanner(
             "File Error",
             0,
-            "No file has been selected."
+            "File has invalid JSON TIP Trip format."
         ));
+      }
+    } catch (e) {
+      this.setErrorBanner(this.props.createErrorBanner(
+          "File Error",
+          0,
+          "File has invalid JSON TIP Trip format."
+      ));
     }
   }
 
