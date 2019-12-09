@@ -25,7 +25,10 @@ export default class DestinationControls extends Component {
           {this.renderAddDestination()}
         </Row>
         <Row>
-          {this.renderSaveKML()} {this.renderSaveSVG()}
+          {this.renderSaveKML()}
+        </Row>
+        <Row>
+          {this.renderSaveSVG()}
         </Row>
         <Row style={{ display: "flex" }}>
           {this.renderCalculateDistances()}
