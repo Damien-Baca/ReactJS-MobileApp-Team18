@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, ListGroup, ListGroupItem, Row} from "reactstrap";
 import MaterialTable from "material-table";
-import {MdDeleteForever, MdArrowDownward, MdArrowUpward, MdVerticalAlignTop} from "react-icons/md"
+import {MdDeleteForever, MdArrowDownward, MdArrowUpward, MdVerticalAlignTop, MDRoom} from "react-icons/md"
 
 export default class DestinationList extends Component {
   constructor(props) {
@@ -29,6 +29,11 @@ export default class DestinationList extends Component {
       onClick: (event, rowData) =>
           this.handleSwapDestinations(rowData.tableData.id,
               rowData.tableData.id - 1)
+    }, {
+      icon:MDRoom,
+      toolTip: 'Toggle Marker',
+      onClick: (event,rowData) =>
+          this.handleMarkerToggle() // need to remove/add from list, not toggle smaller/larger.
     }];
 
     this.state = {
