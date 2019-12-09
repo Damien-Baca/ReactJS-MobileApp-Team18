@@ -151,11 +151,13 @@ export default class DestinationList extends Component {
   }
 
   displayInfo(index) {
+    console.log("aaaaaaaaaaaaa");
+
     return (
         <InfoPopup
             index={index}
-            destination={this.props.destinations[index]}
-            distance={this.props.distances[index]}/>
+            destinations={this.props.destinations}
+            distances={this.props.distances}/>
     );
   }
 }
