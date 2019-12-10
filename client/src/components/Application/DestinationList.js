@@ -15,8 +15,8 @@ export default class DestinationList extends Component {
     }, {
       icon: MdVerticalAlignTop,
       toolTip: 'Start Here',
-      onClick: (event, rowData) => this.handleSwapDestinations(
-          rowData.tableData.id)
+      onClick: (event, rowData) =>
+          this.handleSwapDestinations(rowData.tableData.id)
     }, {
       icon: MdArrowDownward,
       toolTip: 'Move Down',
@@ -33,7 +33,7 @@ export default class DestinationList extends Component {
       icon:MDRoom,
       toolTip: 'Toggle Marker',
       onClick: (event,rowData) =>
-          this.handleMarkerToggle() // need to remove/add from list, not toggle smaller/larger.
+          this.handleMarkerIcon() // need to remove/add from list, not toggle smaller/larger.
     }];
 
     this.state = {

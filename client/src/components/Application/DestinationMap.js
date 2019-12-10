@@ -16,6 +16,7 @@ export default class DestinationMap extends Component {
     super(props);
     this.state={
       markerFlag: false,
+      markerKill: false,
       polylineFlag: true,
       iconColor: false,
       prevInd: -1,
@@ -87,6 +88,13 @@ export default class DestinationMap extends Component {
     //setstate for all markers
     this.setState({
       markerFlag: !this.state.markerFlag
+    });
+
+  }
+  handleMarkerIcon() {
+    //setstate for single marker
+    this.setState({
+      markerKill: !this.state.markerKill
     });
 
   }
@@ -298,6 +306,12 @@ export default class DestinationMap extends Component {
     // so we must create our own
     //lol kill me
     if (!this.state.markerSize[index] && !this.state.iconColor) {
+      return L.icon({
+        iconUrl: icon,
+        shadowUrl: iconShadow,
+        iconAnchor: [12, 40]  // for proper placement
+      })
+    } else if (!this.state.markerSize[index] && !this.state.markerKill) { //this needs to NOT generate marker when markerKill is true
       return L.icon({
         iconUrl: icon,
         shadowUrl: iconShadow,
