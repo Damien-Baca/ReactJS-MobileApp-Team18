@@ -57,6 +57,8 @@ export default class Home extends Component {
               {this.renderMapPane()}
             </Col>
               {this.generateColumn(this.renderDestinationControls, this.renderDestinationQuery)}
+          </Row>
+          <Row>
             <Col>
               {this.renderDestinations()}
             </Col>

@@ -211,6 +211,7 @@ export default class DestinationMap extends Component {
           polylineList.push(polyline);
         }
         polylineList.splice(0,1);
+        polylineList=polylineList.concat(this.addOtherEarthsPolyline(polylineList));
       }
       return (
           polylineList.map((line) => (
@@ -232,6 +233,17 @@ export default class DestinationMap extends Component {
       retLong=long+360;
     }
     return retLong;
+  }
+
+  addOtherEarthsPolyline(polylineList){
+    let newLines=[];
+    polylineList.forEach((polyline) => {
+      let tempLine=[[polyline[0][0],polyline[0][1]+360],[polyline[1][0],polyline[1][1]+360]];
+      newLines.push(tempLine);
+      tempLine=[[polyline[0][0],polyline[0][1]-360],[polyline[1][0],polyline[1][1]-360]];
+      newLines.push(tempLine);
+    });
+    return newLines
   }
 
   itineraryBounds() {
