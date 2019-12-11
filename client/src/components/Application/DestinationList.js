@@ -33,7 +33,7 @@ export default class DestinationList extends Component {
       icon:MDRoom,
       toolTip: 'Toggle Marker',
       onClick: (event,rowData) =>
-          this.handleMarkerIcon() // need to remove/add from list, not toggle smaller/larger.
+          this.handleMarkerIcon(rowData.tableData.id) // passing index so state mem of dest list can be changed
     }];
 
     this.state = {
@@ -137,5 +137,8 @@ export default class DestinationList extends Component {
   handleSwapDestinations(index1, index2) {
     this.props.swapDestinations(index1, index2);
     this.props.resetDistances();
+  }
+  handleMarkerIcon(index) {
+    this.props.markerKill(index);
   }
 }
