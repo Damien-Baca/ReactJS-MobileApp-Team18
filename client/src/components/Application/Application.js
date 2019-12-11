@@ -36,6 +36,7 @@ export default class Application extends Component {
     this.sendServerRequest = this.sendServerRequest.bind(this);
     this.handleServerResponse = this.handleServerResponse.bind(this);
     this.validateSchema = this.validateSchema.bind(this);
+    this.markerKill = this.markerKill.bind(this);
 
     this.state = {
       serverConfig: null,
