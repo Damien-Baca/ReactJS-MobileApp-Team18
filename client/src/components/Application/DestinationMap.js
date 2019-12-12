@@ -256,6 +256,3 @@ export default class DestinationMap extends Component {
   }
 
 }
-
-// export default DestinationMap;
-// // const wrappedPolylines=this.state.polyline()
