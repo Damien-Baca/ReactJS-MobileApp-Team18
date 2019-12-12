@@ -11,7 +11,7 @@ export default class DestinationControls extends Component {
       valid: { name: false, latitude: false, longitude: false  },
       invalid: { name: false, latitude: false, longitude: false },
       fileContents: null,
-      iconKill: false //whether or not to render
+
     };
   }
 
@@ -203,7 +203,7 @@ export default class DestinationControls extends Component {
         newDestination: { name: '', latitude: '', longitude: '' },
         valid: superFalse,
         invalid: superFalse,
-        iconKill: false
+        iconKill: true
       });
       this.props.resetDistances();
     } else {

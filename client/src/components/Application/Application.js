@@ -281,7 +281,11 @@ export default class Application extends Component {
     });
   }
   markerKill(index) {
-
+    let inv = Object.assign( [], this.destinations);
+    inv[index] = !inv[index];
+    this.setState({
+      destinations: inv
+    });
   }
 
   validation(name, value){
