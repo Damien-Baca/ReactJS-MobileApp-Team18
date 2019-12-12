@@ -278,7 +278,7 @@ export default class Home extends Component {
   handleLoadJSON(fileContents) {
     let AJV = require('ajv');
     let ajv = new AJV();
-    let schema = require('../../../schemas/TIPTripFileSchema');
+    let schema = require('../../../../schemas/TIPTripFileSchema');
     try {
       let newTrip = JSON.parse(fileContents);
       if (ajv.validate(schema, newTrip)) {
