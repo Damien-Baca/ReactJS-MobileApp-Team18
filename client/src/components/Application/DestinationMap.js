@@ -6,7 +6,7 @@ import iconY from './About/images/marker-iconY.png';
 import icon2Y from './About/images/marker-icon-2xY.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import {Button, Container, Row} from "reactstrap";
-import { polyline } from 'leaflet/dist/leaflet-src.esm'
+
 
 /*
  * Renders a Leaflet Map with Markers and a Polyline.
