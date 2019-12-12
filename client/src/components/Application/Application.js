@@ -217,8 +217,7 @@ export default class Application extends Component {
       let newDestinationList = Object.assign([], this.state.destinations);
 
       newDestinations.forEach((destination, offset) => {
-        console.log(destination);
-        destination.add('iconKill', true);
+        destination.iconKill = true;
         newDestinationList.splice(index + offset, 0, destination);
       });
 
@@ -284,7 +283,7 @@ export default class Application extends Component {
     });
   }
   markerKill(index) {
-    let inv = Object.assign( [], this.destinations);
+    let inv = Object.assign( [], this.state.destinations);
     inv[index].iconKill = !inv[index].iconKill;
     this.setState({
       destinations: inv
