@@ -217,6 +217,8 @@ export default class Application extends Component {
       let newDestinationList = Object.assign([], this.state.destinations);
 
       newDestinations.forEach((destination, offset) => {
+        console.log(destination);
+        destination.add('iconKill', true);
         newDestinationList.splice(index + offset, 0, destination);
       });
 

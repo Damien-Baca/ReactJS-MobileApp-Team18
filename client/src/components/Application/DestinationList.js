@@ -7,6 +7,8 @@ export default class DestinationList extends Component {
   constructor(props) {
     super(props);
 
+    this.handleMarkerIcon = this.handleMarkerIcon.bind(this);
+
     let actionList = [{
       icon: MdDeleteForever,
       tooltip: 'Remove Location',
