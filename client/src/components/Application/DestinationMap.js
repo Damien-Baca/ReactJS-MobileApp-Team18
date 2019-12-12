@@ -15,7 +15,6 @@ export default class DestinationMap extends Component {
   constructor(props) {
     super(props);
     this.state={
-      markerFlag: false,
       polylineFlag: true,
       iconColor: false,
       prevInd: -1,
@@ -66,7 +65,7 @@ export default class DestinationMap extends Component {
                   name='toggleAllMarkers'
                   key='button_toggleAllMarkers'
                   active={true}
-                  onClick={() => this.handleMarkerToggle()}>
+                  onClick={() => this.props.handleMarkerToggle()}>
                 Toggle All Markers
               </Button>
     )
@@ -83,13 +82,7 @@ export default class DestinationMap extends Component {
           </Button>
     )
   }
-  handleMarkerToggle() {
-    //setstate for all markers
-    this.setState({
-      markerFlag: !this.state.markerFlag
-    });
 
-  }
 
   handlePolylineToggle() {
     //setstate for polylines
@@ -106,19 +99,21 @@ export default class DestinationMap extends Component {
 
 
   generateDestinationMarkers() {
-    if(this.state.markerFlag) {
+
       this.markerSize = [];
       let markerList = [this.props.userLocation];
       if (this.props.destinations.length > 0) {
         markerList = [];
 
       this.props.destinations.forEach((destination) => {
-        this.markerSize.push(false);
-        markerList.push(Object.assign({}, {
-          latitude: destination.latitude,
-          name: destination.name,
-          longitude: this.modifyLong(destination.longitude)
-        }))
+        if(!destination.iconKill) {
+          this.markerSize.push(false);
+          markerList.push(Object.assign({}, {
+            latitude: destination.latitude,
+            name: destination.name,
+            longitude: this.modifyLong(destination.longitude)
+          }))
+        }
       });
     }
 
@@ -143,7 +138,7 @@ export default class DestinationMap extends Component {
               </Marker>
           ))
       );
-    }
+
   }
 
 
@@ -298,8 +293,6 @@ export default class DestinationMap extends Component {
     // react-leaflet does not currently handle default marker icons correctly,
     // so we must create our own
     //lol kill_me
-    console.log(this.props.destinations[index]);
-    if (!this.props.destinations[index].iconKill) {
       if (!this.state.markerSize[index] && !this.state.iconColor) {
         return L.icon({
           iconUrl: icon,
@@ -325,7 +318,7 @@ export default class DestinationMap extends Component {
           iconAnchor: [26, 80]  // for proper placement
         })
       }
-    }
   }
+
 
 }

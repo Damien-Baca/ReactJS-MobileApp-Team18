@@ -32,6 +32,7 @@ export default class Home extends Component {
     this.addJsonValues = this.addJsonValues.bind(this);
 
     this.state = {
+      markerFlag: true,
       errorMessage: null,
       userLocation: {
         name: 'Colorado State University',
@@ -71,6 +72,7 @@ export default class Home extends Component {
     return (
         <Pane header={'Where Am I?'}
               bodyJSX={<DestinationMap
+                  handleMarkerToggle={this.props.handleMarkerToggle}
                   userLocation={this.state.userLocation}
                   destinations={this.convertDestinations()}
                   convertCoordinates={this.props.convertCoordinates}/>}/>

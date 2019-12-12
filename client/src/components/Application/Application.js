@@ -37,6 +37,7 @@ export default class Application extends Component {
     this.handleServerResponse = this.handleServerResponse.bind(this);
     this.validateSchema = this.validateSchema.bind(this);
     this.markerKill = this.markerKill.bind(this);
+    this.handleMarkerToggle = this.handleMarkerToggle.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -161,6 +162,7 @@ export default class Application extends Component {
               convertCoordinates={this.convertCoordinates}
               validation={this.validation}
               validateCoordinates={this.validateCoordinates}
+              handleMarkerToggle={this.handleMarkerToggle}
               sendServerRequest={this.sendServerRequest}/>
     );
   }
@@ -288,6 +290,19 @@ export default class Application extends Component {
     this.setState({
       destinations: inv
     });
+  }
+  handleMarkerToggle() {
+    //setstate for all markers
+    let markerFlag = !this.state.markerFlag;
+    let temp = Object.assign([], this.state.destinations);
+    temp.forEach((destination) =>{
+      destination.iconKill = markerFlag;
+    });
+    this.setState({
+      markerFlag: !this.state.markerFlag,
+      destinations: temp
+    });
+
   }
 
   validation(name, value){
