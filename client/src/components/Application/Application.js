@@ -282,7 +282,7 @@ export default class Application extends Component {
   }
   markerKill(index) {
     let inv = Object.assign( [], this.destinations);
-    inv[index] = !inv[index];
+    inv[index].iconKill = !inv[index].iconKill;
     this.setState({
       destinations: inv
     });

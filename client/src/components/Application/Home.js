@@ -36,8 +36,8 @@ export default class Home extends Component {
       userLocation: {
         name: 'Colorado State University',
         latitude: this.csuOvalGeographicCoordinates().lat,
-        longitude: this.csuOvalGeographicCoordinates().lng,
-        iconKill:true
+        longitude: this.csuOvalGeographicCoordinates().lng
+
       },
       distances: null,
       optimizations: null

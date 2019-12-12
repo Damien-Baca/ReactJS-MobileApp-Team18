@@ -304,12 +304,6 @@ export default class DestinationMap extends Component {
         shadowUrl: iconShadow,
         iconAnchor: [12, 40]  // for proper placement
       })
-    } else if (!this.state.markerSize[index] && !this.state.markerKill) { //this needs to NOT generate marker when markerKill is true
-      return L.icon({
-        iconUrl: icon,
-        shadowUrl: iconShadow,
-        iconAnchor: [12, 40]  // for proper placement
-      })
     } else if(this.state.markerSize[index] && !this.state.iconColor) {
       return L.icon({
         iconUrl: icon2,

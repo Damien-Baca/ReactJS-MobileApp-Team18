@@ -7,7 +7,7 @@ export default class DestinationControls extends Component {
     super(props);
 
     this.state = {
-      newDestination: { name: '', latitude: '', longitude: '' , iconKill: true},
+      newDestination: { name: '', latitude: '', longitude: ''},
       valid: { name: false, latitude: false, longitude: false  },
       invalid: { name: false, latitude: false, longitude: false },
       fileContents: null,
@@ -203,7 +203,7 @@ export default class DestinationControls extends Component {
         newDestination: { name: '', latitude: '', longitude: '' },
         valid: superFalse,
         invalid: superFalse,
-        iconKill: true
+
       });
       this.props.resetDistances();
     } else {
@@ -216,7 +216,8 @@ export default class DestinationControls extends Component {
   }
 
   handleUserDestination () {
-    this.props.addDestinations([Object.assign({}, this.props.userLocation)]);
+
+    this.props.addDestinations([Object.assign({}, this.props.userLocation.add('iconKill', true))]);
     this.props.resetDistances();
   }
 
