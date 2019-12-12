@@ -3,6 +3,7 @@ import {Button, Container, Form, FormGroup, Input, Label, Row} from "reactstrap"
 import worldMapBackground from './worldmap.js';
 
 
+
 export default class DestinationControls extends Component {
   constructor (props) {
     super(props);
@@ -339,19 +340,20 @@ export default class DestinationControls extends Component {
 
   saveSVG(){
     let file="";
-    var coords=" ";
-    for (var i = 0; i < this.props.destinations.length; i++) {
-      coords=coords.concat(this.props.destinations[i].longitude.toString() + "," + this.props.destinations[i].latitude.toString()+" ")
+    var coords=[];
+    if(this.props.destinations.length>1){
+      // coords=coords.concat(this.props.destinations[i].longitude.toString() + "," + this.props.destinations[i].latitude.toString()+" ")
+      coords=this.props.CreatePolylineList();
+      console.log(coords);
     }
-
-    var polylines="<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100% \" viewBox=\"-90 -90 180 180\">\n"+
-      "<g transform=\"scale(1,-1)\">\n"+
-      "<polyline points=\""+coords +"\"\n"+
-      "style=\"fill:none;stroke:#5d00ff;stoke-width:.1;\"/>\n"+
-      "</g>\n"+
-      "</svg></svg>";
-
-    file=worldMapBackground+polylines;
+    let polyLines="";
+    coords.forEach((line) => {
+       polyLines=polyLines.concat(
+        "<polyline points=\"" + line + "\"\n" +
+        "style=\"fill:none;stroke:#5d00ff;stoke-width:.1;\"/>\n");
+    })
+    file=worldMapBackground+"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100% \" viewBox=\"-90 -90 180 180\">\n" +
+      "<g transform=\"rotate(270)\">\n" +polyLines+"</g>\n" + "</svg></svg>";
     var data = new Blob([file], { type: 'image/svg+xml' });
     var URL = window.URL.createObjectURL(data);
     var tempLink = document.createElement('a');
