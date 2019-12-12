@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Button, ListGroup, ListGroupItem} from "reactstrap";
 import MaterialTable from "material-table";
 import {Search, Clear, FirstPage, LastPage, ArrowForward, ArrowBack, ArrowUpward, ArrowDownward, VerticalAlignTop, DeleteForever, DeleteRounded, SwapCallsRounded} from "@material-ui/icons";
 
@@ -54,9 +53,7 @@ export default class DestinationList extends Component {
 
   render() {
     return (
-        <ListGroup>
-          {this.renderMaterialTable()}
-        </ListGroup>
+          this.renderMaterialTable()
     );
   }
 

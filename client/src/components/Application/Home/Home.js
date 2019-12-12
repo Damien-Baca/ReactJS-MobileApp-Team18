@@ -115,17 +115,15 @@ export default class Home extends Component {
 
   renderDestinations() {
     return (
-        <Pane header={'Destinations:'}
-              bodyJSX={<DestinationList
-                destinations={this.props.destinations}
-                removeDestination={this.props.removeDestination}
-                reverseDestinations={this.props.reverseDestinations}
-                swapDestinations={this.props.swapDestinations}
-                distances={this.state.distances}
-                placeAttributes={this.props.placeAttributes}
-                resetDistances={this.resetDistances}
-                sumDistances={this.sumDistances}/>
-              }/>
+        <DestinationList
+            destinations={this.props.destinations}
+            removeDestination={this.props.removeDestination}
+            reverseDestinations={this.props.reverseDestinations}
+            swapDestinations={this.props.swapDestinations}
+            distances={this.state.distances}
+            placeAttributes={this.props.placeAttributes}
+            resetDistances={this.resetDistances}
+            sumDistances={this.sumDistances}/>
     );
   }
 
