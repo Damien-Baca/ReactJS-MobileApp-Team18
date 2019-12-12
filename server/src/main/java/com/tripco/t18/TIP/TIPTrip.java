@@ -51,6 +51,10 @@ public class TIPTrip extends TIPHeader {
       places = new OptimizeTrip().shorterTrip(places, earthRadius);
     }
 
+    if (options.get("optimization").equals("shortest")) {
+      places = new OptimizeTrip().shortestTrip(places, earthRadius);
+    }
+
     for (int i = 0; i < this.places.length; ++i) {
       Map origin = places[i];
       Map destination = places[0];

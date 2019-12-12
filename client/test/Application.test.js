@@ -29,7 +29,7 @@ function testInitialState() {
 
   let actualOptions = app.state().planOptions;
   let expectedOptions = {
-    optimizations: ['none', 'short', 'shorter'],
+    optimizations: ['none', 'short', 'shorter', 'shortest'],
     activeOptimization: 'short',
     units: {kilometers: 6371, miles: 3958.8, 'nautical miles': 3440.1},
     activeUnit: 'miles',
