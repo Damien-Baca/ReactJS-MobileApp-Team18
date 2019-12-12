@@ -216,7 +216,7 @@ export default class DestinationControls extends Component {
   }
 
   handleUserDestination () {
-    this.props.addDestinations([Object.assign({}, this.props.userLocation.add('iconKill', true))]);
+    this.props.addDestinations([Object.assign({}, this.props.userLocation)]);
     this.props.resetDistances();
   }
 

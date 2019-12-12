@@ -297,32 +297,35 @@ export default class DestinationMap extends Component {
   generateMarkerIcon(index) {
     // react-leaflet does not currently handle default marker icons correctly,
     // so we must create our own
-    //lol kill me
-    if (!this.state.markerSize[index] && !this.state.iconColor) {
-      return L.icon({
-        iconUrl: icon,
-        shadowUrl: iconShadow,
-        iconAnchor: [12, 40]  // for proper placement
-      })
-    } else if(this.state.markerSize[index] && !this.state.iconColor) {
-      return L.icon({
-        iconUrl: icon2,
-        shadowUrl: iconShadow,
-        iconAnchor: [26, 80]  // for proper placement
-      })
-    } else if (!this.state.markerSize[index] && this.state.iconColor) {
-      return L.icon({
-        iconUrl: iconY,
-        shadowUrl: iconShadow,
-        iconAnchor: [12, 40]  // for proper placement
-      })
-    } else  {
-      return L.icon({
-        iconUrl: icon2Y,
-        shadowUrl: iconShadow,
-        iconAnchor: [26, 80]  // for proper placement
-      })
-    }
+    //lol kill_me
+    console.log(this.props.destinations[index].iconKill);
+    if (!this.props.destinations[index].iconKill) {
+      if (!this.state.markerSize[index] && !this.state.iconColor) {
+        return L.icon({
+          iconUrl: icon,
+          shadowUrl: iconShadow,
+          iconAnchor: [12, 40]  // for proper placement
+        })
+      } else if (this.state.markerSize[index] && !this.state.iconColor) {
+        return L.icon({
+          iconUrl: icon2,
+          shadowUrl: iconShadow,
+          iconAnchor: [26, 80]  // for proper placement
+        })
+      } else if (!this.state.markerSize[index] && this.state.iconColor) {
+        return L.icon({
+          iconUrl: iconY,
+          shadowUrl: iconShadow,
+          iconAnchor: [12, 40]  // for proper placement
+        })
+      } else {
+        return L.icon({
+          iconUrl: icon2Y,
+          shadowUrl: iconShadow,
+          iconAnchor: [26, 80]  // for proper placement
+        })
+      }
+  }
   }
 
 }
