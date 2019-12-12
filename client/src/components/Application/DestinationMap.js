@@ -298,7 +298,7 @@ export default class DestinationMap extends Component {
     // react-leaflet does not currently handle default marker icons correctly,
     // so we must create our own
     //lol kill_me
-    console.log(this.props.destinations[index].iconKill);
+    console.log(this.props.destinations[index]);
     if (!this.props.destinations[index].iconKill) {
       if (!this.state.markerSize[index] && !this.state.iconColor) {
         return L.icon({
@@ -325,7 +325,7 @@ export default class DestinationMap extends Component {
           iconAnchor: [26, 80]  // for proper placement
         })
       }
-  }
+    }
   }
 
 }
