@@ -36,6 +36,8 @@ export default class Application extends Component {
     this.sendServerRequest = this.sendServerRequest.bind(this);
     this.handleServerResponse = this.handleServerResponse.bind(this);
     this.validateSchema = this.validateSchema.bind(this);
+    this.markerKill = this.markerKill.bind(this);
+    this.handleMarkerToggle = this.handleMarkerToggle.bind(this);
 
     this.state = {
       serverConfig: null,
@@ -153,12 +155,14 @@ export default class Application extends Component {
               swapDestinations={this.swapDestinations}
               addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
+              markerKill={this.markerKill}
               setDestinations={this.setDestinations}
               reverseDestinations={this.reverseDestinations}
               createErrorBanner={this.createErrorBanner}
               convertCoordinates={this.convertCoordinates}
               validation={this.validation}
               validateCoordinates={this.validateCoordinates}
+              handleMarkerToggle={this.handleMarkerToggle}
               sendServerRequest={this.sendServerRequest}/>
     );
   }
@@ -215,6 +219,7 @@ export default class Application extends Component {
       let newDestinationList = Object.assign([], this.state.destinations);
 
       newDestinations.forEach((destination, offset) => {
+        destination.iconKill = true;
         newDestinationList.splice(index + offset, 0, destination);
       });
 
@@ -278,6 +283,26 @@ export default class Application extends Component {
     this.setState({
       destinations: newDestinationList
     });
+  }
+  markerKill(index) {
+    let inv = Object.assign( [], this.state.destinations);
+    inv[index].iconKill = !inv[index].iconKill;
+    this.setState({
+      destinations: inv
+    });
+  }
+  handleMarkerToggle() {
+    //setstate for all markers
+    let markerFlag = !this.state.markerFlag;
+    let temp = Object.assign([], this.state.destinations);
+    temp.forEach((destination) =>{
+      destination.iconKill = markerFlag;
+    });
+    this.setState({
+      markerFlag: !this.state.markerFlag,
+      destinations: temp
+    });
+
   }
 
   validation(name, value){
