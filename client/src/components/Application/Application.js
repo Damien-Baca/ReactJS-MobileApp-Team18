@@ -50,6 +50,7 @@ export default class Application extends Component {
       clientSettings: {
         serverPort: getOriginalServerPort()
       },
+      placeAttributes: [],
       destinations: [],
       filter: [''],
       typeFilter: [],
@@ -148,6 +149,7 @@ export default class Application extends Component {
               settings={this.state.clientSettings}
               typeFilter={this.state.typeFilter}
               countryFilter={this.state.countryFilter}
+              placeAttributes={this.state.placeAttributes}
               swapDestinations={this.swapDestinations}
               addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
@@ -182,6 +184,7 @@ export default class Application extends Component {
     console.log("Switching to server ", this.state.clientSettings.serverPort);
     let newTypes = Object.assign([], this.state.typeFilter);
     let newCountries = Object.assign([], this.state.countryFilter);
+    let newPlaceAttributes = [];
 
     Object.entries(config.body).forEach((entry) => {
       if (entry[0] === "filters") {
@@ -191,11 +194,16 @@ export default class Application extends Component {
         Object.assign([], entry[1][1]["values"]).forEach((country) => {
           newCountries.push(country);
         });
+      } else if (entry[0] === 'placeAttributes') {
+        Object.assign([], entry[1]).forEach((attribute) => {
+          newPlaceAttributes.push(attribute);
+        });
       }
     });
 
     this.setState({
       serverConfig: config.body,
+      placeAttributes: newPlaceAttributes,
       typeFilter: newTypes,
       countryFilter: newCountries,
       errorMessage: null
@@ -347,27 +355,31 @@ export default class Application extends Component {
   }
 
   validateSchema(response) {
-    let Ajv = require('ajv'); let ajv = new Ajv();
-    let TIPConSchema = require('../../../schemas/TIPConfigResponseSchema');
-    let TIPDisSchema = require('../../../schemas/TIPDistanceResponseSchema');
-    let TIPLocSchema = require('../../../schemas/TIPLocationsResponseSchema');
-    let TIPTripSchema = require('../../../schemas/TIPTripResponseSchema');
-    let TIPType = response.body.requestType; let valid = false;
-    if (TIPType === 'config') { valid = ajv.validate(TIPConSchema, response.body);
-    } else if (TIPType === 'distance') { valid = ajv.validate(TIPDisSchema, response.body);
-    } else if (TIPType === 'locations') { valid = ajv.validate(TIPLocSchema, response.body);
-    } else if (TIPType === 'trip') { valid = ajv.validate(TIPTripSchema, response.body);
+    let Ajv = require('ajv');
+    let ajv = new Ajv();
+    let TIPType = response.body.requestType;
+    let TIPSchema;
+    switch (TIPType) {
+      case 'config':
+        TIPSchema = require('../../../schemas/TIPConfigResponseSchema');
+        break;
+      case 'distance':
+        TIPSchema = require('../../../schemas/TIPDistanceResponseSchema');
+        break;
+      case 'trip':
+        TIPSchema = require('../../../schemas/TIPTripFileSchema');
+        break;
+      case 'locations':
+        TIPSchema = require('../../../schemas/TIPLocationsResponseSchema');
+        break;
     }
-    if(!valid){
-      console.log(ajv.errors);
-      console.log(response.body);
+    if(!ajv.validate(TIPSchema,response.body)){
       this.setState({
         errorMessage: this.createErrorBanner(
             "Server Response Error",
             0,
-            `Response from server does not match ${response.body.requestType} schema`
-        )
-      });
+            `Response from server does not match schema`
+        )});
     }else{
       this.setState({
         errorMessage: null

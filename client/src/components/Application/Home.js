@@ -6,6 +6,7 @@ import DestinationMap from "./DestinationMap";
 import DestinationControls from "./DestinationControls";
 import DestinationList from "./DestinationList";
 import DestinationQuery from "./DestinationQuery";
+import 'ajv'
 
 /*
  * Renders the home page.
@@ -29,6 +30,8 @@ export default class Home extends Component {
     this.renderDestinationQuery = this.renderDestinationQuery.bind(this);
     this.renderDestinationControls = this.renderDestinationControls.bind(this);
     this.addJsonValues = this.addJsonValues.bind(this);
+    this.CreatePolylineList = this.CreatePolylineList.bind(this);
+    this.modifyLong= this.modifyLong.bind(this);
 
     this.state = {
       errorMessage: null,
@@ -53,8 +56,13 @@ export default class Home extends Component {
         <Container>
           {this.state.errorMessage}
           <Row>
-            {this.generateColumn(this.renderMapPane, this.renderDestinationControls)}
-            {this.generateColumn(this.renderDestinationQuery, this.renderDestinations)}
+            <Col>
+              {this.renderMapPane()}
+            </Col>
+              {this.generateColumn(this.renderDestinationControls, this.renderDestinationQuery)}
+            <Col>
+              {this.renderDestinations()}
+            </Col>
           </Row>
         </Container>
     );
@@ -66,7 +74,9 @@ export default class Home extends Component {
               bodyJSX={<DestinationMap
                   userLocation={this.state.userLocation}
                   destinations={this.convertDestinations()}
-                  convertCoordinates={this.props.convertCoordinates}/>}/>
+                  convertCoordinates={this.props.convertCoordinates}
+                  CreatePolylineList={this.CreatePolylineList}
+                  modifyLong={this.modifyLong}/>}/>
     );
   }
 
@@ -87,7 +97,8 @@ export default class Home extends Component {
                   handleLoadJSON={this.handleLoadJSON}
                   handleExportFile={this.handleExportFile}
                   handleUserDestination={this.handleUserDestination}
-                  calculateDistances={this.calculateDistances}/>
+                  calculateDistances={this.calculateDistances}
+                  CreatePolylineList={this.CreatePolylineList}/>
               }/>
     );
   }
@@ -115,6 +126,7 @@ export default class Home extends Component {
                 reverseDestinations={this.props.reverseDestinations}
                 swapDestinations={this.props.swapDestinations}
                 distances={this.state.distances}
+                placeAttributes={this.props.placeAttributes}
                 resetDistances={this.resetDistances}
                 sumDistances={this.sumDistances}/>
               }/>
@@ -264,24 +276,26 @@ export default class Home extends Component {
   }
 
   handleLoadJSON(fileContents) {
-    if (fileContents) {
-      try {
-        let newTrip = JSON.parse(fileContents);
+    let AJV = require('ajv');
+    let ajv = new AJV();
+    let schema = require('../../../schemas/TIPTripFileSchema');
+    try {
+      let newTrip = JSON.parse(fileContents);
+      if (ajv.validate(schema, newTrip)) {
         this.addJsonValues(newTrip);
-
-      } catch (e) {
-        this.setErrorBanner( this.props.createErrorBanner(
-              "File Error",
-              0,
-              "File has invalid JSON TIP Trip format."
-          ));
-      }
-    } else {
-      this.setErrorBanner( this.props.createErrorBanner(
+      } else {
+        this.setErrorBanner(this.props.createErrorBanner(
             "File Error",
             0,
-            "No file has been selected."
+            "File has invalid JSON TIP Trip format."
         ));
+      }
+    } catch (e) {
+      this.setErrorBanner(this.props.createErrorBanner(
+          "File Error",
+          0,
+          "File has invalid JSON TIP Trip format."
+      ));
     }
   }
 
@@ -385,5 +399,82 @@ export default class Home extends Component {
 
   csuOvalGeographicCoordinates() {
     return L.latLng(40.576179, -105.080773);
+  }
+
+  CreatePolylineList() {
+    let polylineList = [];
+    let polyline = [];
+    let origin = [];
+    let previousLatLong = [];
+    let index = 0;
+    let currentLong = 0;
+    this.props.destinations.forEach((destination) => {
+          if (index === 0) {
+            origin = [parseFloat(destination.latitude),
+              this.modifyLong(parseFloat(destination.longitude))];
+            index++;
+          }
+          if (previousLatLong === []) {
+            previousLatLong = origin;
+          } else {
+            currentLong = this.modifyLong(parseFloat(destination.longitude));
+            if (Math.abs(currentLong - previousLatLong[1]) > 180) {
+              if (currentLong > previousLatLong[1]) {
+                polyline = [[previousLatLong[0], previousLatLong[1]],
+                  [parseFloat(destination.latitude), currentLong - 360]];
+                polylineList.push(polyline);
+
+                polyline = [[previousLatLong[0], previousLatLong[1] + 360],
+                  [parseFloat(destination.latitude), currentLong]];
+                polylineList.push(polyline);
+              } else {
+                polyline = [[previousLatLong[0], previousLatLong[1]],
+                  [parseFloat(destination.latitude), currentLong + 360]];
+                polylineList.push(polyline);
+
+                polyline = [[previousLatLong[0], previousLatLong[1] - 360],
+                  [parseFloat(destination.latitude), currentLong]];
+                polylineList.push(polyline);
+              }
+              previousLatLong = [parseFloat(destination.latitude), currentLong];
+            } else {
+              polyline = [previousLatLong, [parseFloat(destination.latitude),
+                this.modifyLong(parseFloat(destination.longitude))]];
+              previousLatLong = polyline[1];
+              polylineList.push(polyline);
+            }
+          }
+        }
+    );
+    if (Math.abs(origin[1] - previousLatLong[1]) > 180) {
+      if (origin[1] > previousLatLong[1]) {
+
+        polyline = [previousLatLong, [origin[0], origin[1] - 360]];
+        polylineList.push(polyline);
+        polyline = [[previousLatLong[0], previousLatLong[1] + 360], origin];
+        polylineList.push(polyline);
+      } else {
+        polyline = [previousLatLong, [origin[0], origin[1] + 360]];
+        polylineList.push(polyline);
+        polyline = [[previousLatLong[0], previousLatLong[1] - 360], origin];
+        polylineList.push(polyline);
+      }
+    } else {
+      polyline = [previousLatLong, origin];
+      polylineList.push(polyline);
+    }
+    polylineList.splice(0,1);
+    return polylineList;
+  }
+
+  modifyLong(long){
+    let retLong=long;
+    if(long>180){
+      retLong=long-360;
+    }
+    else if (long < -180) {
+      retLong=long+360;
+    }
+    return retLong;
   }
 }
