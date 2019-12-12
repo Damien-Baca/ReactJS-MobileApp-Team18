@@ -328,7 +328,7 @@ export default class Home extends Component {
         distances: newDistances.distances
       });
 
-      if (newDistances.options.optimization === 'short') {
+      if (newDistances.options.optimization !== 'none') {
         let nameList = [];
         newDistances.places.forEach((place) => {
           nameList.push(place.name);

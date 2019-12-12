@@ -44,8 +44,6 @@ const buttonNamesInitial = [
   'calculate',
   'optimize',
   'submit_query',
-  'clear_destinations',
-  'reverse_destinations',
 ];
 const validationDummy = () => {
   return true;
