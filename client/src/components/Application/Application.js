@@ -154,6 +154,7 @@ export default class Application extends Component {
               swapDestinations={this.swapDestinations}
               addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
+              markerKill={this.markerKill}
               setDestinations={this.setDestinations}
               reverseDestinations={this.reverseDestinations}
               createErrorBanner={this.createErrorBanner}

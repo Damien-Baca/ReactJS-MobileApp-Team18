@@ -121,6 +121,7 @@ export default class Home extends Component {
                 removeDestination={this.props.removeDestination}
                 reverseDestinations={this.props.reverseDestinations}
                 swapDestinations={this.props.swapDestinations}
+                markerKill={this.props.markerKill}
                 distances={this.state.distances}
                 placeAttributes={this.props.placeAttributes}
                 resetDistances={this.resetDistances}
