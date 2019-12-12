@@ -97,7 +97,8 @@ export default class Home extends Component {
                   handleLoadJSON={this.handleLoadJSON}
                   handleExportFile={this.handleExportFile}
                   handleUserDestination={this.handleUserDestination}
-                  calculateDistances={this.calculateDistances}/>
+                  calculateDistances={this.calculateDistances}
+                  CreatePolylineList={this.CreatePolylineList}/>
               }/>
     );
   }
