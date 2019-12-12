@@ -90,13 +90,7 @@ export default class DestinationMap extends Component {
     });
 
   }
-  handleMarkerIcon() {
-    //setstate for single marker
-    this.setState({
-      markerKill: !this.state.markerKill
-    });
 
-  }
   handlePolylineToggle() {
     //setstate for polylines
     this.setState({

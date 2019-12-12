@@ -7,7 +7,7 @@ export default class DestinationControls extends Component {
     super(props);
 
     this.state = {
-      newDestination: { name: '', latitude: '', longitude: '' },
+      newDestination: { name: '', latitude: '', longitude: '' , iconKill: true},
       valid: { name: false, latitude: false, longitude: false  },
       invalid: { name: false, latitude: false, longitude: false },
       fileContents: null,

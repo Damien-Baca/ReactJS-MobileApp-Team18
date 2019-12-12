@@ -280,6 +280,9 @@ export default class Application extends Component {
       destinations: newDestinationList
     });
   }
+  markerKill(index) {
+
+  }
 
   validation(name, value){
     let valid = false;
