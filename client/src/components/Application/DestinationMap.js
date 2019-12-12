@@ -193,11 +193,24 @@ export default class DestinationMap extends Component {
     }
 
     let margin = 0.02;
-    return L.latLngBounds(
-        L.latLng(boundaries.max.latitude + margin,
-            boundaries.min.longitude - margin),
-        L.latLng(boundaries.min.latitude - margin,
-            boundaries.max.longitude + margin));
+    let maxLong=boundaries.max.longitude + margin;
+    let minLong=boundaries.min.longitude - margin;
+    console.log(boundaries.max.latitude+margin,minLong);
+    console.log(boundaries.min.latitude+margin,maxLong);
+    if(maxLong>180||minLong<-180){
+      console.log('cool');
+      return L.latLngBounds(
+          L.latLng(boundaries.max.latitude + margin,
+              -180),
+          L.latLng(boundaries.min.latitude - margin,
+              180));
+    }else {
+      return L.latLngBounds(
+          L.latLng(boundaries.max.latitude + margin,
+              maxLong),
+          L.latLng(boundaries.min.latitude - margin,
+              minLong));
+    }
   }
 
   destinationsBound(boundaries) {

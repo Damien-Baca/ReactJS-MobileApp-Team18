@@ -46,7 +46,9 @@
         "enum": [
           "none",
           "short",
-          "shorter"
+          "shorter",
+          "shortest",
+          "automatic"
         ]
       },
       "minItems": 2,
