@@ -16,7 +16,6 @@ export default class DestinationMap extends Component {
     super(props);
     this.state={
       markerFlag: false,
-      markerKill: false,
       polylineFlag: true,
       iconColor: false,
       prevInd: -1,

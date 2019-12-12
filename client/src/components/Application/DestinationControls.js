@@ -11,7 +11,7 @@ export default class DestinationControls extends Component {
       valid: { name: false, latitude: false, longitude: false  },
       invalid: { name: false, latitude: false, longitude: false },
       fileContents: null,
-      iconKill: false
+      iconKill: false //whether or not to render
     };
   }
 

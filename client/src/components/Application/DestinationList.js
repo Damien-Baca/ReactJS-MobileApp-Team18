@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, ListGroup, ListGroupItem, Row} from "reactstrap";
 import MaterialTable from "material-table";
-import {MdDeleteForever, MdArrowDownward, MdArrowUpward, MdVerticalAlignTop, MDRoom} from "react-icons/md"
+import {MdDeleteForever, MdArrowDownward, MdArrowUpward, MdVerticalAlignTop, MdRoom} from "react-icons/md"
 
 export default class DestinationList extends Component {
   constructor(props) {
@@ -29,11 +29,6 @@ export default class DestinationList extends Component {
       onClick: (event, rowData) =>
           this.handleSwapDestinations(rowData.tableData.id,
               rowData.tableData.id - 1)
-    }, {
-      icon:MDRoom,
-      toolTip: 'Toggle Marker',
-      onClick: (event,rowData) =>
-          this.handleMarkerIcon(rowData.tableData.id) // passing index so state mem of dest list can be changed
     }];
 
     this.state = {
@@ -115,6 +110,8 @@ export default class DestinationList extends Component {
           actions={this.state.actions}
           data={setData()}
           options={{search: true}}
+          onRowClick={ (event,rowData) =>
+              this.handleMarkerIcon(rowData.tableData.id) }
           />
     );
   }
