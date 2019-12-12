@@ -57,6 +57,7 @@ export default class DestinationControls extends Component {
           {this.generateCoordinateInput()}
           {this.renderAddDestinationButton()}
           {this.renderAddUserDestinationButton()}
+          {this.renderFindALocation()}
           {this.renderJSONInput()}
           {this.renderAddJSONButton()}
           {this.renderExportFileButton()}
@@ -140,7 +141,20 @@ export default class DestinationControls extends Component {
         key='button_add_user_destination'
         active={true}
         onClick={() => this.handleUserDestination()}>
-        Add User Location
+        Add Use r Location
+      </Button>
+    );
+  }
+
+  renderFindALocation() {
+    return (
+      <Button
+          className='btn-csu w-100 text-left'
+          name='find_a_location'
+          key='button_find_a_location'
+          active={true}
+          onClick={() => {}}>
+        Find a Location
       </Button>
     );
   }

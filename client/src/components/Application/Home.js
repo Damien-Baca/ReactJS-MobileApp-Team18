@@ -243,7 +243,9 @@ export default class Home extends Component {
 
   handleExportFile() {
     let saveTrip = { "requestType"    : "trip", "requestVersion" : 5,
-      "options"        : {"optimization" : "none"},
+      "options"        : {"title": "My Trip",
+        "earthRadius": this.props.options.units[this.props.options.activeUnit].toString(),
+        "optimization" : "none"},
       "places"         : this.props.destinations,
       "distances"      : this.state.distances
     };
