@@ -111,7 +111,7 @@ export default class DestinationMap extends Component {
           markerList.push(Object.assign({}, {
             latitude: destination.latitude,
             name: destination.name,
-            longitude: this.modifyLong(destination.longitude)
+            longitude: this.props.modifyLong(destination.longitude)
           }))
         }
       });
