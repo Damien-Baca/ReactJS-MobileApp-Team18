@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import MaterialTable from "material-table";
 import {Search, Clear, FirstPage, LastPage, ArrowForward, ArrowBack, ArrowUpward, ArrowDownward, VerticalAlignTop, DeleteForever, DeleteRounded, SwapCallsRounded} from "@material-ui/icons";
+import { useState, useEffect } from 'react';
 
 export default class DestinationList extends Component {
   constructor(props) {
     super(props);
+
+    this.calculateColumnLife = this.calculateColumnLife.bind(this);
 
     let actionList = [{
       icon: DeleteForever,
@@ -43,11 +46,12 @@ export default class DestinationList extends Component {
     this.state = {
       columns: [
         {title: 'Name', field: 'name'},
-        {title: 'Latitude', field: 'latitude'},
-        {title: 'Longitude', field: 'longitude'},
-        {title: 'Leg Distance', field: 'legDistance'},
-        {title: 'Cumulative Distance', field: 'cumulativeDistance'}],
+        {title: 'Latitude', field: 'latitude', hidden: this.state.viewPort > 0},
+        {title: 'Longitude', field: 'longitude', hidden: this.state.viewPort > 1},
+        {title: 'Leg Distance', field: 'legDistance', hidden: this.state.viewPort > 2},
+        {title: 'Cumulative Distance', field: 'cumulativeDistance', hidden: this.state.viewPort > 3}],
       actions: actionList,
+      viewPort: this.getViewPort()
     }
   }
 
@@ -88,11 +92,11 @@ export default class DestinationList extends Component {
             FirstPage: FirstPage,
             LastPage: LastPage,
             PreviousPage: ArrowBack,
-            NextPage: ArrowForward
+            NextPage: ArrowForward,
+            SortArrow: ArrowUpward
           }}
           options={{
             search: true
-
           }}
           />
     );
@@ -116,5 +120,23 @@ export default class DestinationList extends Component {
   handleSwapDestinations(index1, index2) {
     this.props.swapDestinations(index1, index2);
     this.props.resetDistances();
+  }
+
+  getViewPort() {
+
+  }
+
+  calculateColumnLife() {
+    let newViewPort = 0;
+
+    if (this.state.viewPort <= 425) {
+      newViewPort = 0;
+    }
+
+    if (newViewPort !== this.state.viewPort) {
+      this.setState({
+        viewPort: newViewPort
+      })
+    }
   }
 }

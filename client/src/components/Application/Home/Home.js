@@ -367,7 +367,6 @@ export default class Home extends Component {
     return markerList;
   }
 
-
   addJsonValues(newTrip) {
     let newState = {
       errorMessage: null,
