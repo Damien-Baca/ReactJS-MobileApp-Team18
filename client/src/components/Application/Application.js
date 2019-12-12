@@ -42,7 +42,7 @@ export default class Application extends Component {
       planOptions: {
         units: {'miles': 3958.8, 'kilometers': 6371, 'nautical miles': 3440.1},
         activeUnit: 'miles',
-        optimizations: ['none', 'short', 'shorter'],
+        optimizations: ['none', 'short', 'shorter', 'shortest'],
         activeOptimization: 'short',
         formats: ['json', 'csv'],
         activeFileFormat: 'json'
@@ -357,27 +357,31 @@ export default class Application extends Component {
   }
 
   validateSchema(response) {
-    let Ajv = require('ajv'); let ajv = new Ajv();
-    let TIPConSchema = require('../../../schemas/TIPConfigResponseSchema');
-    let TIPDisSchema = require('../../../schemas/TIPDistanceResponseSchema');
-    let TIPLocSchema = require('../../../schemas/TIPLocationsResponseSchema');
-    let TIPTripSchema = require('../../../schemas/TIPTripResponseSchema');
-    let TIPType = response.body.requestType; let valid = false;
-    if (TIPType === 'config') { valid = ajv.validate(TIPConSchema, response.body);
-    } else if (TIPType === 'distance') { valid = ajv.validate(TIPDisSchema, response.body);
-    } else if (TIPType === 'locations') { valid = ajv.validate(TIPLocSchema, response.body);
-    } else if (TIPType === 'trip') { valid = ajv.validate(TIPTripSchema, response.body);
+    let Ajv = require('ajv');
+    let ajv = new Ajv();
+    let TIPType = response.body.requestType;
+    let TIPSchema;
+    switch (TIPType) {
+      case 'config':
+        TIPSchema = require('../../../schemas/TIPConfigResponseSchema');
+        break;
+      case 'distance':
+        TIPSchema = require('../../../schemas/TIPDistanceResponseSchema');
+        break;
+      case 'trip':
+        TIPSchema = require('../../../schemas/TIPTripFileSchema');
+        break;
+      case 'locations':
+        TIPSchema = require('../../../schemas/TIPLocationsResponseSchema');
+        break;
     }
-    if(!valid){
-      console.log(ajv.errors);
-      console.log(response.body);
+    if(!ajv.validate(TIPSchema,response.body)){
       this.setState({
         errorMessage: this.createErrorBanner(
             "Server Response Error",
             0,
-            `Response from server does not match ${response.body.requestType} schema`
-        )
-      });
+            `Response from server does not match schema`
+        )});
     }else{
       this.setState({
         errorMessage: null
