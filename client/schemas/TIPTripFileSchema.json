@@ -8,7 +8,7 @@
     "requestVersion": {
       "description":"the TIP protocol version",
       "type":"integer",
-      "minimum": 2
+      "minimum": 1
     },
     "requestType": {
       "description":"the TIP object type should be itinerary",
@@ -45,10 +45,7 @@
     },
     "distances": {
       "description": "distances between corresponding places",
-      "type":"array",
-      "items": {
-        "type":"integer"
-      },
+      "type": ["array","null"],
       "minitems": 0
     }
   },

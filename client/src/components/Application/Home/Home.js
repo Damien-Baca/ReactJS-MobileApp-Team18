@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import 'leaflet/dist/leaflet.css';
-import Pane from './Pane'
+import Pane from '../Pane'
 import DestinationMap from "./DestinationMap";
 import DestinationControls from "./DestinationControls";
 import DestinationList from "./DestinationList";
@@ -34,6 +34,7 @@ export default class Home extends Component {
     this.modifyLong= this.modifyLong.bind(this);
 
     this.state = {
+      markerFlag: true,
       errorMessage: null,
       userLocation: {
         name: 'Colorado State University',
@@ -60,6 +61,8 @@ export default class Home extends Component {
               {this.renderMapPane()}
             </Col>
               {this.generateColumn(this.renderDestinationControls, this.renderDestinationQuery)}
+          </Row>
+          <Row>
             <Col>
               {this.renderDestinations()}
             </Col>
@@ -72,6 +75,7 @@ export default class Home extends Component {
     return (
         <Pane header={'Where Am I?'}
               bodyJSX={<DestinationMap
+                  handleMarkerToggle={this.props.handleMarkerToggle}
                   userLocation={this.state.userLocation}
                   destinations={this.convertDestinations()}
                   convertCoordinates={this.props.convertCoordinates}
@@ -125,8 +129,10 @@ export default class Home extends Component {
                 removeDestination={this.props.removeDestination}
                 reverseDestinations={this.props.reverseDestinations}
                 swapDestinations={this.props.swapDestinations}
+                markerKill={this.props.markerKill}
                 distances={this.state.distances}
                 placeAttributes={this.props.placeAttributes}
+                calculateDistances={this.calculateDistances}
                 resetDistances={this.resetDistances}
                 sumDistances={this.sumDistances}/>
               }/>
@@ -243,7 +249,9 @@ export default class Home extends Component {
 
   handleExportFile() {
     let saveTrip = { "requestType"    : "trip", "requestVersion" : 5,
-      "options"        : {"optimization" : "none"},
+      "options"        : {"title": "My Trip",
+        "earthRadius": this.props.options.units[this.props.options.activeUnit].toString(),
+        "optimization" : "none"},
       "places"         : this.props.destinations,
       "distances"      : this.state.distances
     };
@@ -278,7 +286,7 @@ export default class Home extends Component {
   handleLoadJSON(fileContents) {
     let AJV = require('ajv');
     let ajv = new AJV();
-    let schema = require('../../../schemas/TIPTripFileSchema');
+    let schema = require('../../../../schemas/TIPTripFileSchema');
     try {
       let newTrip = JSON.parse(fileContents);
       if (ajv.validate(schema, newTrip)) {
@@ -336,7 +344,7 @@ export default class Home extends Component {
         distances: newDistances.distances
       });
 
-      if (newDistances.options.optimization === 'short') {
+      if (newDistances.options.optimization !== 'none') {
         let nameList = [];
         newDistances.places.forEach((place) => {
           nameList.push(place.name);
@@ -374,7 +382,6 @@ export default class Home extends Component {
 
     return markerList;
   }
-
 
   addJsonValues(newTrip) {
     let newState = {
