@@ -42,18 +42,20 @@ public class TIPTrip extends TIPHeader {
   @Override
   public void buildResponse() {
     Double earthRadius = Double.parseDouble((String) options.get("earthRadius"));
+    Object opt = options.get("optimization");
 
-    if (options.get("optimization").equals("short")) {
+    int num_places = places.length;
+    boolean auto = opt.equals("automatic");
+
+    // CONSTANT VALUES SHOULD BE CHANGED AFTER BENCHMARKING!! (Delete This After)
+    if ((auto && num_places <= 50) || opt.equals("shortest")) {       // Shortest - 3 Opt
+      places = new OptimizeTrip().shortestTrip(places, earthRadius);
+    } else if ((auto && num_places <= 200) || opt.equals("shorter")) { // Shorter - 2 Opt
+      places = new OptimizeTrip().shorterTrip(places, earthRadius);
+    } else if ((auto && num_places <= 1000) || opt.equals("short")) { // Short - NN
       places = new OptimizeTrip().shortTrip(places, earthRadius);
     }
 
-    if (options.get("optimization").equals("shorter")) {
-      places = new OptimizeTrip().shorterTrip(places, earthRadius);
-    }
-
-    if (options.get("optimization").equals("shortest")) {
-      places = new OptimizeTrip().shortestTrip(places, earthRadius);
-    }
 
     for (int i = 0; i < this.places.length; ++i) {
       Map origin = places[i];

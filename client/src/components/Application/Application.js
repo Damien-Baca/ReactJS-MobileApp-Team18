@@ -44,8 +44,8 @@ export default class Application extends Component {
       planOptions: {
         units: {'miles': 3958.8, 'kilometers': 6371, 'nautical miles': 3440.1},
         activeUnit: 'miles',
-        optimizations: ['none', 'short', 'shorter', 'shortest'],
-        activeOptimization: 'short',
+        optimizations: ['none', 'short', 'shorter', 'shortest', 'automatic'],
+        activeOptimization: 'automatic',
         formats: ['json', 'csv'],
         activeFileFormat: 'json'
       },
