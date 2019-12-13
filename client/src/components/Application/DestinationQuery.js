@@ -193,7 +193,7 @@ export default class DestinationQuery extends Component {
     Object.keys(this.state.places[index]).forEach((key) => {
       newDestination[key] = this.state.places[index][key]
     });
-
+    newDestination.add('iconKill', true);
     this.props.addDestinations([newDestination]);
     this.props.calculateDistances("none");
   }

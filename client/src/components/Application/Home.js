@@ -34,11 +34,13 @@ export default class Home extends Component {
     this.modifyLong= this.modifyLong.bind(this);
 
     this.state = {
+      markerFlag: true,
       errorMessage: null,
       userLocation: {
         name: 'Colorado State University',
         latitude: this.csuOvalGeographicCoordinates().lat,
         longitude: this.csuOvalGeographicCoordinates().lng
+
       },
       distances: null,
       optimizations: null
@@ -72,6 +74,7 @@ export default class Home extends Component {
     return (
         <Pane header={'Where Am I?'}
               bodyJSX={<DestinationMap
+                  handleMarkerToggle={this.props.handleMarkerToggle}
                   userLocation={this.state.userLocation}
                   destinations={this.convertDestinations()}
                   convertCoordinates={this.props.convertCoordinates}
@@ -125,6 +128,7 @@ export default class Home extends Component {
                 removeDestination={this.props.removeDestination}
                 reverseDestinations={this.props.reverseDestinations}
                 swapDestinations={this.props.swapDestinations}
+                markerKill={this.props.markerKill}
                 distances={this.state.distances}
                 placeAttributes={this.props.placeAttributes}
                 calculateDistances={this.calculateDistances}

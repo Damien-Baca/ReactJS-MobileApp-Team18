@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Button, ListGroup, ListGroupItem, Row} from "reactstrap";
 import MaterialTable from "material-table";
-import {MdDeleteForever, MdArrowDownward, MdArrowUpward, MdVerticalAlignTop} from "react-icons/md"
+import {MdDeleteForever, MdArrowDownward, MdArrowUpward, MdVerticalAlignTop, MdRoom} from "react-icons/md"
 
 export default class DestinationList extends Component {
   constructor(props) {
     super(props);
+
+    this.handleMarkerIcon = this.handleMarkerIcon.bind(this);
 
     let actionList = [{
       icon: MdDeleteForever,
@@ -15,8 +17,8 @@ export default class DestinationList extends Component {
     }, {
       icon: MdVerticalAlignTop,
       toolTip: 'Start Here',
-      onClick: (event, rowData) => this.handleSwapDestinations(
-          rowData.tableData.id)
+      onClick: (event, rowData) =>
+          this.handleSwapDestinations(rowData.tableData.id)
     }, {
       icon: MdArrowDownward,
       toolTip: 'Move Down',
@@ -110,6 +112,8 @@ export default class DestinationList extends Component {
           actions={this.state.actions}
           data={setData()}
           options={{search: true}}
+          onRowClick={ (event,rowData) =>
+              this.handleMarkerIcon(rowData.tableData.id) }
           />
     );
   }
@@ -132,5 +136,8 @@ export default class DestinationList extends Component {
   handleSwapDestinations(index1, index2) {
     this.props.swapDestinations(index1, index2);
     this.props.calculateDistances("none");
+  }
+  handleMarkerIcon(index) {
+    this.props.markerKill(index);
   }
 }
