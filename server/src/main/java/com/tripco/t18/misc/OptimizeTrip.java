@@ -66,8 +66,9 @@ public class OptimizeTrip {
 	boolean improvement = true;
 
 	int[] newTrip = new int[trip.length];
-    for(int i : trip)
-    	newTrip[i] = trip[(i + zeroOffset) % places.length];
+    for(int i : trip) {
+      newTrip[i] = trip[(i + zeroOffset) % places.length];
+    }
 
   	while(improvement) {
     	improvement = false;
