@@ -9,10 +9,11 @@ export default class DestinationControls extends Component {
     super(props);
 
     this.state = {
-      newDestination: { name: '', latitude: '', longitude: '' },
+      newDestination: { name: '', latitude: '', longitude: ''},
       valid: { name: false, latitude: false, longitude: false  },
       invalid: { name: false, latitude: false, longitude: false },
-      fileContents: null
+      fileContents: null,
+
     };
   }
 
@@ -218,7 +219,8 @@ export default class DestinationControls extends Component {
       this.setState({
         newDestination: { name: '', latitude: '', longitude: '' },
         valid: superFalse,
-        invalid: superFalse
+        invalid: superFalse,
+
       });
       this.props.resetDistances();
     } else {

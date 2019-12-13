@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Container} from 'reactstrap';
 
-import Home from './Home';
+import Home from './Home/Home';
 import Options from './Options/Options';
 import Calculator from './Calculator/Calculator';
 import About from './About/About';
@@ -36,13 +36,15 @@ export default class Application extends Component {
     this.sendServerRequest = this.sendServerRequest.bind(this);
     this.handleServerResponse = this.handleServerResponse.bind(this);
     this.validateSchema = this.validateSchema.bind(this);
+    this.markerKill = this.markerKill.bind(this);
+    this.handleMarkerToggle = this.handleMarkerToggle.bind(this);
 
     this.state = {
       serverConfig: null,
       planOptions: {
         units: {'miles': 3958.8, 'kilometers': 6371, 'nautical miles': 3440.1},
         activeUnit: 'miles',
-        optimizations: ['none', 'short', 'shorter'],
+        optimizations: ['none', 'short', 'shorter', 'shortest'],
         activeOptimization: 'short',
         formats: ['json', 'csv'],
         activeFileFormat: 'json'
@@ -153,12 +155,14 @@ export default class Application extends Component {
               swapDestinations={this.swapDestinations}
               addDestinations={this.addDestinations}
               removeDestination={this.removeDestination}
+              markerKill={this.markerKill}
               setDestinations={this.setDestinations}
               reverseDestinations={this.reverseDestinations}
               createErrorBanner={this.createErrorBanner}
               convertCoordinates={this.convertCoordinates}
               validation={this.validation}
               validateCoordinates={this.validateCoordinates}
+              handleMarkerToggle={this.handleMarkerToggle}
               sendServerRequest={this.sendServerRequest}/>
     );
   }
@@ -215,6 +219,7 @@ export default class Application extends Component {
       let newDestinationList = Object.assign([], this.state.destinations);
 
       newDestinations.forEach((destination, offset) => {
+        destination.iconKill = true;
         newDestinationList.splice(index + offset, 0, destination);
       });
 
@@ -238,16 +243,18 @@ export default class Application extends Component {
   }
 
   reverseDestinations() {
-    let newDestinations = [];
-    Object.assign(newDestinations,
-        this.state.destinations.slice(1).reverse());
+    if (this.state.destinations.length > 0) {
+      let newDestinations = [];
+      Object.assign(newDestinations,
+          this.state.destinations.slice(1).reverse());
 
-    newDestinations.splice(0,0,
-        Object.assign({}, this.state.destinations[0]));
+      newDestinations.splice(0, 0,
+          Object.assign({}, this.state.destinations[0]));
 
-    this.setState({
-      destinations: newDestinations
-    });
+      this.setState({
+        destinations: newDestinations
+      });
+    }
   }
 
   setDestinations(names) {
@@ -278,6 +285,26 @@ export default class Application extends Component {
     this.setState({
       destinations: newDestinationList
     });
+  }
+  markerKill(index) {
+    let inv = Object.assign( [], this.state.destinations);
+    inv[index].iconKill = !inv[index].iconKill;
+    this.setState({
+      destinations: inv
+    });
+  }
+  handleMarkerToggle() {
+    //setstate for all markers
+    let markerFlag = !this.state.markerFlag;
+    let temp = Object.assign([], this.state.destinations);
+    temp.forEach((destination) =>{
+      destination.iconKill = markerFlag;
+    });
+    this.setState({
+      markerFlag: !this.state.markerFlag,
+      destinations: temp
+    });
+
   }
 
   validation(name, value){
