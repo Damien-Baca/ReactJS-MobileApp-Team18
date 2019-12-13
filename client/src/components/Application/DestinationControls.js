@@ -57,9 +57,7 @@ export default class DestinationControls extends Component {
           {this.generateCoordinateInput()}
           {this.renderAddDestinationButton()}
           {this.renderAddUserDestinationButton()}
-          {this.renderFindALocation()}
           {this.renderJSONInput()}
-          {this.renderAddJSONButton()}
           {this.renderExportFileButton()}
         </FormGroup>
       </Form>
@@ -146,19 +144,6 @@ export default class DestinationControls extends Component {
     );
   }
 
-  renderFindALocation() {
-    return (
-      <Button
-          className='btn-csu w-100 text-left'
-          name='find_a_location'
-          key='button_find_a_location'
-          active={true}
-          onClick={() => {}}>
-        Find a Location
-      </Button>
-    );
-  }
-
   renderJSONInput () {
     return (
       <Input type='file'
@@ -166,20 +151,6 @@ export default class DestinationControls extends Component {
              key='input_json_file'
              name='json_file'
              onChange={event => this.onFileChange(event)}/>
-    );
-  }
-
-  renderAddJSONButton () {
-    return (
-      <Button
-        className='btn-csu w-100 text-left'
-        name='loadJSON'
-        key='button_loadJSON'
-        active={true}
-        disabled={this.state.fileContents === null}
-        onClick={() => this.props.handleLoadJSON(this.state.fileContents)}>
-        Import JSON
-      </Button>
     );
   }
 
@@ -217,7 +188,7 @@ export default class DestinationControls extends Component {
         valid: superFalse,
         invalid: superFalse
       });
-      this.props.resetDistances();
+      this.props.calculateDistances("none");
     } else {
       this.props.setErrorBanner(this.props.createErrorBanner(
         'Invalid Coordinates',
@@ -229,7 +200,7 @@ export default class DestinationControls extends Component {
 
   handleUserDestination () {
     this.props.addDestinations([Object.assign({}, this.props.userLocation)]);
-    this.props.resetDistances();
+    this.props.calculateDistances("none");
   }
 
   setValidState (name, value, valid, invalid) {
@@ -248,7 +219,7 @@ export default class DestinationControls extends Component {
 
   onFileChange (event) {
     let callback = (string) => {
-      this.setState({ fileContents: string });
+      this.props.handleLoadJSON(string);
     };
     let fileIn = event.target;
     if (fileIn) {

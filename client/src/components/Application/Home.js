@@ -127,6 +127,7 @@ export default class Home extends Component {
                 swapDestinations={this.props.swapDestinations}
                 distances={this.state.distances}
                 placeAttributes={this.props.placeAttributes}
+                calculateDistances={this.calculateDistances}
                 resetDistances={this.resetDistances}
                 sumDistances={this.sumDistances}/>
               }/>
@@ -333,6 +334,7 @@ export default class Home extends Component {
 
   setDistances(newDistances) {
     if (newDistances !== null) {
+      console.log("Life is Suffering");
       this.setState({
         errorMessage: newDistances.errorMessage,
         distances: newDistances.distances

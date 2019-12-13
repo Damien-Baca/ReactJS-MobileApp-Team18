@@ -121,16 +121,16 @@ export default class DestinationList extends Component {
 
   handleReverseDestinations() {
     this.props.reverseDestinations();
-    this.props.resetDistances();
+    this.props.calculateDistances("none");
   }
 
   handleRemoveDestination(index) {
     this.props.removeDestination(index);
-    this.props.resetDistances();
+    this.props.calculateDistances("none");
   }
 
   handleSwapDestinations(index1, index2) {
     this.props.swapDestinations(index1, index2);
-    this.props.resetDistances();
+    this.props.calculateDistances("none");
   }
 }

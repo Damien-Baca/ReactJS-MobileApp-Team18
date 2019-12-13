@@ -45,15 +45,7 @@
     },
     "distances": {
       "description": "distances between corresponding places",
-      "anyOf": [
-        {"type": "array",
-        "items": {
-          "type":"integer"
-        }},
-        {
-          "type": "null"
-        }
-      ],
+      "type": ["array","null"],
       "minitems": 0
     }
   },
