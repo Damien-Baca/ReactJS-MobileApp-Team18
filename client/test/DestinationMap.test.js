@@ -1,6 +1,6 @@
 import './enzyme.config.js'
 import React from 'react'
-import DestinationMap from "../src/components/Application/DestinationMap";
+import DestinationMap from "../src/components/Application/Home/DestinationMap";
 import {shallow} from 'enzyme'
 
 const newDestinations = [{
