@@ -190,11 +190,15 @@ export default class DestinationMap extends Component {
     }
 
     let margin = 0.02;
+    let maxLat=boundaries.max.latitude + margin;
+    let minLat=boundaries.min.latitude - margin;
+    let maxLong=boundaries.max.longitude + margin;
+    let minLong=boundaries.min.longitude - margin;
+    if(maxLong<-140 && Math.abs(maxLong-minLong)>180){maxLong=-110;}
+    if(minLong>140 && Math.abs(maxLong-minLong)>180){minLong=110;}
     return L.latLngBounds(
-        L.latLng(boundaries.max.latitude + margin,
-            boundaries.min.longitude - margin),
-        L.latLng(boundaries.min.latitude - margin,
-            boundaries.max.longitude + margin));
+        L.latLng(maxLat, minLong),
+        L.latLng(minLat, maxLong));
   }
 
   destinationsBound(boundaries) {
