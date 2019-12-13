@@ -44,25 +44,18 @@ public class TIPTrip extends TIPHeader {
     Double earthRadius = Double.parseDouble((String) options.get("earthRadius"));
     Object opt = options.get("optimization");
 
-    if(opt.equals("automatic")) {
-      int num_places = places.length;
+    int num_places = places.length;
+    boolean auto = opt.equals("automatic");
 
-      // CONSTANT VALUES SHOULD BE CHANGED AFTER BENCHMARKING!! (Delete This After)
-      if(num_places <= 1) {       // Shortest - 3 Opt
-        places = new OptimizeTrip().shortestTrip(places, earthRadius);
-      }else if(num_places <= 2) { // Shorter - 2 Opt
-        places = new OptimizeTrip().shorterTrip(places, earthRadius);
-      }else if(num_places <= 3) { // Short - NN
-        places = new OptimizeTrip().shortTrip(places, earthRadius);
-      }
-    }
-    else if (opt.equals("short")) {
-      places = new OptimizeTrip().shortTrip(places, earthRadius);
-    }else if (opt.equals("shorter")) {
-      places = new OptimizeTrip().shorterTrip(places, earthRadius);
-    }else if (opt.equals("shortest")) {
+    // CONSTANT VALUES SHOULD BE CHANGED AFTER BENCHMARKING!! (Delete This After)
+    if ((auto && num_places <= 50) || opt.equals("shortest")) {       // Shortest - 3 Opt
       places = new OptimizeTrip().shortestTrip(places, earthRadius);
+    } else if ((auto && num_places <= 200) || opt.equals("shorter")) { // Shorter - 2 Opt
+      places = new OptimizeTrip().shorterTrip(places, earthRadius);
+    } else if ((auto && num_places <= 1000) || opt.equals("short")) { // Short - NN
+      places = new OptimizeTrip().shortTrip(places, earthRadius);
     }
+
 
     for (int i = 0; i < this.places.length; ++i) {
       Map origin = places[i];

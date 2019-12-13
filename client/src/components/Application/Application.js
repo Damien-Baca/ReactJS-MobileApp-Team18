@@ -43,7 +43,7 @@ export default class Application extends Component {
         units: {'miles': 3958.8, 'kilometers': 6371, 'nautical miles': 3440.1},
         activeUnit: 'miles',
         optimizations: ['none', 'short', 'shorter', 'shortest', 'automatic'],
-        activeOptimization: 'short',
+        activeOptimization: 'automatic',
         formats: ['json', 'csv'],
         activeFileFormat: 'json'
       },
