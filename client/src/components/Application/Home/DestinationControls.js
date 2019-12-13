@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Container, Form, FormGroup, Input, Label, Row} from "reactstrap";
-import worldMapBackground from './worldmap.js';
+import worldMapBackground from '../worldmap.js';
 
 
 
@@ -270,18 +270,18 @@ export default class DestinationControls extends Component {
 
   kmlWrite () {
     let file = " ";
-    var header = "<?xml version=" + "\"1.0\"" + " encoding=" + "\"UTF-8\"" + "?> \n\
+    let header = "<?xml version=" + "\"1.0\"" + " encoding=" + "\"UTF-8\"" + "?> \n\
 <kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
 
-    var body = "<Document>\n\
+    let body = "<Document>\n\
 \
-"
-    var list="";
-    var endOflist='';
+";
+    let list="";
+    let endOflist='';
     if (typeof this.props.destinations.altitude==='undefined'){
 
-      for (var i = 0; i < this.props.destinations.length; i++) {
-        var name='';
+      for (let i = 0; i < this.props.destinations.length; i++) {
+        let name='';
         name=this.props.destinations[i].name;
         if ( name.includes('&')){
           name= name.replace(/&/g,'&amp;');
@@ -301,8 +301,8 @@ export default class DestinationControls extends Component {
       }
     }
     else{
-      for (var i = 0; i < this.props.destinations.length; i++) {
-        var name='';
+      for (let i = 0; i < this.props.destinations.length; i++) {
+        let name='';
         name=this.props.destinations[i].name;
         if ( name.includes('&')){
           name= name.replace(/&/g,'&amp;');
@@ -321,7 +321,7 @@ export default class DestinationControls extends Component {
        endOflist="\n\t\t\t"+this.props.destinations[0].longitude + "," + this.props.destinations[0].latitude + ","+this.props.destinations[0].altitude
       }}
 
-    var footer = "\
+    let footer = "\
 \t<Placemark>\n\
 \t\t<name>trip lines</name>\n\
 \t\t<LineString>\n\
@@ -332,9 +332,9 @@ export default class DestinationControls extends Component {
 
     file = header + body + footer;
 
-    var data = new Blob([file], { type: 'text/plain' });
-    var URL = window.URL.createObjectURL(data);
-    var tempLink = document.createElement('a');
+    let data = new Blob([file], { type: 'text/plain' });
+    let URL = window.URL.createObjectURL(data);
+    let tempLink = document.createElement('a');
     tempLink.href = URL;
     tempLink.setAttribute('download', 'Trip.kml');
     tempLink.click();
@@ -342,7 +342,7 @@ export default class DestinationControls extends Component {
 
   saveSVG(){
     let file="";
-    var coords=[];
+    let coords=[];
     if(this.props.destinations.length>1){
       coords=this.props.CreatePolylineList();
     }
@@ -351,12 +351,12 @@ export default class DestinationControls extends Component {
        polyLines=polyLines.concat(
         "<polyline points=\"" + line + "\"\n" +
         "style=\"fill:none;stroke:#5d00ff;stoke-width:.1;\"/>\n");
-    })
+    });
     file=worldMapBackground+"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100% \" viewBox=\"-90 -90 180 180\">\n" +
       "<g transform=\"rotate(270)\">\n" +polyLines+"</g>\n" + "</svg></svg>";
-    var data = new Blob([file], { type: 'image/svg+xml' });
-    var URL = window.URL.createObjectURL(data);
-    var tempLink = document.createElement('a');
+    let data = new Blob([file], { type: 'image/svg+xml' });
+    let URL = window.URL.createObjectURL(data);
+    let tempLink = document.createElement('a');
     tempLink.href = URL;
     tempLink.setAttribute('download', 'MyTrip.SVG');
     tempLink.click();
