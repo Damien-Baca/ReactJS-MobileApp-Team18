@@ -49,69 +49,78 @@ This sprint will complete the following Epics.
 * #269 Map Clutter: Implement features that make the map easier to understand.
 * #370 TIP V5: Update version info and json schemas.
 
-
-
-
 ## Metrics
 
 | Statistic | # Planned | # Completed |
 | --- | ---: | ---: |
-| Epics | 5 | 0 |
-| Tasks |  17   | 0 | 
-| Story Points |  27  | 0 | 
+| Epics | 5 | 5 |
+| Tasks |  17   | 24 | 
+| Story Points |  27  | 27 | 
 
 
 ## Scrums
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *date* | *#task, ...* | *#task, ...* | *none* | 
-
+| 11/18/19 | none | #353,#356,#357,#362,#363,#366,#367,#369,#371,#374 | *none* | 
+| 11/20/19 | none | #353,#356,#357,#362,#363,#366,#367,#369,#371,#374 | *none* |
+| 11/22/19 | none | #353,#356,#357,#362,#363,#366,#367,#369,#371,#374 | *none* |
+| 11/25/19 | none | #353,#356,#357,#362,#363,#366,#367,#369,#371,#374 | *none* |
+| 11/27/19 | none | #353,#356,#357,#362,#363,#366,#367,#369,#371,#374 | *none* |
+| 11/29/19 | none | #353,#356,#357,#362,#363,#366,#367,#369,#371,#374 | *none* |
+| 12/02/19 | #353 | #356,#357,#362,#363,#366,#367,#369,#371,#377,#374 | *none* |
+| 12/04/19 | #363,#366 | #354,#356,#357,#362,#367,#369,#371,#377,#374 | *none* |
+| 12/06/19 | none | #356,#357,#362,#367,#369,#371,#377,#374 | *none* |
+| 12/09/19 | none | #356,#357,#362,#367,#369,#371,#377,#374 | *none* |
+| 12/11/19 | none | #356,#357,#362,#367,#369,#371,#377,#374,#383,#385 | *none* |
+| 12/12/19 | #356,#357,#367,#369,#371,#374,#383,#385,#388,#389 | #362,#377 | *none* |
 
 ## Review (focus on solution and technology)
 
-In this sprint, ...
+In this sprint, we finished a remaining epic from last sprint, added a greater level of optimization, and worked on improving our mobile interface.
 
 #### Completed epics in Sprint Backlog 
 
 These Epics were completed.
 
-* *## epic title: comments*
-* 
+* #358 Ease of Use: Make the application easier to use.
+* #359 Auto Optimization: Let the system automatically optimize trips, as long as the response time is very fast.
+* #265 Save Map: Save the map to KML and SVG
+* #360 Shortest Trip: Optimize for the shortest possible trips.
+* #269 Map Clutter: Implement features that make the map easier to understand.
+* #370 TIP V5: Update version info and json schemas.
 
 #### Incomplete epics in Sprint Backlog 
 
 These Epics were not completed.
 
-* *## epic title: explanation*
-*
+* none
 
 #### What went well
 
-The ...
+We completed all planned epics in addition to an uncompleted epic from last sprint.
 
 
 #### Problems encountered and resolutions
 
-The ...
+Interface was difficult to use on mobile so improvements were made to make it more accesible and small screens.
 
 
 ## Retrospective (focus on people, process, tools)
 
-In this sprint, ...
+This sprint went along more smoothly than the first sprints.
 
 #### What we changed this sprint
 
-Our changes for this sprint included ...
+We started earlier.
+We learned to work better together.
 
 #### What we did well
 
-We ...
+We completed all the epics we planned.
 
 #### What we need to work on
 
-We could improve ...
+We could improve our comfort with JS and REACT.
 
-#### What we will change next sprint 
 
-We will change ...
