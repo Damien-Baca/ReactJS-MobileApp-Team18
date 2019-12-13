@@ -1,6 +1,6 @@
 import './enzyme.config.js'
 import React from 'react'
-import DestinationQuery from "../src/components/Application/DestinationQuery";
+import DestinationQuery from "../src/components/Application/Home/DestinationQuery";
 import {shallow} from 'enzyme'
 
 const newPlaces = [{
