@@ -64,7 +64,6 @@ export default class DestinationControls extends Component {
           {this.renderAddDestinationButton()}
           {this.renderAddUserDestinationButton()}
           {this.renderJSONInput()}
-          {this.renderAddJSONButton()}
           {this.renderExportFileButton()}
         </FormGroup>
       </Form>
@@ -173,20 +172,6 @@ export default class DestinationControls extends Component {
     );
   }
 
-  renderAddJSONButton () {
-    return (
-      <Button
-        className='btn-csu w-100 text-left'
-        name='loadJSON'
-        key='button_loadJSON'
-        active={true}
-        disabled={this.state.fileContents === null}
-        onClick={() => this.props.handleLoadJSON(this.state.fileContents)}>
-        Import JSON
-      </Button>
-    );
-  }
-
   generateCoordinateInput () {
     return (Object.keys(this.state.newDestination).map((field) => (
       <Input type='text'
@@ -222,7 +207,7 @@ export default class DestinationControls extends Component {
         invalid: superFalse,
 
       });
-      this.props.resetDistances();
+      this.props.calculateDistances("none");
     } else {
       this.props.setErrorBanner(this.props.createErrorBanner(
         'Invalid Coordinates',
@@ -234,7 +219,7 @@ export default class DestinationControls extends Component {
 
   handleUserDestination () {
     this.props.addDestinations([Object.assign({}, this.props.userLocation)]);
-    this.props.resetDistances();
+    this.props.calculateDistances("none");
   }
 
   setValidState (name, value, valid, invalid) {
@@ -253,7 +238,7 @@ export default class DestinationControls extends Component {
 
   onFileChange (event) {
     let callback = (string) => {
-      this.setState({ fileContents: string });
+      this.props.handleLoadJSON(string);
     };
     let fileIn = event.target;
     if (fileIn) {

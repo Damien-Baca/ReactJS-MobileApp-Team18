@@ -39,7 +39,6 @@ const buttonNamesInitial = [
   'toggleIconColors',
   'add_new_destination',
   'add_user_destination',
-  'loadJSON',
   'exportFile',
   'save_kml',
   'save_SVG',

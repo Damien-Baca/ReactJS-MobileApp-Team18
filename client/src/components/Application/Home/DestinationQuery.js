@@ -195,7 +195,7 @@ export default class DestinationQuery extends Component {
     });
     newDestination.add('iconKill', true);
     this.props.addDestinations([newDestination]);
-    this.props.resetDistances();
+    this.props.calculateDistances("none");
   }
 
   handleServerSubmission() {

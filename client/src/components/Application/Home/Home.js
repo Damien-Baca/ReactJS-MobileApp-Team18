@@ -123,16 +123,19 @@ export default class Home extends Component {
 
   renderDestinations() {
     return (
-        <DestinationList
-            destinations={this.props.destinations}
-            removeDestination={this.props.removeDestination}
-            reverseDestinations={this.props.reverseDestinations}
-            swapDestinations={this.props.swapDestinations}
-            distances={this.state.distances}
-            placeAttributes={this.props.placeAttributes}
-            markerKill={this.props.markerKill}
-            resetDistances={this.resetDistances}
-            sumDistances={this.sumDistances}/>
+        <Pane header={'Destinations:'}
+              bodyJSX={<DestinationList
+                destinations={this.props.destinations}
+                removeDestination={this.props.removeDestination}
+                reverseDestinations={this.props.reverseDestinations}
+                swapDestinations={this.props.swapDestinations}
+                markerKill={this.props.markerKill}
+                distances={this.state.distances}
+                placeAttributes={this.props.placeAttributes}
+                calculateDistances={this.calculateDistances}
+                resetDistances={this.resetDistances}
+                sumDistances={this.sumDistances}/>
+              }/>
     );
   }
 
@@ -246,7 +249,9 @@ export default class Home extends Component {
 
   handleExportFile() {
     let saveTrip = { "requestType"    : "trip", "requestVersion" : 5,
-      "options"        : {"optimization" : "none"},
+      "options"        : {"title": "My Trip",
+        "earthRadius": this.props.options.units[this.props.options.activeUnit].toString(),
+        "optimization" : "none"},
       "places"         : this.props.destinations,
       "distances"      : this.state.distances
     };
