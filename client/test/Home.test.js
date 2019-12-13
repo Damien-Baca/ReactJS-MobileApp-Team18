@@ -14,6 +14,7 @@ const options = {
 };
 const initialState = {
   errorMessage: null,
+  markerFlag: true,
   userLocation: {
     name: 'Colorado State University',
     latitude: 40.576179,

@@ -34,6 +34,7 @@ export default class Home extends Component {
     this.modifyLong= this.modifyLong.bind(this);
 
     this.state = {
+      markerFlag: true,
       errorMessage: null,
       userLocation: {
         name: 'Colorado State University',
@@ -74,6 +75,7 @@ export default class Home extends Component {
     return (
         <Pane header={'Where Am I?'}
               bodyJSX={<DestinationMap
+                  handleMarkerToggle={this.props.handleMarkerToggle}
                   userLocation={this.state.userLocation}
                   destinations={this.convertDestinations()}
                   convertCoordinates={this.props.convertCoordinates}
@@ -128,6 +130,7 @@ export default class Home extends Component {
             swapDestinations={this.props.swapDestinations}
             distances={this.state.distances}
             placeAttributes={this.props.placeAttributes}
+            markerKill={this.props.markerKill}
             resetDistances={this.resetDistances}
             sumDistances={this.sumDistances}/>
     );

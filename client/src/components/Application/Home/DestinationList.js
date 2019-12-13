@@ -6,6 +6,8 @@ export default class DestinationList extends Component {
   constructor(props) {
     super(props);
 
+    this.handleMarkerIcon = this.handleMarkerIcon.bind(this);
+
     let actionList = [{
       icon: DeleteForever,
       tooltip: 'Clear Destinations',
@@ -43,13 +45,12 @@ export default class DestinationList extends Component {
     this.state = {
       columns: [
         {title: 'Name', field: 'name'},
-        {title: 'Latitude', field: 'latitude', hidden: false},
-        {title: 'Longitude', field: 'longitude', hidden: false},
-        {title: 'Leg Distance', field: 'legDistance', hidden: false},
-        {title: 'Cumulative Distance',
-          field: 'cumulativeDistance', hidden: false}],
-      actions: actionList
-    };
+        {title: 'Latitude', field: 'latitude'},
+        {title: 'Longitude', field: 'longitude'},
+        {title: 'Leg Distance', field: 'legDistance'},
+        {title: 'Cumulative Distance', field: 'cumulativeDistance'}],
+      actions: actionList,
+    }
   }
 
   render() {
@@ -99,6 +100,8 @@ export default class DestinationList extends Component {
             minBodyHeight: 600,
             maxBodyHeight: 600
           }}
+          onRowClick={ (event,rowData) =>
+              this.handleMarkerIcon(rowData.tableData.id) }
           />
     );
   }
@@ -121,5 +124,8 @@ export default class DestinationList extends Component {
   handleSwapDestinations(index1, index2) {
     this.props.swapDestinations(index1, index2);
     this.props.resetDistances();
+  }
+  handleMarkerIcon(index) {
+    this.props.markerKill(index);
   }
 }
