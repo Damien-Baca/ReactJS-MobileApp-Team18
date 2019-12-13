@@ -140,7 +140,7 @@ export default class DestinationControls extends Component {
         key='button_add_user_destination'
         active={true}
         onClick={() => this.handleUserDestination()}>
-        Add Use r Location
+        Add User Location
       </Button>
     );
   }
