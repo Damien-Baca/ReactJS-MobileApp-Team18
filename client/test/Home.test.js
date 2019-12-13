@@ -42,6 +42,7 @@ const buttonNamesInitial = [
   'loadJSON',
   'exportFile',
   'save_kml',
+  'save_SVG',
   'calculate',
   'optimize',
   'submit_query',
