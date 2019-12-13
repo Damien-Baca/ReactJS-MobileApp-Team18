@@ -344,7 +344,6 @@ export default class DestinationControls extends Component {
     if(this.props.destinations.length>1){
       // coords=coords.concat(this.props.destinations[i].longitude.toString() + "," + this.props.destinations[i].latitude.toString()+" ")
       coords=this.props.CreatePolylineList();
-      console.log(coords);
     }
     let polyLines="";
     coords.forEach((line) => {
