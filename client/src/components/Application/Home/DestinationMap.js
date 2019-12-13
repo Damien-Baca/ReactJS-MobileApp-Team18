@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {Map, Marker, Polyline, Popup, TileLayer} from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import icon2 from 'leaflet/dist/images/marker-icon-2x.png';
-import iconY from './About/images/marker-iconY.png';
-import icon2Y from './About/images/marker-icon-2xY.png';
+import iconY from '../About/images/marker-iconY.png';
+import icon2Y from '../About/images/marker-icon-2xY.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import {Button, Container, Row} from "reactstrap";
+
 
 /*
  * Renders a Leaflet Map with Markers and a Polyline.
@@ -15,7 +16,6 @@ export default class DestinationMap extends Component {
   constructor(props) {
     super(props);
     this.state={
-      markerFlag: false,
       polylineFlag: true,
       iconColor: false,
       prevInd: -1,
@@ -66,7 +66,7 @@ export default class DestinationMap extends Component {
                   name='toggleAllMarkers'
                   key='button_toggleAllMarkers'
                   active={true}
-                  onClick={() => this.handleMarkerToggle()}>
+                  onClick={() => this.props.handleMarkerToggle()}>
                 Toggle All Markers
               </Button>
     )
@@ -83,13 +83,8 @@ export default class DestinationMap extends Component {
           </Button>
     )
   }
-  handleMarkerToggle() {
-    //setstate for all markers
-    this.setState({
-      markerFlag: !this.state.markerFlag
-    });
 
-  }
+
   handlePolylineToggle() {
     //setstate for polylines
     this.setState({
@@ -105,19 +100,21 @@ export default class DestinationMap extends Component {
 
 
   generateDestinationMarkers() {
-    if(this.state.markerFlag) {
+
       this.markerSize = [];
       let markerList = [this.props.userLocation];
       if (this.props.destinations.length > 0) {
         markerList = [];
 
       this.props.destinations.forEach((destination) => {
-        this.markerSize.push(false);
-        markerList.push(Object.assign({}, {
-          latitude: destination.latitude,
-          name: destination.name,
-          longitude: this.modifyLong(destination.longitude)
-        }))
+        if(!destination.iconKill) {
+          this.markerSize.push(false);
+          markerList.push(Object.assign({}, {
+            latitude: destination.latitude,
+            name: destination.name,
+            longitude: this.props.modifyLong(destination.longitude)
+          }))
+        }
       });
     }
 
@@ -142,97 +139,27 @@ export default class DestinationMap extends Component {
               </Marker>
           ))
       );
-    }
+
   }
 
 
   renderPolyline() {
-    if(this.state.polylineFlag){
-      let polylineList = [];
-      let polyline = [];
-      let origin = [];
-      let previousLatLong = [];
-      let index = 0;
-      let currentLong = 0;
-      if(this.props.destinations.length>1) {
-        this.props.destinations.forEach((destination) => {
-              if (index === 0) {
-                origin = [parseFloat(destination.latitude),
-                  this.modifyLong(parseFloat(destination.longitude))];
-                index++;
-              }
-              if (previousLatLong === []) {
-                previousLatLong = origin;
-              } else {
-                currentLong = this.modifyLong(parseFloat(destination.longitude));
-                if (Math.abs(currentLong - previousLatLong[1]) > 180) {
-                  if (currentLong > previousLatLong[1]) {
-                    polyline = [[previousLatLong[0], previousLatLong[1]],
-                      [parseFloat(destination.latitude), currentLong - 360]];
-                    polylineList.push(polyline);
-
-                    polyline = [[previousLatLong[0], previousLatLong[1] + 360],
-                      [parseFloat(destination.latitude), currentLong]];
-                    polylineList.push(polyline);
-                  } else {
-                    polyline = [[previousLatLong[0], previousLatLong[1]],
-                      [parseFloat(destination.latitude), currentLong + 360]];
-                    polylineList.push(polyline);
-
-                    polyline = [[previousLatLong[0], previousLatLong[1] - 360],
-                      [parseFloat(destination.latitude), currentLong]];
-                    polylineList.push(polyline);
-                  }
-                  previousLatLong = [parseFloat(destination.latitude), currentLong];
-                } else {
-                  polyline = [previousLatLong, [parseFloat(destination.latitude),
-                    this.modifyLong(parseFloat(destination.longitude))]];
-                  previousLatLong = polyline[1];
-                  polylineList.push(polyline);
-                }
-              }
-            }
-        );
-        if (Math.abs(origin[1] - previousLatLong[1]) > 180) {
-          if (origin[1] > previousLatLong[1]) {
-
-            polyline = [previousLatLong, [origin[0], origin[1] - 360]];
-            polylineList.push(polyline);
-            polyline = [[previousLatLong[0], previousLatLong[1] + 360], origin];
-            polylineList.push(polyline);
-          } else {
-            polyline = [previousLatLong, [origin[0], origin[1] + 360]];
-            polylineList.push(polyline);
-            polyline = [[previousLatLong[0], previousLatLong[1] - 360], origin];
-            polylineList.push(polyline);
-          }
-        } else {
-          polyline = [previousLatLong, origin];
-          polylineList.push(polyline);
-        }
-        polylineList.splice(0,1);
-        polylineList=polylineList.concat(this.addOtherEarthsPolyline(polylineList));
+    let polylineList = [];
+    if (this.state.polylineFlag) {
+      if (this.props.destinations.length > 1) {
+        polylineList = this.props.CreatePolylineList();
+        polylineList = polylineList.concat(
+            this.addOtherEarthsPolyline(polylineList));
       }
-      return (
-          polylineList.map((line) => (
-              <Polyline
-                  color={'blue'}
-                  positions={line}
-              />
-          ))
-      );
     }
-  }
-
-  modifyLong(long){
-    let retLong=long;
-    if(long>180){
-      retLong=long-360;
-    }
-    else if (long < -180) {
-      retLong=long+360;
-    }
-    return retLong;
+    return (
+        polylineList.map((line) => (
+            <Polyline
+                color={'blue'}
+                positions={line}
+            />
+        ))
+    );
   }
 
   addOtherEarthsPolyline(polylineList){
@@ -282,14 +209,14 @@ export default class DestinationMap extends Component {
             latitude: Math.max(boundaries[field].latitude,
                 parseFloat(destination.latitude)),
             longitude: Math.max(boundaries[field].longitude,
-                this.modifyLong(parseFloat(destination.longitude)))
+                this.props.modifyLong(parseFloat(destination.longitude)))
           };
         } else {
           boundaries[field] = {
             latitude: Math.min(boundaries[field].latitude,
                 parseFloat(destination.latitude)),
             longitude: Math.min(boundaries[field].longitude,
-                this.modifyLong(parseFloat(destination.longitude)))
+                this.props.modifyLong(parseFloat(destination.longitude)))
           };
         }
       })
@@ -300,14 +227,14 @@ export default class DestinationMap extends Component {
   generateMarkerIcon(index) {
     // react-leaflet does not currently handle default marker icons correctly,
     // so we must create our own
-    //lol kill me
+    //lol kill_me
     if (!this.state.markerSize[index] && !this.state.iconColor) {
       return L.icon({
         iconUrl: icon,
         shadowUrl: iconShadow,
         iconAnchor: [12, 40]  // for proper placement
       })
-    } else if(this.state.markerSize[index] && !this.state.iconColor) {
+    } else if (this.state.markerSize[index] && !this.state.iconColor) {
       return L.icon({
         iconUrl: icon2,
         shadowUrl: iconShadow,
@@ -319,7 +246,7 @@ export default class DestinationMap extends Component {
         shadowUrl: iconShadow,
         iconAnchor: [12, 40]  // for proper placement
       })
-    } else  {
+    } else {
       return L.icon({
         iconUrl: icon2Y,
         shadowUrl: iconShadow,

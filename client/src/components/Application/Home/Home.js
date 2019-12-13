@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import 'leaflet/dist/leaflet.css';
-import Pane from './Pane'
+import Pane from '../Pane'
 import DestinationMap from "./DestinationMap";
 import DestinationControls from "./DestinationControls";
 import DestinationList from "./DestinationList";
@@ -30,8 +30,11 @@ export default class Home extends Component {
     this.renderDestinationQuery = this.renderDestinationQuery.bind(this);
     this.renderDestinationControls = this.renderDestinationControls.bind(this);
     this.addJsonValues = this.addJsonValues.bind(this);
+    this.CreatePolylineList = this.CreatePolylineList.bind(this);
+    this.modifyLong= this.modifyLong.bind(this);
 
     this.state = {
+      markerFlag: true,
       errorMessage: null,
       userLocation: {
         name: 'Colorado State University',
@@ -58,6 +61,8 @@ export default class Home extends Component {
               {this.renderMapPane()}
             </Col>
               {this.generateColumn(this.renderDestinationControls, this.renderDestinationQuery)}
+          </Row>
+          <Row>
             <Col>
               {this.renderDestinations()}
             </Col>
@@ -70,9 +75,12 @@ export default class Home extends Component {
     return (
         <Pane header={'Where Am I?'}
               bodyJSX={<DestinationMap
+                  handleMarkerToggle={this.props.handleMarkerToggle}
                   userLocation={this.state.userLocation}
                   destinations={this.convertDestinations()}
-                  convertCoordinates={this.props.convertCoordinates}/>}/>
+                  convertCoordinates={this.props.convertCoordinates}
+                  CreatePolylineList={this.CreatePolylineList}
+                  modifyLong={this.modifyLong}/>}/>
     );
   }
 
@@ -93,7 +101,8 @@ export default class Home extends Component {
                   handleLoadJSON={this.handleLoadJSON}
                   handleExportFile={this.handleExportFile}
                   handleUserDestination={this.handleUserDestination}
-                  calculateDistances={this.calculateDistances}/>
+                  calculateDistances={this.calculateDistances}
+                  CreatePolylineList={this.CreatePolylineList}/>
               }/>
     );
   }
@@ -120,8 +129,10 @@ export default class Home extends Component {
                 removeDestination={this.props.removeDestination}
                 reverseDestinations={this.props.reverseDestinations}
                 swapDestinations={this.props.swapDestinations}
+                markerKill={this.props.markerKill}
                 distances={this.state.distances}
                 placeAttributes={this.props.placeAttributes}
+                calculateDistances={this.calculateDistances}
                 resetDistances={this.resetDistances}
                 sumDistances={this.sumDistances}/>
               }/>
@@ -238,7 +249,9 @@ export default class Home extends Component {
 
   handleExportFile() {
     let saveTrip = { "requestType"    : "trip", "requestVersion" : 5,
-      "options"        : {"optimization" : "none"},
+      "options"        : {"title": "My Trip",
+        "earthRadius": this.props.options.units[this.props.options.activeUnit].toString(),
+        "optimization" : "none"},
       "places"         : this.props.destinations,
       "distances"      : this.state.distances
     };
@@ -273,7 +286,7 @@ export default class Home extends Component {
   handleLoadJSON(fileContents) {
     let AJV = require('ajv');
     let ajv = new AJV();
-    let schema = require('../../../schemas/TIPTripFileSchema');
+    let schema = require('../../../../schemas/TIPTripFileSchema');
     try {
       let newTrip = JSON.parse(fileContents);
       if (ajv.validate(schema, newTrip)) {
@@ -331,7 +344,7 @@ export default class Home extends Component {
         distances: newDistances.distances
       });
 
-      if (newDistances.options.optimization === 'short') {
+      if (newDistances.options.optimization !== 'none') {
         let nameList = [];
         newDistances.places.forEach((place) => {
           nameList.push(place.name);
@@ -370,7 +383,6 @@ export default class Home extends Component {
     return markerList;
   }
 
-
   addJsonValues(newTrip) {
     let newState = {
       errorMessage: null,
@@ -394,5 +406,82 @@ export default class Home extends Component {
 
   csuOvalGeographicCoordinates() {
     return L.latLng(40.576179, -105.080773);
+  }
+
+  CreatePolylineList() {
+    let polylineList = [];
+    let polyline = [];
+    let origin = [];
+    let previousLatLong = [];
+    let index = 0;
+    let currentLong = 0;
+    this.props.destinations.forEach((destination) => {
+          if (index === 0) {
+            origin = [parseFloat(destination.latitude),
+              this.modifyLong(parseFloat(destination.longitude))];
+            index++;
+          }
+          if (previousLatLong === []) {
+            previousLatLong = origin;
+          } else {
+            currentLong = this.modifyLong(parseFloat(destination.longitude));
+            if (Math.abs(currentLong - previousLatLong[1]) > 180) {
+              if (currentLong > previousLatLong[1]) {
+                polyline = [[previousLatLong[0], previousLatLong[1]],
+                  [parseFloat(destination.latitude), currentLong - 360]];
+                polylineList.push(polyline);
+
+                polyline = [[previousLatLong[0], previousLatLong[1] + 360],
+                  [parseFloat(destination.latitude), currentLong]];
+                polylineList.push(polyline);
+              } else {
+                polyline = [[previousLatLong[0], previousLatLong[1]],
+                  [parseFloat(destination.latitude), currentLong + 360]];
+                polylineList.push(polyline);
+
+                polyline = [[previousLatLong[0], previousLatLong[1] - 360],
+                  [parseFloat(destination.latitude), currentLong]];
+                polylineList.push(polyline);
+              }
+              previousLatLong = [parseFloat(destination.latitude), currentLong];
+            } else {
+              polyline = [previousLatLong, [parseFloat(destination.latitude),
+                this.modifyLong(parseFloat(destination.longitude))]];
+              previousLatLong = polyline[1];
+              polylineList.push(polyline);
+            }
+          }
+        }
+    );
+    if (Math.abs(origin[1] - previousLatLong[1]) > 180) {
+      if (origin[1] > previousLatLong[1]) {
+
+        polyline = [previousLatLong, [origin[0], origin[1] - 360]];
+        polylineList.push(polyline);
+        polyline = [[previousLatLong[0], previousLatLong[1] + 360], origin];
+        polylineList.push(polyline);
+      } else {
+        polyline = [previousLatLong, [origin[0], origin[1] + 360]];
+        polylineList.push(polyline);
+        polyline = [[previousLatLong[0], previousLatLong[1] - 360], origin];
+        polylineList.push(polyline);
+      }
+    } else {
+      polyline = [previousLatLong, origin];
+      polylineList.push(polyline);
+    }
+    polylineList.splice(0,1);
+    return polylineList;
+  }
+
+  modifyLong(long){
+    let retLong=long;
+    if(long>180){
+      retLong=long-360;
+    }
+    else if (long < -180) {
+      retLong=long+360;
+    }
+    return retLong;
   }
 }
